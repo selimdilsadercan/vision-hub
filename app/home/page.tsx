@@ -1,17 +1,34 @@
 "use client";
 
-import { useState } from "react";
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
+import { useState, useEffect } from "react";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ProjectTypeFilter } from "@/components/ProjectTypeFilter";
 import { Loader2 } from "lucide-react";
+import { getProjects, Project } from "@/lib/db";
+import { toast } from "react-hot-toast";
 
 export default function ProjectsPage() {
   const [selectedType, setSelectedType] = useState<string | null>(null);
-  const projects = useQuery(api.projects.getProjects, { type: selectedType ?? undefined });
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  if (projects === undefined) {
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const data = await getProjects(selectedType ?? undefined);
+        setProjects(data);
+      } catch (error) {
+        console.error("Failed to fetch projects:", error);
+        toast.error("Failed to fetch projects");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, [selectedType]);
+
+  if (loading) {
     return (
       <div className="h-full flex items-center justify-center">
         <Loader2 className="h-6 w-6 text-muted-foreground animate-spin" />
@@ -30,7 +47,7 @@ export default function ProjectsPage() {
       ) : (
         <div className="grid grid-cols-1 gap-4">
           {projects.map((project) => (
-            <ProjectCard key={project._id} project={project} />
+            <ProjectCard key={project.id} project={project} />
           ))}
         </div>
       )}

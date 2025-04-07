@@ -1,37 +1,41 @@
 "use client";
 
-import { Doc } from "@/convex/_generated/dataModel";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { Eye } from "lucide-react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { Diamond, Building2, Laptop2, HelpCircle } from "lucide-react";
+import { Project } from "@/lib/db";
 
 interface ProjectCardProps {
-  project: Doc<"projects">;
+  project: Project;
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
-  const router = useRouter();
-  const incrementViews = useMutation(api.projects.incrementViews);
+const projectIcons = {
+  hub: { icon: Diamond, color: "text-violet-500", bgColor: "bg-violet-500/10" },
+  bireysel: { icon: Building2, color: "text-pink-700", bgColor: "bg-pink-700/10" },
+  remote: { icon: Laptop2, color: "text-green-700", bgColor: "bg-green-700/10" },
+  vcamp: { icon: Building2, color: "text-orange-700", bgColor: "bg-orange-700/10" }
+};
 
-  const handleClick = () => {
-    incrementViews({ id: project._id });
-    router.push(`/project/${project._id}`);
-  };
+export function ProjectCard({ project }: ProjectCardProps) {
+  const { icon: Icon, color, bgColor } = projectIcons[project.type as keyof typeof projectIcons] || projectIcons.hub;
 
   return (
-    <div onClick={handleClick} className="group flex items-center gap-x-4 p-4 cursor-pointer rounded-lg hover:bg-gray-100 transition">
-      <div className="flex items-center justify-center w-8 h-8 rounded-md bg-gray-100 group-hover:bg-white transition">{project.icon}</div>
-      <div className="flex-1">
-        <div className="flex items-center gap-x-2">
-          <p className="text-sm font-medium">{project.title}</p>
-          <div className="flex items-center gap-x-1 text-muted-foreground">
-            <Eye className="h-4 w-4" />
-            <span className="text-xs">{project.views}</span>
+    <Link href={`/project/${project.id}`}>
+      <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-all border">
+        <div className="flex items-center gap-3 mb-4">
+          <div className={cn("p-2 rounded-md", bgColor)}>
+            <Icon className={cn("w-5 h-5", color)} />
+          </div>
+          <div>
+            <h3 className="font-medium text-sm">{project.title}</h3>
+            <p className="text-xs text-muted-foreground">{project.type}</p>
           </div>
         </div>
-        {project.description && <p className="text-xs text-muted-foreground line-clamp-2">{project.description}</p>}
+        <div className="flex items-center justify-between">
+          <div className="text-xs text-muted-foreground">Görüntülenme</div>
+          <div className="text-sm font-medium">{project.views}</div>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }

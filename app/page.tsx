@@ -1,29 +1,69 @@
 "use client";
 
-import { SignInButton, useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { ProjectCard } from "@/components/ProjectCard";
+
+const mockProjects = [
+  {
+    id: "1",
+    title: "Vision Hub Project",
+    type: "hub",
+    views: 3,
+    icon: "🔶",
+    is_archived: false,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: "2",
+    title: "Bireysel Proje",
+    type: "bireysel",
+    views: 47,
+    icon: "🏢",
+    is_archived: false,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: "3",
+    title: "Remote Tech Work",
+    type: "remote",
+    views: 31,
+    icon: "💻",
+    is_archived: false,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: "4",
+    title: "V-CAMP Project",
+    type: "vcamp",
+    views: 0,
+    icon: "🏢",
+    is_archived: false,
+    created_at: new Date().toISOString()
+  }
+];
 
 export default function Home() {
-  const { isSignedIn } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (isSignedIn) {
-      router.push("/projects");
-    }
-  }, [isSignedIn, router]);
+    // Redirect to home page after a short delay
+    const timer = setTimeout(() => {
+      router.push("/home");
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [router]);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background">
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold tracking-tight">Welcome to Vision Hub</h1>
-        <p className="text-muted-foreground">Sign in to get started</p>
-        <SignInButton mode="modal">
-          <button className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-            Sign In
-          </button>
-        </SignInButton>
+    <div className="h-full p-4 space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold">Projeler</h2>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {mockProjects.map((project) => (
+          <ProjectCard key={project.id} project={project} />
+        ))}
       </div>
     </div>
   );

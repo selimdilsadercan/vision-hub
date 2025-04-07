@@ -2,50 +2,47 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
-import { useUser } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
-import { Diamond, Laptop2, Building2, HelpCircle } from "lucide-react";
+import { Home, Search, Layout, Briefcase, UserCircle } from "lucide-react";
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { user } = useUser();
 
   const routes = [
     {
-      label: "Vision Hub",
-      icon: Diamond,
-      href: "/hub",
+      label: "Home",
+      icon: Home,
+      href: "/home",
+      color: "text-sky-500",
+      bgColor: "bg-sky-500/10"
+    },
+    {
+      label: "Discover",
+      icon: Search,
+      href: "/discover",
       color: "text-violet-500",
       bgColor: "bg-violet-500/10"
     },
     {
-      label: "Bireysel",
-      icon: Building2,
-      href: "/bireysel",
+      label: "Spaces",
+      icon: Layout,
+      href: "/spaces",
       color: "text-pink-700",
       bgColor: "bg-pink-700/10"
     },
     {
-      label: "Remote Tech Work",
-      icon: Laptop2,
-      href: "/remote",
+      label: "Jobs",
+      icon: Briefcase,
+      href: "/jobs",
       color: "text-green-700",
       bgColor: "bg-green-700/10"
     },
     {
-      label: "V-CAMP",
-      icon: Building2,
-      href: "/vcamp",
+      label: "Profile",
+      icon: UserCircle,
+      href: "/profile",
       color: "text-orange-700",
       bgColor: "bg-orange-700/10"
-    },
-    {
-      label: "Ne Yapalım?",
-      icon: HelpCircle,
-      href: "/help",
-      color: "text-blue-700",
-      bgColor: "bg-blue-700/10"
     }
   ];
 
@@ -54,12 +51,10 @@ export function Sidebar() {
   }
 
   return (
-    <div className="hidden space-y-4 py-4 md:fixed md:inset-y-0 md:flex md:w-72 md:flex-col bg-gray-50">
+    <div className="space-y-4 py-4 flex flex-col h-full">
       <div className="px-3 py-2 flex-1">
         <Link href="/" className="flex items-center pl-3 mb-14">
-          <div className="relative h-8 w-8 mr-4">
-            <Image fill alt="Logo" src="/logo.png" />
-          </div>
+          <div className="text-3xl mr-4">🔶</div>
           <h1 className="text-2xl font-bold">HUB</h1>
         </Link>
         <div className="space-y-1">
