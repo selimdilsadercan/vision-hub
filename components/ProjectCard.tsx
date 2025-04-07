@@ -1,41 +1,58 @@
-"use client";
-
-import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Diamond, Building2, Laptop2, HelpCircle } from "lucide-react";
-import { Project } from "@/lib/db";
 
 interface ProjectCardProps {
-  project: Project;
+  name: string;
+  description: string;
+  field_name: string;
+  user_name: string;
+  user_image_url: string;
+  created_at: string;
+  variant?: "spaces" | "profile";
 }
 
-const projectIcons = {
-  hub: { icon: Diamond, color: "text-violet-500", bgColor: "bg-violet-500/10" },
-  bireysel: { icon: Building2, color: "text-pink-700", bgColor: "bg-pink-700/10" },
-  remote: { icon: Laptop2, color: "text-green-700", bgColor: "bg-green-700/10" },
-  vcamp: { icon: Building2, color: "text-orange-700", bgColor: "bg-orange-700/10" }
-};
-
-export function ProjectCard({ project }: ProjectCardProps) {
-  const { icon: Icon, color, bgColor } = projectIcons[project.type as keyof typeof projectIcons] || projectIcons.hub;
-
-  return (
-    <Link href={`/project/${project.id}`}>
-      <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-all border">
-        <div className="flex items-center gap-3 mb-4">
-          <div className={cn("p-2 rounded-md", bgColor)}>
-            <Icon className={cn("w-5 h-5", color)} />
+export function ProjectCard({ name, description, field_name, user_name, user_image_url, created_at, variant = "profile" }: ProjectCardProps) {
+  if (variant === "spaces") {
+    return (
+      <div className="bg-white rounded-lg border p-4 space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-100">
+            {user_image_url && <img src={user_image_url} alt={user_name} className="w-full h-full object-cover" />}
           </div>
           <div>
-            <h3 className="font-medium text-sm">{project.title}</h3>
-            <p className="text-xs text-muted-foreground">{project.type}</p>
+            <h3 className="font-medium text-blue-600">{name}</h3>
+            <p className="text-sm text-muted-foreground">{user_name}</p>
           </div>
         </div>
-        <div className="flex items-center justify-between">
-          <div className="text-xs text-muted-foreground">Görüntülenme</div>
-          <div className="text-sm font-medium">{project.views}</div>
+
+        <div className="space-y-2">
+          <div className="text-sm text-blue-600 bg-blue-50 w-fit px-3 py-1 rounded-full">{field_name}</div>
+          <p className="text-sm text-muted-foreground">{description}</p>
         </div>
       </div>
-    </Link>
+    );
+  }
+
+  return (
+    <div className="bg-white rounded-lg border p-4 space-y-4">
+      <div className="flex items-start justify-between">
+        <div className="space-y-1">
+          <h3 className="font-medium">{name}</h3>
+          <p className="text-sm text-muted-foreground">{description}</p>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between text-sm">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-100">
+            {user_image_url && <img src={user_image_url} alt={user_name} className="w-full h-full object-cover" />}
+          </div>
+          <span className="text-muted-foreground">{user_name}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-blue-600 bg-blue-50 px-2 py-1 rounded-full text-xs">{field_name}</span>
+          <span className="text-muted-foreground">{new Date(created_at).toLocaleDateString()}</span>
+        </div>
+      </div>
+    </div>
   );
 }

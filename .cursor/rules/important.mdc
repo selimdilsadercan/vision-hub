@@ -9,3 +9,4 @@ alwaysApply: true
 - if i say you to use a component for a task always search detaily if is this component exists in components folder
 - do not left unnecessary imports, and unused variables
 - do not use "any" type
+- use next.config.ts instead of next.config.js

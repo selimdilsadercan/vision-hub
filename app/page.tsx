@@ -1,51 +1,39 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { ProjectCard } from "@/components/ProjectCard";
+import { WorkspaceCard } from "@/components/WorkspaceCard";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
 
-type Project = {
-  id: string;
-  name: string;
-  image_url: string | null;
-  is_admin: boolean;
-  type?: string;
-  views?: number;
+type Workspace = {
+  project_id: string;
+  project_name: string;
+  project_tasks: string[];
+  project_extra_text: string;
+  image_url: string;
 };
 
 export default function Home() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchWorkspaces = async () => {
       try {
         setLoading(true);
 
-        // Use the provided profile ID directly
+        // Use the provided profile ID
         const profileId = "d8323ace-4e10-4422-8c99-7380286ec0e5";
 
-        // Fetch projects using the list_projects function
-        const { data, error } = await supabase.rpc("list_projects", {
+        const { data, error } = await supabase.rpc("list_user_workspaces", {
           input_profile_id: profileId
         });
 
         if (error) {
-          console.error("Error fetching projects:", error);
-          toast.error("Failed to fetch projects");
+          console.error("Error fetching workspaces:", error);
+          toast.error("Failed to fetch workspaces");
         } else {
-          // Transform the data to match the Project type expected by ProjectCard
-          const transformedProjects = (data as Project[]).map((project) => ({
-            ...project,
-            title: project.name, // ProjectCard expects 'title' but Supabase returns 'name'
-            type: "hub", // Default type if not available
-            views: 0 // Default views if not available
-          }));
-
-          setProjects(transformedProjects);
+          setWorkspaces(data as Workspace[]);
         }
       } catch (error) {
         console.error("Unexpected error:", error);
@@ -55,27 +43,27 @@ export default function Home() {
       }
     };
 
-    fetchProjects();
-  }, [router]);
+    fetchWorkspaces();
+  }, []);
 
   return (
     <div className="h-full p-4 space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Projeler</h2>
+        <h2 className="text-2xl font-bold">HUB</h2>
       </div>
       {loading ? (
         <div className="flex justify-center items-center h-40">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
         </div>
-      ) : projects.length > 0 ? (
+      ) : workspaces.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+          {workspaces.map((workspace) => (
+            <WorkspaceCard key={workspace.project_id} workspace={workspace} />
           ))}
         </div>
       ) : (
         <div className="text-center py-10">
-          <p className="text-muted-foreground">No projects found</p>
+          <p className="text-muted-foreground">No workspaces found</p>
         </div>
       )}
     </div>

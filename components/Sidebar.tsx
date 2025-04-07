@@ -12,7 +12,7 @@ export function Sidebar() {
     {
       label: "Home",
       icon: Home,
-      href: "/home",
+      href: "/",
       color: "text-sky-500",
       bgColor: "bg-sky-500/10"
     },
