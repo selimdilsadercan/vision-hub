@@ -4,6 +4,7 @@ import "./globals.css";
 import { ToastProvider } from "@/providers/ToastProvider";
 import ConvexProvider from "@/providers/ConvexProvider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { UserSync } from "@/components/UserSync";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
         <ClerkProvider>
           <ConvexProvider>
             <ToastProvider />
+            <UserSync />
             {children}
           </ConvexProvider>
         </ClerkProvider>
