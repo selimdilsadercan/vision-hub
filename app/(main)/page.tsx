@@ -11,6 +11,7 @@ type Workspace = {
   project_tasks: string[];
   project_extra_text: string;
   image_url: string;
+  type: "project" | "workspace";
 };
 
 export default function Home() {
@@ -25,16 +26,38 @@ export default function Home() {
         // Use the provided profile ID
         const profileId = "d8323ace-4e10-4422-8c99-7380286ec0e5";
 
-        const { data, error } = await supabase.rpc("list_user_workspaces", {
+        // First get all workspaces
+        const { data: workspacesData, error: workspacesError } = await supabase.rpc("list_user_workspaces", {
           input_profile_id: profileId
         });
 
-        if (error) {
-          console.error("Error fetching workspaces:", error);
+        if (workspacesError) {
+          console.error("Error fetching workspaces:", workspacesError);
           toast.error("Failed to fetch workspaces");
-        } else {
-          setWorkspaces(data as Workspace[]);
+          return;
         }
+
+        // Then get all projects to check which workspaces are projects
+        const { data: projectsData, error: projectsError } = await supabase.rpc("list_projects", {
+          input_profile_id: profileId
+        });
+
+        if (projectsError) {
+          console.error("Error fetching projects:", projectsError);
+          toast.error("Failed to fetch projects");
+          return;
+        }
+
+        // Create a set of project IDs for faster lookup
+        const projectIds = new Set(projectsData?.map((project: any) => project.id) || []);
+
+        // Transform workspaces data to include type
+        const workspacesWithType = workspacesData.map((workspace: any) => ({
+          ...workspace,
+          type: projectIds.has(workspace.project_id) ? "project" : "workspace"
+        }));
+
+        setWorkspaces(workspacesWithType);
       } catch (error) {
         console.error("Unexpected error:", error);
         toast.error("An unexpected error occurred");

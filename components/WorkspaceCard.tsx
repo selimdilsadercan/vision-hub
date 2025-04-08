@@ -12,6 +12,7 @@ interface WorkspaceCardProps {
     project_tasks: string[];
     project_extra_text: string;
     image_url: string;
+    type?: "project" | "workspace";
   };
 }
 
@@ -28,8 +29,10 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
 
   const shouldShowExtraText = workspace.project_extra_text !== "-1";
 
+  const href = workspace.type === "project" ? `/projects/${workspace.project_id}` : `/workspace/${workspace.project_id}`;
+
   return (
-    <Link href={`/workspace/${workspace.project_id}`}>
+    <Link href={href}>
       <div className="bg-white rounded-3xl p-4 border shadow-sm hover:shadow-md transition-all h-[72px]">
         <div className="flex items-center gap-3">
           <div className="flex-shrink-0 w-5 h-5 relative">

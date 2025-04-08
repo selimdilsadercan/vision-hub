@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { Config } from "tailwindcss";
 
 const nextConfig: NextConfig = {
   images: {
@@ -14,6 +15,11 @@ const nextConfig: NextConfig = {
         hostname: "www.shutterstock.com",
         port: "",
         pathname: "/image-vector/**"
+      },
+      {
+        protocol: "https",
+        hostname: "www.google.com",
+        pathname: "/s2/favicons/**"
       }
     ]
   }

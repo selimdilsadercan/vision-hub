@@ -8,5 +8,3 @@
 - **State Management**: React Context API
 - **Hosting**: Vercel
 - Utils: react-hot-toast
-
-- supabase gen types typescript --project-id ceyufcdjltcefofcjgt --schema public > lib/supabase-types.ts
