@@ -3,76 +3,146 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Home, Search, Layout, Briefcase, UserCircle } from "lucide-react";
+import { Home, Search, Rocket, GraduationCap, Trophy, Lightbulb, Globe, UserCircle, Settings, ChevronDown, ChevronUp } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useState } from "react";
+
+const discoverItems = [
+  {
+    title: "Projeler",
+    icon: Rocket,
+    href: "/projects",
+    description: "Katılabileceğin Etkinlikleri Keşfet"
+  },
+  {
+    title: "Eğitim Programları",
+    icon: GraduationCap,
+    href: "/education",
+    description: "Katılabileceğin Etkinlikleri Keşfet"
+  },
+  {
+    title: "Yarışmalar",
+    icon: Trophy,
+    href: "/competitions",
+    description: "Katılabileceğin Etkinlikleri Keşfet"
+  },
+  {
+    title: "Etkinlikler",
+    icon: Lightbulb,
+    href: "/activities",
+    description: "Katılabileceğin Etkinlikleri Keşfet"
+  },
+  {
+    title: "Websiteler",
+    icon: Globe,
+    href: "/websites",
+    description: "Katılabileceğin Etkinlikleri Keşfet"
+  }
+];
 
 export function Sidebar() {
   const pathname = usePathname();
-
-  const routes = [
-    {
-      label: "Home",
-      icon: Home,
-      href: "/",
-      color: "text-sky-500",
-      bgColor: "bg-sky-500/10"
-    },
-    {
-      label: "Discover",
-      icon: Search,
-      href: "/discover",
-      color: "text-violet-500",
-      bgColor: "bg-violet-500/10"
-    },
-    {
-      label: "Spaces",
-      icon: Layout,
-      href: "/spaces",
-      color: "text-pink-700",
-      bgColor: "bg-pink-700/10"
-    },
-    {
-      label: "Jobs",
-      icon: Briefcase,
-      href: "/jobs",
-      color: "text-green-700",
-      bgColor: "bg-green-700/10"
-    },
-    {
-      label: "Profile",
-      icon: UserCircle,
-      href: "/profile",
-      color: "text-orange-700",
-      bgColor: "bg-orange-700/10"
-    }
-  ];
-
-  if (pathname?.includes("/auth")) {
-    return null;
-  }
+  const [isDiscoverOpen, setIsDiscoverOpen] = useState(true);
 
   return (
-    <div className="space-y-4 py-4 flex flex-col h-full">
-      <div className="px-3 py-2 flex-1">
-        <Link href="/" className="flex items-center pl-3 mb-14">
-          <div className="text-3xl mr-4">🔶</div>
-          <h1 className="text-2xl font-bold">HUB</h1>
+    <div className="relative flex h-full w-[260px] flex-col border-r px-3 py-4">
+      {/* Logo Area */}
+      <div className="flex h-[60px] items-center px-2">
+        <Link href="/home" className="flex items-center gap-2">
+          <div className="rounded-lg bg-primary p-1">
+            <span className="text-lg font-bold text-primary-foreground">HUB</span>
+          </div>
         </Link>
-        <div className="space-y-1">
-          {routes.map((route) => (
-            <Link
-              key={route.href}
-              href={route.href}
+      </div>
+
+      <div className="flex flex-1 flex-col gap-4 overflow-hidden">
+        {/* Main Navigation */}
+        <div className="flex flex-col gap-1">
+          {/* Home */}
+          <Link href="/home">
+            <span
               className={cn(
-                "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-primary hover:bg-primary/10 rounded-lg transition",
-                pathname === route.href ? "text-primary bg-primary/10" : "text-zinc-500"
+                "group flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+                pathname === "/home" ? "bg-accent text-accent-foreground" : "transparent"
               )}
             >
-              <div className="flex items-center flex-1">
-                <route.icon className={cn("h-5 w-5 mr-3", route.color)} />
-                {route.label}
+              <Home className="mr-2 h-4 w-4" />
+              Home
+            </span>
+          </Link>
+
+          {/* Discover Group */}
+          <Collapsible open={isDiscoverOpen} onOpenChange={setIsDiscoverOpen}>
+            <CollapsibleTrigger className="w-full">
+              <div className="group flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
+                <div className="flex items-center">
+                  <Search className="mr-2 h-4 w-4" />
+                  Discover
+                </div>
+                {isDiscoverOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
               </div>
-            </Link>
-          ))}
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <div className="ml-4 flex flex-col gap-1">
+                {discoverItems.map((item) => (
+                  <Link key={item.href} href={item.href}>
+                    <span
+                      className={cn(
+                        "group flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+                        pathname === item.href ? "bg-accent text-accent-foreground" : "transparent"
+                      )}
+                    >
+                      <item.icon className="mr-2 h-4 w-4" />
+                      {item.title}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
+
+          {/* Spaces */}
+          <Link href="/spaces">
+            <span
+              className={cn(
+                "group flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+                pathname === "/spaces" ? "bg-accent text-accent-foreground" : "transparent"
+              )}
+            >
+              <Globe className="mr-2 h-4 w-4" />
+              Spaces
+            </span>
+          </Link>
+
+          {/* Jobs */}
+          <Link href="/jobs">
+            <span
+              className={cn(
+                "group flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+                pathname === "/jobs" ? "bg-accent text-accent-foreground" : "transparent"
+              )}
+            >
+              <Lightbulb className="mr-2 h-4 w-4" />
+              Jobs
+            </span>
+          </Link>
+        </div>
+
+        {/* Bottom Navigation */}
+        <div className="mt-auto flex flex-col gap-1">
+          <Separator className="my-2" />
+          <Link href="/profile">
+            <span
+              className={cn(
+                "group flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+                pathname === "/profile" ? "bg-accent text-accent-foreground" : "transparent"
+              )}
+            >
+              <UserCircle className="mr-2 h-4 w-4" />
+              Profile
+            </span>
+          </Link>
         </div>
       </div>
     </div>

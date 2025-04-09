@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
-import { Config } from "tailwindcss";
 
 const nextConfig: NextConfig = {
+  devIndicators: false,
   images: {
     remotePatterns: [
       {

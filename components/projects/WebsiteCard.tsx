@@ -15,7 +15,7 @@ interface WebsiteCardProps {
 
 export function WebsiteCard({ website }: WebsiteCardProps) {
   return (
-    <Link href={website.url} target="_blank" className="block p-4 bg-white border rounded-lg hover:bg-gray-50 transition">
+    <Link href={`/websites/${website.id}`} className="block p-4 bg-white border rounded-lg hover:bg-gray-50 transition">
       <div className="flex items-start gap-3">
         <div className="flex-shrink-0 w-6 h-6 relative">
           {website.favicon_url && <Image src={website.favicon_url} alt={website.title} fill className="object-contain" />}

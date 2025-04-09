@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { WorkspaceCard } from "@/components/WorkspaceCard";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
+import { useAuth } from "@/lib/firebase/auth-context";
+import { RouteProtection } from "@/components/auth/RouteProtection";
+import { getUserData, type FirestoreUser } from "@/lib/firebase/firestore";
 
 type Workspace = {
   project_id: string;
@@ -17,14 +20,28 @@ type Workspace = {
 export default function Home() {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState<FirestoreUser | null>(null);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!user) return;
+      const firestoreUser = await getUserData(user.uid);
+      setUserData(firestoreUser);
+    };
+
+    fetchUserData();
+  }, [user]);
 
   useEffect(() => {
     const fetchWorkspaces = async () => {
+      if (!userData) return;
+
       try {
         setLoading(true);
 
-        // Use the provided profile ID
-        const profileId = "d8323ace-4e10-4422-8c99-7380286ec0e5";
+        // Use Firestore profile_id instead of Firebase uid
+        const profileId = userData.profile_id;
 
         // First get all workspaces
         const { data: workspacesData, error: workspacesError } = await supabase.rpc("list_user_workspaces", {
@@ -49,13 +66,13 @@ export default function Home() {
         }
 
         // Create a set of project IDs for faster lookup
-        const projectIds = new Set(projectsData?.map((project: any) => project.id) || []);
+        const projectIds = new Set(projectsData?.map((project) => project.id) || []);
 
-        // Transform workspaces data to include type
-        const workspacesWithType = workspacesData.map((workspace: any) => ({
+        // Transform workspaces data to include type with proper type assertion
+        const workspacesWithType: Workspace[] = workspacesData.map((workspace) => ({
           ...workspace,
           type: projectIds.has(workspace.project_id) ? "project" : "workspace"
-        }));
+        })) as Workspace[];
 
         setWorkspaces(workspacesWithType);
       } catch (error) {
@@ -67,28 +84,30 @@ export default function Home() {
     };
 
     fetchWorkspaces();
-  }, []);
+  }, [userData]);
 
   return (
-    <div className="h-full p-4 space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">HUB</h2>
+    <RouteProtection>
+      <div className="h-full p-4 space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold">HUB</h2>
+        </div>
+        {loading ? (
+          <div className="flex justify-center items-center h-40">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+          </div>
+        ) : workspaces.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {workspaces.map((workspace) => (
+              <WorkspaceCard key={workspace.project_id} workspace={workspace} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-10">
+            <p className="text-muted-foreground">No workspaces found</p>
+          </div>
+        )}
       </div>
-      {loading ? (
-        <div className="flex justify-center items-center h-40">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-        </div>
-      ) : workspaces.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {workspaces.map((workspace) => (
-            <WorkspaceCard key={workspace.project_id} workspace={workspace} />
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-10">
-          <p className="text-muted-foreground">No workspaces found</p>
-        </div>
-      )}
-    </div>
+    </RouteProtection>
   );
 }

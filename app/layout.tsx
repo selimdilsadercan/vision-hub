@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { SupabaseProvider } from "@/providers/SupabaseProvider";
+import { AuthProvider } from "@/lib/firebase/auth-context";
 import { Toaster } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 
@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Vision Hub",
-  description: "Project Management App"
+  description: "Vision Hub - Your Vision, Our Mission"
 };
 
 export default function RootLayout({
@@ -20,10 +20,10 @@ export default function RootLayout({
   return (
     <html lang="tr" suppressHydrationWarning>
       <body className={cn(inter.className)} suppressHydrationWarning>
-        <SupabaseProvider>
+        <AuthProvider>
           <Toaster />
           {children}
-        </SupabaseProvider>
+        </AuthProvider>
       </body>
     </html>
   );
