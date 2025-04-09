@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { WorkspaceCard } from "@/components/WorkspaceCard";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
-import { useAuth } from "@/lib/firebase/auth-context";
+import { useAuth } from "@/firebase/auth-context";
 import { RouteProtection } from "@/components/auth/RouteProtection";
-import { getUserData, type FirestoreUser } from "@/lib/firebase/firestore";
+import { getUserData, type FirestoreUser } from "@/firebase/firestore";
 
 type Workspace = {
   project_id: string;

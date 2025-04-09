@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/lib/firebase/auth-context";
+import { AuthProvider } from "@/firebase/auth-context";
 import { Toaster } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 

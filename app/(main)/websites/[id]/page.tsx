@@ -8,8 +8,8 @@ import { toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/lib/supabase";
-import { useAuth } from "@/lib/firebase/auth-context";
-import { getUserData } from "@/lib/firebase/firestore";
+import { useAuth } from "@/firebase/auth-context";
+import { getUserData } from "@/firebase/firestore";
 
 interface WebsiteData {
   id: string;

@@ -7,12 +7,12 @@ import { VideoCard } from "@/components/VideoCard";
 import { EventCard } from "@/components/EventCard";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
-import { useAuth } from "@/lib/firebase/auth-context";
+import { useAuth } from "@/firebase/auth-context";
 import { RouteProtection } from "@/components/auth/RouteProtection";
 import { LogOut } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { getUserData, type FirestoreUser } from "@/lib/firebase/firestore";
+import { getUserData, type FirestoreUser } from "@/firebase/firestore";
 
 const tabs = ["Genel", "Portfolyo", "Eğitim", "Etkinlik"];
 
