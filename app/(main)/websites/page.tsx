@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import { WebsiteCard } from "@/components/projects/WebsiteCard";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
@@ -32,8 +31,7 @@ type WebsiteDetails = {
   faviconUrl: string;
 };
 
-export default function ResearchPage() {
-  const params = useParams();
+export default function WebsitesPage() {
   const [websites, setWebsites] = useState<Website[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -44,13 +42,13 @@ export default function ResearchPage() {
 
   useEffect(() => {
     fetchWebsites();
-  }, [params.id]);
+  }, []);
 
   const fetchWebsites = async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase.rpc("list_user_websites", {
-        input_project_id: params.id as string
+        input_project_id: ""
       });
 
       if (error) {
@@ -109,7 +107,7 @@ export default function ResearchPage() {
 
     try {
       const { error } = await supabase.rpc("add_project_website", {
-        input_project_id: params.id as string,
+        input_project_id: "",
         input_url: websiteDetails.url,
         input_title: websiteDetails.title,
         input_description: websiteDetails.description,
@@ -146,7 +144,7 @@ export default function ResearchPage() {
   return (
     <div className="h-full p-4 space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Research</h2>
+        <h2 className="text-2xl font-bold">Websites</h2>
         <Button onClick={() => setIsAddDialogOpen(true)} size="sm">
           <Plus className="h-4 w-4 mr-2" />
           Add Website
@@ -224,7 +222,7 @@ export default function ResearchPage() {
                   />
                 </div>
                 <Button onClick={handleAddWebsite} className="w-full">
-                  Add to Project
+                  Add Website
                 </Button>
               </div>
             </div>

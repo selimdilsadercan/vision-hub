@@ -10,3 +10,4 @@ alwaysApply: true
 - do not left unnecessary imports, and unused variables
 - do not use "any" type
 - use next.config.ts instead of next.config.js
+- while implementing ui always first check related functions in supabase-types.ts file for types
