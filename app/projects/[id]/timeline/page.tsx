@@ -1,9 +1,11 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
+import { useAuth } from "@/firebase/auth-context";
+import { getUserData } from "@/firebase/firestore";
 import {
   format,
   eachWeekOfInterval,
@@ -21,13 +23,15 @@ import {
   differenceInDays,
   addDays
 } from "date-fns";
-import { ChevronDown, ChevronRight, CheckSquare, Square, Zap, MoreHorizontal, Plus, Info } from "lucide-react";
+import { ChevronDown, ChevronRight, CheckSquare, Square, Zap, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import { StoryDetailDialog } from "@/components/StoryDetailDialog";
 
 interface Story {
   id: string;
@@ -44,6 +48,8 @@ interface Story {
   expanded?: boolean;
   start_date?: Date;
   end_date?: Date;
+  isResizing?: boolean;
+  resizeEdge?: "start" | "end" | null;
 }
 
 interface Task {
@@ -60,6 +66,7 @@ type TimelineView = "Weeks" | "Months";
 
 export default function TimelinePage() {
   const params = useParams();
+  const { user } = useAuth();
   const [stories, setStories] = useState<Story[]>([]);
   const [loading, setLoading] = useState(true);
   const [timelineView, setTimelineView] = useState<TimelineView>("Weeks");
@@ -67,6 +74,32 @@ export default function TimelinePage() {
     start: startOfMonth(subYears(new Date(), 1)),
     end: endOfMonth(addYears(new Date(), 1))
   });
+  const [selectedStoryId, setSelectedStoryId] = useState<string | null>(null);
+  const [isStoryDialogOpen, setIsStoryDialogOpen] = useState(false);
+  const [isResizing, setIsResizing] = useState(false);
+  const [isCreatingStory, setIsCreatingStory] = useState(false);
+  const [newStoryTitle, setNewStoryTitle] = useState("");
+  const [profileId, setProfileId] = useState<string | null>(null);
+
+  const timelineRef = useRef<HTMLDivElement>(null);
+
+  // Function to center the timeline
+  const centerTimeline = useCallback(() => {
+    if (timelineRef.current) {
+      const containerWidth = timelineRef.current.scrollWidth;
+      const viewportWidth = timelineRef.current.offsetWidth;
+      const todayPosition = (calculateTodayPosition() / 100) * containerWidth;
+      const scrollPosition = Math.max(0, todayPosition - viewportWidth / 2);
+      timelineRef.current.scrollLeft = scrollPosition;
+    }
+  }, []);
+
+  // Center timeline when component mounts or stories load
+  useEffect(() => {
+    if (!loading && stories.length > 0 && !stories.some((story) => story.expanded)) {
+      centerTimeline();
+    }
+  }, [loading, stories.length, centerTimeline]);
 
   // Get all days in the range for weeks view
   const days = eachDayOfInterval({ start: timelineRange.start, end: timelineRange.end });
@@ -80,6 +113,19 @@ export default function TimelinePage() {
   useEffect(() => {
     fetchStories();
   }, [params.id]);
+
+  // Fetch user's profile ID from Firebase
+  useEffect(() => {
+    const fetchProfileId = async () => {
+      if (!user) return;
+      const userData = await getUserData(user.uid);
+      if (userData?.profile_id) {
+        setProfileId(userData.profile_id);
+      }
+    };
+
+    fetchProfileId();
+  }, [user]);
 
   const fetchStories = async () => {
     try {
@@ -95,21 +141,19 @@ export default function TimelinePage() {
       }
 
       // Transform and sort stories with actual dates
-      const sortedStories = (data as any[])
-        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-        .map((story) => {
-          const start_date = parseISO(story.start_date || story.created_at);
-          const end_date = story.end_date ? parseISO(story.end_date) : addWeeks(start_date, 2);
+      const sortedStories = (data as any[]).map((story) => {
+        const start_date = parseISO(story.start_date || story.created_at);
+        const end_date = story.end_date ? parseISO(story.end_date) : addWeeks(start_date, 2);
 
-          return {
-            ...story,
-            story_users: story.story_users as Story["story_users"],
-            status: story.status || "TODO",
-            expanded: false,
-            start_date,
-            end_date
-          };
-        });
+        return {
+          ...story,
+          story_users: story.story_users as Story["story_users"],
+          status: story.status || "TODO",
+          expanded: false,
+          start_date,
+          end_date
+        };
+      });
 
       // Adjust timeline range based on story dates
       if (sortedStories.length > 0) {
@@ -143,10 +187,15 @@ export default function TimelinePage() {
           <div className="grid" style={{ gridTemplateColumns: `repeat(${days.length}, 40px)` }}>
             {months.map((month, index) => {
               const monthDays = days.filter((date) => format(date, "MMM yyyy") === month);
+              const firstDayOfMonth = monthDays[0];
+
               return (
                 <div
                   key={`${month}-${index}`}
-                  className="text-center border-r last:border-r-0 text-sm font-medium text-muted-foreground"
+                  className={cn(
+                    "text-center text-sm font-medium text-muted-foreground",
+                    firstDayOfMonth && firstDayOfMonth.getDay() === 1 ? "border-l border-border" : ""
+                  )}
                   style={{ gridColumn: `span ${monthDays.length}` }}
                 >
                   {month}
@@ -155,17 +204,24 @@ export default function TimelinePage() {
             })}
           </div>
           <div className="grid" style={{ gridTemplateColumns: `repeat(${days.length}, 40px)` }}>
-            {days.map((date, i) => (
-              <div
-                key={`day-${i}`}
-                className={cn(
-                  "px-2 py-1 text-center border-r last:border-r-0 text-xs",
-                  isToday(date) ? "bg-blue-500/10 text-blue-500" : "text-muted-foreground"
-                )}
-              >
-                {format(date, "d")}
-              </div>
-            ))}
+            {days.map((date, i) => {
+              const isWeekend = [0, 6].includes(date.getDay());
+              const isWeekStart = date.getDay() === 1; // Monday
+
+              return (
+                <div
+                  key={`day-${i}`}
+                  className={cn(
+                    "px-2 py-1 text-center text-xs",
+                    isToday(date) ? "bg-blue-500/10 text-blue-500" : "text-muted-foreground",
+                    isWeekend ? "bg-secondary/30" : "",
+                    isWeekStart ? "border-l border-border" : ""
+                  )}
+                >
+                  {format(date, "d")}
+                </div>
+              );
+            })}
           </div>
         </>
       );
@@ -201,6 +257,191 @@ export default function TimelinePage() {
     return (todayOffset / totalDuration) * 100;
   };
 
+  const getExpandedHeight = (itemCount: number) => {
+    return 56 + itemCount * 40; // 56px for story row + 40px per task
+  };
+
+  const updateStoryDates = async (storyId: string, startDate: Date, endDate: Date) => {
+    try {
+      const { error } = await supabase.rpc("update_story", {
+        input_story_id: storyId,
+        input_start_date: startDate.toISOString(),
+        input_end_date: endDate.toISOString()
+      });
+
+      if (error) {
+        console.error("Error updating story:", error);
+        toast.error("Failed to update story dates");
+        return;
+      }
+
+      // Update local state
+      setStories(stories.map((story) => (story.id === storyId ? { ...story, start_date: startDate, end_date: endDate } : story)));
+
+      toast.success("Story dates updated successfully");
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      toast.error("An unexpected error occurred");
+    }
+  };
+
+  const handleResizeStart = (storyId: string, edge: "start" | "end") => {
+    setIsResizing(true);
+    setStories(stories.map((story) => (story.id === storyId ? { ...story, isResizing: true, resizeEdge: edge } : story)));
+  };
+
+  const handleResize = (storyId: string, clientX: number) => {
+    const story = stories.find((s) => s.id === storyId);
+    if (!story?.isResizing || !timelineRef.current) return;
+
+    const timelineRect = timelineRef.current.getBoundingClientRect();
+    const timelineWidth = timelineRef.current.scrollWidth;
+    const position = (clientX - timelineRect.left + timelineRef.current.scrollLeft) / timelineWidth;
+    const timestamp = timelineRange.start.getTime() + (timelineRange.end.getTime() - timelineRange.start.getTime()) * position;
+
+    // Create date and set to noon UTC to avoid timezone issues
+    const newDate = new Date(timestamp);
+    newDate.setUTCHours(12, 0, 0, 0);
+
+    setStories(
+      stories.map((s) => {
+        if (s.id === storyId && s.start_date && s.end_date) {
+          if (story.resizeEdge === "start") {
+            // When resizing start, keep the end date as is
+            const currentEndDate = new Date(s.end_date);
+            currentEndDate.setUTCHours(12, 0, 0, 0);
+            // Ensure start date doesn't go beyond end date
+            const proposedDate = newDate < currentEndDate ? newDate : new Date(currentEndDate.getTime() - 86400000);
+            return {
+              ...s,
+              start_date: proposedDate
+              // Don't update end_date here
+            };
+          } else if (story.resizeEdge === "end") {
+            // When resizing end, keep the start date as is
+            const currentStartDate = new Date(s.start_date);
+            currentStartDate.setUTCHours(12, 0, 0, 0);
+            // Ensure end date doesn't go before start date
+            const proposedDate = newDate > currentStartDate ? newDate : new Date(currentStartDate.getTime() + 86400000);
+            return {
+              ...s,
+              end_date: proposedDate
+              // Don't update start_date here
+            };
+          }
+        }
+        return s;
+      })
+    );
+  };
+
+  const handleResizeEnd = async (storyId: string) => {
+    const story = stories.find((s) => s.id === storyId);
+    if (!story?.isResizing) return;
+
+    // Immediately mark as not resizing to stop the visual update
+    setStories(stories.map((s) => (s.id === storyId ? { ...s, isResizing: false, resizeEdge: null } : s)));
+
+    // Set a small delay before allowing clicks again to prevent accidental dialog opening
+    setTimeout(() => {
+      setIsResizing(false);
+    }, 300);
+
+    if (story && story.start_date && story.end_date) {
+      try {
+        // Both dates should already be normalized to noon UTC from handleResize
+        const { error } = await supabase.rpc("update_story", {
+          input_story_id: storyId,
+          input_start_date: story.start_date.toISOString(),
+          input_end_date: story.end_date.toISOString()
+        });
+
+        if (error) {
+          console.error("Error updating story:", error);
+          toast.error("Failed to update story dates");
+          return;
+        }
+
+        toast.success("Story dates updated successfully");
+      } catch (error) {
+        console.error("Unexpected error:", error);
+        toast.error("An unexpected error occurred");
+      }
+    }
+  };
+
+  // Add mouse move and mouse up event listeners
+  useEffect(() => {
+    const resizingStory = stories.find((s) => s.isResizing);
+    if (!resizingStory) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      handleResize(resizingStory.id, e.clientX);
+    };
+
+    const handleMouseUp = () => {
+      handleResizeEnd(resizingStory.id);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("mouseleave", handleMouseUp);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mouseleave", handleMouseUp);
+    };
+  }, [stories]);
+
+  const handleStoryClick = (storyId: string) => {
+    // Don't open dialog if we're resizing
+    if (isResizing) return;
+
+    setSelectedStoryId(storyId);
+    setIsStoryDialogOpen(true);
+  };
+
+  const handleCreateStory = async () => {
+    if (!newStoryTitle.trim() || !profileId) return;
+
+    try {
+      const startDate = addDays(new Date(), 1); // Tomorrow
+      const endDate = addWeeks(startDate, 2); // 2 weeks from tomorrow
+
+      const { error } = await supabase.rpc("create_story", {
+        input_project_id: params.id as string,
+        input_story_name: newStoryTitle.trim(),
+        input_profile_id: profileId,
+        input_start_date: startDate.toISOString(),
+        input_end_date: endDate.toISOString()
+      });
+
+      if (error) {
+        console.error("Error creating story:", error);
+        toast.error("Failed to create story");
+        return;
+      }
+
+      toast.success("Story created successfully");
+      setNewStoryTitle("");
+      setIsCreatingStory(false);
+      fetchStories();
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      toast.error("An unexpected error occurred");
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleCreateStory();
+    } else if (e.key === "Escape") {
+      setIsCreatingStory(false);
+      setNewStoryTitle("");
+    }
+  };
+
   if (loading) {
     return (
       <div className="p-6 space-y-6">
@@ -222,218 +463,264 @@ export default function TimelinePage() {
     <TooltipProvider>
       <div className="h-full flex flex-col">
         <div className="flex-1 flex">
-          {/* Left Column - Stories & Tasks */}
-          <div className="w-1/3 border-r overflow-y-auto">
-            <div className="pt-[72px] space-y-0">
-              {stories.map((story, index) => (
-                <div className="group" key={story.id}>
-                  <div
-                    className={cn(
-                      "min-h-[64px] transition-colors duration-200",
-                      index % 2 === 0
-                        ? "bg-background hover:bg-purple-100 group-hover:bg-purple-100"
-                        : "bg-purple-100/50 hover:bg-purple-200 group-hover:bg-purple-200"
-                    )}
-                  >
-                    <div className="p-4 space-y-2">
-                      {/* Story Row */}
-                      <div className="group flex items-center gap-2 hover:bg-secondary/50 rounded-md">
-                        <button onClick={() => toggleStoryExpansion(story.id)} className="text-muted-foreground hover:text-primary">
-                          {story.expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-                        </button>
-                        <Square className="h-4 w-4 text-muted-foreground" />
-                        <Zap className="h-4 w-4 text-purple-500" />
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className="text-sm font-medium flex-1 truncate">{story.title}</span>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>{story.title}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                        <Badge variant="outline" className="bg-green-500/10 text-green-500 hover:bg-green-500/20 shrink-0">
-                          {story.status}
-                        </Badge>
-                        <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 shrink-0">
-                          <Plus className="h-4 w-4" />
-                        </Button>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 shrink-0">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent>
-                            <DropdownMenuItem>Edit Story</DropdownMenuItem>
-                            <DropdownMenuItem>Delete Story</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-
-                      {/* Tasks */}
-                      {story.expanded &&
-                        story.items?.map((item, index) => (
-                          <div key={index} className="group flex items-center gap-2 p-2 pl-8 hover:bg-secondary/50 rounded-md mt-2">
-                            <CheckSquare className="h-4 w-4 text-muted-foreground" />
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <span className="text-sm text-muted-foreground flex-1 truncate">{item}</span>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>{item}</p>
-                              </TooltipContent>
-                            </Tooltip>
-                            <Badge variant="outline" className="bg-blue-500/10 text-blue-500 shrink-0">
-                              TODO
-                            </Badge>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Right Column - Timeline */}
-          <div className="flex-1 overflow-x-auto bg-secondary/5">
-            <div
-              className="relative"
-              style={{
-                minWidth: timelineView === "Weeks" ? `${days.length * 40}px` : `${weeks.length * 100}px`
-              }}
-            >
-              {/* Timeline Header */}
-              <div className="flex border-b sticky top-0 bg-background p-4">
-                <div className="flex-1">{renderTimelineHeader()}</div>
-              </div>
-
-              {/* Today Indicator */}
-              <div
-                className="absolute top-0 bottom-0 w-px bg-blue-500 z-10"
-                style={{
-                  left: `${calculateTodayPosition()}%`,
-                  boxShadow: "0 0 8px rgba(59, 130, 246, 0.5)"
-                }}
-              />
-
-              {/* Timeline Content */}
-              <div className="relative p-4">
-                {stories.map((story, index) => {
-                  const startPosition = Math.max(
-                    0,
-                    ((new Date(story.start_date!).getTime() - timelineRange.start.getTime()) / (timelineRange.end.getTime() - timelineRange.start.getTime())) *
-                      100
-                  );
-
-                  const duration = Math.min(
-                    100 - startPosition,
-                    ((new Date(story.end_date!).getTime() - new Date(story.start_date!).getTime()) /
-                      (timelineRange.end.getTime() - timelineRange.start.getTime())) *
-                      100
-                  );
-
-                  return (
-                    <div className="group-hover:[&:not(:hover)]:opacity-80 transition-opacity" key={story.id}>
+          <ResizablePanelGroup direction="horizontal">
+            {/* Left Column - Stories & Tasks */}
+            <ResizablePanel defaultSize={40} minSize={20} maxSize={50}>
+              <div className="h-full border-r overflow-y-auto">
+                <div className="pt-[90px] space-y-0">
+                  {stories.map((story, index) => (
+                    <div className="group" key={story.id}>
                       <div
                         className={cn(
-                          "min-h-[64px] flex items-center transition-colors duration-200",
-                          index % 2 === 0
-                            ? "bg-background hover:bg-purple-100 group-hover:bg-purple-100"
-                            : "bg-purple-100/50 hover:bg-purple-200 group-hover:bg-purple-200"
+                          "transition-all duration-200",
+                          index % 2 === 0 ? "bg-background" : "bg-purple-100/50",
+                          story.expanded ? `h-[${getExpandedHeight(story.items?.length || 0)}px]` : "h-14"
                         )}
                       >
-                        <div className="absolute inset-x-0 flex flex-col gap-1 px-4">
-                          <div className="h-4 rounded-full w-full relative">
-                            {story.start_date && story.end_date && (
-                              <>
-                                <div
-                                  className="h-full bg-purple-500 rounded-xs"
-                                  style={{
-                                    width: `${duration}%`,
-                                    marginLeft: `${startPosition}%`,
-                                    display: startPosition > 100 || startPosition + duration < 0 ? "none" : "block"
-                                  }}
-                                />
-                                <div
-                                  className="absolute whitespace-nowrap text-xs text-muted-foreground"
-                                  style={{
-                                    left: `${startPosition + duration / 2}%`,
-                                    top: "-20px",
-                                    transform: "translateX(-50%)"
-                                  }}
-                                >
-                                  {format(story.start_date, "MMM dd")} - {format(story.end_date, "MMM dd")} •{" "}
-                                  {differenceInDays(story.end_date, story.start_date)}d
-                                </div>
-                              </>
-                            )}
+                        <div className="p-4 space-y-2">
+                          {/* Story Row */}
+                          <div className="group flex items-center gap-2 rounded-md h-6">
+                            <button
+                              onClick={() => toggleStoryExpansion(story.id)}
+                              className="text-muted-foreground hover:text-primary cursor-pointer transition-colors"
+                            >
+                              {story.expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                            </button>
+                            <span
+                              className="text-sm font-medium flex-1 truncate cursor-pointer hover:text-primary transition-colors"
+                              onClick={() => handleStoryClick(story.id)}
+                            >
+                              {story.title}
+                            </span>
+                            <Badge variant="outline" className="bg-green-500/10 text-green-500 hover:bg-green-500/20 shrink-0">
+                              {story.status}
+                            </Badge>
                           </div>
 
-                          {/* Tasks Timeline */}
+                          {/* Tasks */}
                           {story.expanded &&
-                            story.items?.map((item, itemIndex) => {
-                              // For demo, create task dates based on story dates and task index
-                              const taskStartDate = addDays(story.start_date!, itemIndex * 3);
-                              const taskEndDate = addDays(taskStartDate, 2);
-
-                              const taskStartPosition = Math.max(
-                                0,
-                                ((taskStartDate.getTime() - timelineRange.start.getTime()) / (timelineRange.end.getTime() - timelineRange.start.getTime())) *
-                                  100
-                              );
-
-                              const taskDuration = Math.min(
-                                100 - taskStartPosition,
-                                ((taskEndDate.getTime() - taskStartDate.getTime()) / (timelineRange.end.getTime() - timelineRange.start.getTime())) * 100
-                              );
-
-                              return (
-                                <div key={itemIndex} className="h-2 rounded-full w-full relative">
-                                  <div
-                                    className="h-full rounded-xs bg-blue-500"
-                                    style={{
-                                      width: `${taskDuration}%`,
-                                      marginLeft: `${taskStartPosition}%`,
-                                      display: taskStartPosition > 100 || taskStartPosition + taskDuration < 0 ? "none" : "block"
-                                    }}
-                                  />
-                                  <div
-                                    className="absolute whitespace-nowrap text-xs font-medium"
-                                    style={{
-                                      left: `${taskStartPosition}%`,
-                                      bottom: "100%",
-                                      marginBottom: "2px",
-                                      color: "rgb(59 130 246)"
-                                    }}
-                                  >
-                                    {item.length > 30 ? item.substring(0, 30) + "..." : item} • {format(taskStartDate, "MMM dd")}
-                                  </div>
-                                </div>
-                              );
-                            })}
+                            story.items?.map((item, index) => (
+                              <div key={index} className="group flex items-center gap-2 p-2 pl-8 hover:bg-secondary/50 rounded-md h-8">
+                                <CheckSquare className="h-4 w-4 text-muted-foreground" />
+                                <span className="text-sm text-muted-foreground flex-1 truncate">{item}</span>
+                                <Badge variant="outline" className="bg-blue-500/10 text-blue-500 shrink-0">
+                                  TODO
+                                </Badge>
+                              </div>
+                            ))}
                         </div>
                       </div>
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
-            </div>
-          </div>
+            </ResizablePanel>
+
+            <ResizableHandle className="w-1.5 bg-transparent hover:bg-border transition-colors duration-150">
+              <div className="opacity-0 hover:opacity-100 transition-opacity duration-150">
+                <div className="w-1 h-20 bg-border/60 rounded-full mx-auto" />
+              </div>
+            </ResizableHandle>
+
+            {/* Right Column - Timeline */}
+            <ResizablePanel defaultSize={75}>
+              <div ref={timelineRef} className="h-full overflow-x-auto bg-secondary/5">
+                <div
+                  className="relative"
+                  style={{
+                    minWidth: timelineView === "Weeks" ? `${days.length * 40}px` : `${weeks.length * 100}px`
+                  }}
+                >
+                  {/* Timeline Header */}
+                  <div className="flex border-b sticky top-0 bg-background p-4 h-[90px]">
+                    <div className="flex-1">{renderTimelineHeader()}</div>
+                  </div>
+
+                  {/* Week separator lines */}
+                  {timelineView === "Weeks" &&
+                    days.map(
+                      (date, index) =>
+                        date.getDay() === 1 && (
+                          <div
+                            key={`separator-${index}`}
+                            className="absolute top-[90px] bottom-0 w-px bg-border"
+                            style={{
+                              left: `${index * 40 + 16}px`
+                            }}
+                          />
+                        )
+                    )}
+
+                  {/* Today Indicator */}
+                  <div
+                    className="absolute top-[90px] bottom-0 w-[3px] bg-blue-500 z-10"
+                    style={{
+                      left: `${calculateTodayPosition() * days.length * 0.4 - 4}px`,
+                      boxShadow: "0 0 8px rgba(59, 130, 246, 0.5)"
+                    }}
+                  >
+                    <div
+                      className="absolute -top-1 left-1/2 -translate-x-1/2 w-0 h-0"
+                      style={{
+                        borderLeft: "6px solid transparent",
+                        borderRight: "6px solid transparent",
+                        borderTop: "8px solid rgb(59, 130, 246)"
+                      }}
+                    />
+                  </div>
+
+                  {stories.map((story: Story, index: number) => {
+                    const startDate = new Date(story.start_date!);
+                    const endDate = new Date(story.end_date!);
+
+                    // Calculate days from the start of the timeline
+                    const timelineDays = days.length;
+                    const dayWidth = 40; // Width of each day column
+                    const timelineStartDay = timelineRange.start.getTime();
+                    const daysFromStart = Math.floor((startDate.getTime() - timelineStartDay) / (24 * 60 * 60 * 1000));
+                    const daysUntilEnd = Math.floor((endDate.getTime() - timelineStartDay) / (24 * 60 * 60 * 1000));
+
+                    // Calculate position and width based on day columns
+                    const startPosition = daysFromStart * dayWidth;
+                    const duration = (daysUntilEnd - daysFromStart + 1) * dayWidth;
+
+                    return (
+                      <div key={story.id}>
+                        <div
+                          className={cn(
+                            "transition-all duration-200",
+                            index % 2 === 0 ? "bg-background" : "bg-purple-100/50",
+                            story.expanded ? `h-[${getExpandedHeight(story.items?.length || 0)}px]` : "h-14"
+                          )}
+                          style={{
+                            height: story.expanded ? getExpandedHeight(story.items?.length || 0) : 56,
+                            minHeight: 56,
+                            width: "100%"
+                          }}
+                        >
+                          <div className="p-4 space-y-4">
+                            {/* Story Timeline Bar */}
+                            <div className="h-6 rounded-full w-full relative flex items-center">
+                              {story.start_date && story.end_date && (
+                                <div
+                                  className="h-5 bg-purple-500 rounded-xs relative group cursor-pointer hover:shadow-[0_0_8px_rgba(168,85,247,0.5)] transition-shadow duration-200"
+                                  style={{
+                                    width: `${duration}px`,
+                                    left: `${startPosition}px`,
+                                    position: "absolute",
+                                    display: startPosition < 0 || startPosition > timelineDays * dayWidth ? "none" : "block"
+                                  }}
+                                  onClick={() => handleStoryClick(story.id)}
+                                >
+                                  {/* Resize handles */}
+                                  <div
+                                    className="absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize hover:bg-purple-100/50 m-1 rounded-xs"
+                                    onMouseDown={(e) => {
+                                      e.stopPropagation();
+                                      handleResizeStart(story.id, "start");
+                                    }}
+                                  />
+                                  <div
+                                    className="absolute right-0 top-0 bottom-0 w-2 cursor-ew-resize hover:bg-purple-100/50 m-1 rounded-xs"
+                                    onMouseDown={(e) => {
+                                      e.stopPropagation();
+                                      handleResizeStart(story.id, "end");
+                                    }}
+                                  />
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Tasks Timeline */}
+                            {story.expanded &&
+                              story.items?.map((item: string, itemIndex: number) => {
+                                if (!story.start_date) return null;
+
+                                const taskStartDate = addDays(story.start_date, itemIndex * 3);
+                                const taskEndDate = addDays(taskStartDate, 2);
+
+                                const taskDaysFromStart = Math.floor((taskStartDate.getTime() - timelineStartDay) / (24 * 60 * 60 * 1000));
+                                const taskDaysUntilEnd = Math.floor((taskEndDate.getTime() - timelineStartDay) / (24 * 60 * 60 * 1000));
+
+                                const taskStartPosition = taskDaysFromStart * dayWidth;
+                                const taskDuration = (taskDaysUntilEnd - taskDaysFromStart + 1) * dayWidth;
+
+                                return (
+                                  <div key={itemIndex} className="h-8 rounded-full w-full relative flex items-center">
+                                    <div
+                                      className="h-4 rounded-xs bg-blue-500"
+                                      style={{
+                                        width: `${taskDuration}px`,
+                                        left: `${taskStartPosition}px`,
+                                        position: "absolute",
+                                        display: taskStartPosition < 0 || taskStartPosition > timelineDays * dayWidth ? "none" : "block"
+                                      }}
+                                    />
+                                  </div>
+                                );
+                              })}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </ResizablePanel>
+          </ResizablePanelGroup>
         </div>
 
         {/* Footer Controls */}
-        <div className="border-t p-2 flex justify-end items-center gap-2 bg-background">
-          {timelineControls.map((view) => (
-            <Button key={view} variant={timelineView === view ? "secondary" : "ghost"} size="sm" onClick={() => setTimelineView(view)}>
-              {view}
+        <div className="border-t p-4 flex justify-between items-center gap-2 bg-background">
+          {/* Create Story Button/Input */}
+          <div className="flex items-center gap-2">
+            {isCreatingStory ? (
+              <input
+                type="text"
+                value={newStoryTitle}
+                onChange={(e) => setNewStoryTitle(e.target.value)}
+                onKeyDown={handleKeyDown}
+                onBlur={() => {
+                  setIsCreatingStory(false);
+                  setNewStoryTitle("");
+                }}
+                placeholder="Enter story title..."
+                className="h-9 px-3 py-1 text-sm rounded-md border border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                autoFocus
+              />
+            ) : (
+              <Button variant="outline" size="sm" onClick={() => setIsCreatingStory(true)} className="gap-1">
+                <Plus className="h-4 w-4" />
+                Create Story
+              </Button>
+            )}
+          </div>
+
+          {/* Timeline Controls */}
+          <div className="flex items-center gap-2">
+            {timelineControls.map((view) => (
+              <Button
+                key={view}
+                variant={timelineView === view ? "secondary" : "ghost"}
+                size="sm"
+                onClick={() => {
+                  setTimelineView(view);
+                  setTimeout(centerTimeline, 0);
+                }}
+              >
+                {view}
+              </Button>
+            ))}
+            <div className="w-px h-4 bg-border" />
+            <Button variant="outline" size="sm" onClick={centerTimeline}>
+              Today
             </Button>
-          ))}
-          <Button variant="ghost" size="icon">
-            <Info className="h-4 w-4" />
-          </Button>
+          </div>
         </div>
       </div>
+
+      {/* Story Detail Dialog */}
+      <StoryDetailDialog storyId={selectedStoryId} open={isStoryDialogOpen} onOpenChange={setIsStoryDialogOpen} onStoryUpdate={fetchStories} />
     </TooltipProvider>
   );
 }

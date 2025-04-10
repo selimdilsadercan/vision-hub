@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { FolderIcon, Users2Icon, SearchIcon, ClockIcon } from "lucide-react";
+import { FolderIcon, Users2Icon, SearchIcon, ClockIcon, CalendarIcon, WalletIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -11,14 +11,9 @@ interface ProjectSidebarProps {
 
 const routes = [
   {
-    label: "Folders",
+    label: "Overview",
     icon: FolderIcon,
     href: ""
-  },
-  {
-    label: "Research",
-    icon: SearchIcon,
-    href: "/research"
   },
   {
     label: "Timeline",
@@ -26,9 +21,24 @@ const routes = [
     href: "/timeline"
   },
   {
+    label: "Meetings",
+    icon: CalendarIcon,
+    href: "/meetings"
+  },
+  {
+    label: "Research",
+    icon: SearchIcon,
+    href: "/research"
+  },
+  {
     label: "Members",
     icon: Users2Icon,
     href: "/members"
+  },
+  {
+    label: "Finance",
+    icon: WalletIcon,
+    href: "/finance"
   }
 ];
 
@@ -36,22 +46,30 @@ export function ProjectSidebar({ projectId }: ProjectSidebarProps) {
   const pathname = usePathname();
 
   return (
-    <div className="space-y-4 flex flex-col h-full text-primary bg-secondary">
-      <div className="p-3 flex-1 flex justify-center">
-        <div className="space-y-2">
+    <div className="relative flex h-full w-[260px] flex-col border-r px-3 py-4">
+      {/* Logo Area */}
+      <div className="flex h-[60px] items-center px-2">
+        <Link href="/home" className="flex items-center gap-2">
+          <div className="rounded-lg bg-primary p-1">
+            <span className="text-lg font-bold text-primary-foreground">HUB</span>
+          </div>
+        </Link>
+      </div>
+
+      <div className="flex flex-1 flex-col gap-4 overflow-hidden">
+        {/* Main Navigation */}
+        <div className="flex flex-col gap-1">
           {routes.map((route) => (
-            <Link
-              key={route.href}
-              href={`/projects/${projectId}${route.href}`}
-              className={cn(
-                "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-primary hover:bg-primary/10 rounded-lg transition",
-                pathname === `/projects/${projectId}${route.href}` ? "text-primary bg-primary/10" : "text-zinc-400"
-              )}
-            >
-              <div className="flex items-center flex-1">
-                <route.icon className="h-5 w-5 mr-3" />
+            <Link key={route.href} href={`/projects/${projectId}${route.href}`}>
+              <span
+                className={cn(
+                  "group flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+                  pathname === `/projects/${projectId}${route.href}` ? "bg-accent text-accent-foreground" : "transparent"
+                )}
+              >
+                <route.icon className="mr-2 h-4 w-4" />
                 {route.label}
-              </div>
+              </span>
             </Link>
           ))}
         </div>
