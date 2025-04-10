@@ -4,6 +4,7 @@ globs:
 alwaysApply: true
 ---
 - do not create shadcn compoennts by yourself
+- do not create components/ui/ componets by yourself
 - use react-hot-toast we already have in app
 - use npx shadcn@latest instead of npx shadcn-ui@latest
 - if i say you to use a component for a task always search detaily if is this component exists in components folder
@@ -11,5 +12,6 @@ alwaysApply: true
 - do not use "any" type
 - use next.config.ts instead of next.config.js
 - while implementing ui always first check related functions in supabase-types.ts file for types
-- look for main pages = (main)/, project pages = project/[id]/, auth pages = (auth)/
+- look for main pages = (main)/, project pages = dashboard/[id]/, auth pages = (auth)/
 - do not use params.id use useParams
+- get profile id using import { getUserData, type FirestoreUser } from "@/firebase/firestore";

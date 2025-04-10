@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { WebsiteCard } from "@/components/projects/WebsiteCard";
+import { WebsiteCard } from "@/components/dashboard/WebsiteCard";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";

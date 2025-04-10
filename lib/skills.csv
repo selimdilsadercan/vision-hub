@@ -1,0 +1,1753 @@
+Kategori|Skill|Micro Skill
+Backend|Django|Django nedir ve avantajları
+Backend|Django|Django kurulumu (virtualenv ile)
+Backend|Django|Yeni proje başlatma (django-admin startproject)
+Backend|Django|Yeni uygulama oluşturma (startapp)
+Backend|Django|Proje ayarlarını yapılandırma (settings.py)
+Backend|Django|URL yönlendirmeleri tanımlama (urls.py)
+Backend|Django|Temel view oluşturma (HttpResponse)
+Backend|Django|Template sistemi kullanımı (HTML entegrasyonu)
+Backend|Django|Template inheritance (extends, block)
+Backend|Django|Django template etiketleri (if, for)
+Backend|Django|Static dosyalar (CSS, JS) yönetimi
+Backend|Django|Media dosyalarının yüklenmesi ve servisi
+Backend|Django|Model tanımı ve alanlar (CharField, DateField)
+Backend|Django|Veri tabanı işlemleri (makemigrations, migrate)
+Backend|Django|Admin panel özelleştirme
+Backend|Django|Model kayıtlarını yönetme (create, update, delete)
+Backend|Django|Django Shell kullanımı
+Backend|Django|Form sınıfları ile form oluşturma
+Backend|Django|Django form validasyonları
+Backend|Django|Django Generic Views kullanımı
+Backend|Django|Class-based views tanımı
+Backend|Django|Django REST Framework kurulumu
+Backend|Django|Serializer tanımı
+Backend|Django|APIView, ModelViewSet kullanımı
+Backend|Django|Authentication işlemleri (login, logout, permission)
+Backend|Django|JWT Authentication ile kullanıcı giriş sistemi
+Backend|Django|URL parametreleri ve route düzenleme
+Backend|Django|Swagger veya Redoc ile API dokümantasyonu
+Backend|Django|QuerySet filtreleme ve sıralama
+Backend|Django|Pagination işlemleri (limit, offset)
+Backend|Django|File upload işlemleri
+Backend|Django|E-posta gönderme (send_mail, SMTP ayarları)
+Backend|Django|Signal kullanımı (post_save, pre_delete)
+Backend|Django|Middleware oluşturma ve kullanma
+Backend|Django|Celery ile background task tanımlama
+Backend|Django|Django Channels ile WebSocket uygulama
+Backend|Django|TestCase sınıfı ile test yazma
+Backend|Django|Deployment işlemleri (Gunicorn, Nginx, Heroku)
+Backend|Django|Çevresel değişkenlerin yönetimi (env dosyası)
+Backend|Django|Güvenlik ayarları (CSRF, CORS, XSS korumaları)
+Backend|Django|Kullanıcı profili oluşturma ve ilişkilendirme
+Backend|Express.js|Express nedir ve ne için kullanılır?
+Backend|Express.js|express-generator ile proje başlatma
+Backend|Express.js|express() ile uygulama başlatma
+Backend|Express.js|Temel route tanımlama (app.get, app.post)
+Backend|Express.js|Dinamik route parametreleri kullanma (req.params)
+Backend|Express.js|Query string okuma (req.query)
+Backend|Express.js|Body verilerini okuma (req.body)
+Backend|Express.js|JSON body parse işlemi (express.json)
+Backend|Express.js|URL encoded veri işleme (express.urlencoded)
+Backend|Express.js|Middleware mantığını anlama
+Backend|Express.js|Global ve lokal middleware tanımı
+Backend|Express.js|Static dosyalar sunma (express.static)
+Backend|Express.js|Router kullanımı (express.Router)
+Backend|Express.js|Route'ları ayrı dosyalara ayırma
+Backend|Express.js|Hata yönetimi middleware yazma
+Backend|Express.js|404 sayfası oluşturma
+Backend|Express.js|MVC mimarisine göre dosya yapısı oluşturma
+Backend|Express.js|Template engine kullanımı (EJS, Pug)
+Backend|Express.js|Cookie işleme (cookie-parser)
+Backend|Express.js|Session yönetimi (express-session)
+Backend|Express.js|JWT ile kimlik doğrulama entegrasyonu
+Backend|Express.js|Rate limiting uygulama (express-rate-limit)
+Backend|Express.js|Helmet ile güvenlik önlemleri
+Backend|Express.js|CORS ayarları yapma (cors modülü)
+Backend|Express.js|API versiyonlama
+Backend|Express.js|Logger middleware yazma (morgan, custom logger)
+Backend|Express.js|Çevresel değişkenlerle yapılandırma (dotenv)
+Backend|Express.js|Asenkron route tanımlama (async/await)
+Backend|Express.js|Postman ile test etme
+Backend|Express.js|Jest veya Supertest ile endpoint testi
+Backend|Express.js|MongoDB bağlantısı (mongoose ile)
+Backend|Express.js|CRUD operasyonları gerçekleştirme
+Backend|Express.js|Dosya yükleme (multer)
+Backend|Express.js|Kullanıcı doğrulama sistemi oluşturma
+Backend|Express.js|Mail gönderme (nodemailer)
+Backend|Express.js|API dokümantasyonu (Swagger ile)
+Backend|Express.js|Deployment (Render, Heroku, Vercel)
+Backend|Express.js|Hata loglarını log dosyasına kaydetme
+Backend|Express.js|Otomatik yeniden başlatma (nodemon)
+Backend|Flask|Flask kurulumu ve pip ile yükleme
+Backend|Flask|Basit uygulama oluşturma (hello world)
+Backend|Flask|Flask app yapısı ve debug modu
+Backend|Flask|Route tanımlama ve parametre kullanımı
+Backend|Flask|GET, POST metodları ile istek işleme
+Backend|Flask|Jinja2 template kullanımı
+Backend|Flask|Template inheritance yapısı
+Backend|Flask|Static dosya sunumu
+Backend|Flask|Form veri alma (request.form)
+Backend|Flask|Redirect ve URL oluşturma (redirect, url_for)
+Backend|Flask|JSON response döndürme (jsonify)
+Backend|Flask|Blueprints ile modüler yapı oluşturma
+Backend|Flask|Middleware yazma (before_request, after_request)
+Backend|Flask|Session yönetimi ve cookie işlemleri
+Backend|Flask|Flask-WTF ile form validasyonu
+Backend|Flask|Flask-Login ile kullanıcı girişi
+Backend|Flask|Flask-Migrate ile veritabanı migrasyonu
+Backend|Flask|SQLAlchemy ORM kullanımı
+Backend|Flask|CRUD işlemleri gerçekleştirme
+Backend|Flask|Flask-SQLAlchemy ile ilişkili modeller
+Backend|Flask|Dosya yükleme (Flask-Uploads)
+Backend|Flask|JWT Authentication entegrasyonu
+Backend|Flask|RESTful API geliştirme
+Backend|Flask|Flask-RESTful veya Flask-Restx kullanımı
+Backend|Flask|API testleri (Postman, pytest)
+Backend|Flask|Swagger ile API dökümantasyonu
+Backend|Flask|Mail gönderimi (Flask-Mail)
+Backend|Flask|CORS ayarları (Flask-CORS)
+Backend|Flask|Uygulama konfigürasyonu (config.py)
+Backend|Flask|Production için deployment (Gunicorn, Heroku)
+Backend|Flask|Hata yakalama ve özel hata sayfaları
+Backend|Flask|Logging sistemi kurma
+Backend|Flask|Background task işlemleri (Celery ile)
+Backend|Flask|WebSocket entegrasyonu (Flask-SocketIO)
+Backend|GraphQL|GraphQL nedir ve REST'ten farkları
+Backend|GraphQL|GraphQL sunucusu kurulumu (Apollo, Express)
+Backend|GraphQL|Schema tanımlama (type, query, mutation)
+Backend|GraphQL|Resolver fonksiyonlarının yazılması
+Backend|GraphQL|Query yazımı ve çalıştırma
+Backend|GraphQL|Mutation yazımı ve veri değiştirme
+Backend|GraphQL|GraphiQL ve Apollo Studio kullanımı
+Backend|GraphQL|Field ve nested query işlemleri
+Backend|GraphQL|Alias ve fragments kullanımı
+Backend|GraphQL|Input types ile veri gönderimi
+Backend|GraphQL|Enum tanımlama ve kullanımı
+Backend|GraphQL|Interface ve union types
+Backend|GraphQL|Scalar types kullanımı
+Backend|GraphQL|Otomatik schema dokümantasyonu
+Backend|GraphQL|Hata yönetimi ve validasyon
+Backend|GraphQL|Authorization işlemleri (context, JWT)
+Backend|GraphQL|Pagination stratejileri (offset, cursor)
+Backend|GraphQL|Filter ve search işlemleri
+Backend|GraphQL|GraphQL subscription (gerçek zamanlı veri)
+Backend|GraphQL|Apollo Client ile frontend bağlantısı
+Backend|GraphQL|Caching stratejileri (InMemoryCache)
+Backend|GraphQL|Lazy ve eager loading teknikleri
+Backend|GraphQL|Batch resolver kullanımı (DataLoader)
+Backend|GraphQL|REST API'den veri çekme (merge schemas)
+Backend|GraphQL|Gateway yapısı oluşturma
+Backend|GraphQL|Mikro servislerle entegre kullanım
+Backend|GraphQL|GraphQL Codegen kullanımı
+Backend|GraphQL|Test yazımı (Jest, Supertest, Apollo Test Client)
+Backend|GraphQL|Monitoring ve logging (Apollo Tracing)
+Backend|GraphQL|Deployment (Vercel, Heroku, AWS Lambda)
+Backend|GraphQL|Versiyonlama stratejileri ve backward compatibility
+Backend|GraphQL|Rate limiting ve güvenlik ayarları
+Backend|GraphQL|Custom scalar types oluşturma
+Backend|GraphQL|Directive kullanımı (deprecated, include, skip)
+Backend|GraphQL|Query analizleri ve performans optimizasyonu
+Backend|Node.js|Node.js nedir ve kullanım alanları
+Backend|Node.js|Node kurulumu ve environment ayarları
+Backend|Node.js|İlk Node.js uygulamasını yazma
+Backend|Node.js|console.log ile çıktı alma
+Backend|Node.js|Modül yapısını anlama (require, module.exports)
+Backend|Node.js|Yerleşik modüller (fs, http, path, os)
+Backend|Node.js|Dosya sistemi ile etkileşim (fs.readFile, writeFile)
+Backend|Node.js|HTTP server oluşturma (http.createServer)
+Backend|Node.js|Temel routing işlemleri
+Backend|Node.js|npm ile paket yönetimi
+Backend|Node.js|package.json dosyası oluşturma ve yönetimi
+Backend|Node.js|Üçüncü parti modül yükleme (chalk, lodash, dotenv)
+Backend|Node.js|Asenkron programlama kavramları
+Backend|Node.js|Callback fonksiyonlar
+Backend|Node.js|Promises kullanımı
+Backend|Node.js|async/await yapısı
+Backend|Node.js|try/catch ile hata yönetimi
+Backend|Node.js|Environment değişkenleri ile çalışma (dotenv)
+Backend|Node.js|Process objesi kullanımı
+Backend|Node.js|__dirname ve __filename kullanımı
+Backend|Node.js|JSON dosyaları ile veri okuma/yazma
+Backend|Node.js|EventEmitter kullanımı
+Backend|Node.js|Komut satırı argümanları ile çalışma
+Backend|Node.js|Uygulama yapısının modüler hale getirilmesi
+Backend|Node.js|Middleware kavramı (temel olarak)
+Backend|Node.js|RESTful API'lere giriş (yalın Node.js ile)
+Backend|Node.js|HTTP metotlarını yönetme (GET, POST, PUT, DELETE)
+Backend|Node.js|Veri doğrulama ve filtreleme
+Backend|Node.js|Basit logger fonksiyonu oluşturma
+Backend|Node.js|Server'ı restart etmeden izlemek (nodemon kullanımı)
+Backend|Node.js|Basit proje yapısı oluşturma (MVC öncesi yapı)
+Backend|Node.js|Zamanlayıcılar ile çalışmak (setInterval, setTimeout)
+Backend|Node.js|Try/catch-finally ile uygulama kararlılığı sağlama
+Backend|Node.js|Debugging yöntemleri (console, VSCode debugger)
+Backend|Node.js|Basit test yazımı (assert modülü)
+Backend|Node.js|Uygulamanın loglarını kayıt altına alma
+Backend|Node.js|Error-first callback pattern kullanımı
+Backend|Node.js|Temel performans ölçümü
+Backend|Node.js|Global object’ler (global, process, Buffer)
+Backend|Node.js|Uygulamanın farklı ortamlarda (dev/prod) çalıştırılması
+Backend|Spring Boot|Spring Boot nedir ve kullanım alanları
+Backend|Spring Boot|Spring Boot kurulumu ve yapılandırma
+Backend|Spring Boot|İlk Spring Boot projesi oluşturma (Spring Initializr)
+Backend|Spring Boot|Proje bağımlılıklarını yönetme (Maven, Gradle)
+Backend|Spring Boot|Application.properties ve YAML dosyaları
+Backend|Spring Boot|Controller sınıfı oluşturma
+Backend|Spring Boot|REST API endpoint tanımlama (GET, POST, PUT, DELETE)
+Backend|Spring Boot|RequestMapping, GetMapping, PostMapping kullanımı
+Backend|Spring Boot|DTO sınıfları oluşturma
+Backend|Spring Boot|Service katmanı yazımı
+Backend|Spring Boot|Repository interface oluşturma (CrudRepository, JpaRepository)
+Backend|Spring Boot|JPA ile veritabanı işlemleri
+Backend|Spring Boot|MySQL / PostgreSQL bağlantısı
+Backend|Spring Boot|@Entity, @Id, @GeneratedValue anotasyonları
+Backend|Spring Boot|H2 in-memory database kullanımı
+Backend|Spring Boot|Veri doğrulama (Bean Validation, @Valid)
+Backend|Spring Boot|Hata yönetimi (@ExceptionHandler, @ControllerAdvice)
+Backend|Spring Boot|Swagger/OpenAPI entegrasyonu
+Backend|Spring Boot|Lombok kullanımı (@Getter, @Setter, @Data)
+Backend|Spring Boot|Spring Security ile kimlik doğrulama
+Backend|Spring Boot|JWT ile kullanıcı doğrulama
+Backend|Spring Boot|Spring Boot DevTools kullanımı
+Backend|Spring Boot|Logging (SLF4J, Logback)
+Backend|Spring Boot|Uygulama testleri (JUnit, Mockito)
+Backend|Spring Boot|MockMvc ile REST API testleri
+Backend|Spring Boot|Proje yapılandırması ve katmanlı mimari
+Backend|Spring Boot|Environment değişkenleri ile çalışmak
+Backend|Spring Boot|CORS yapılandırması
+Backend|Spring Boot|Global exception handling
+Backend|Spring Boot|Scheduler (Zamanlanmış görevler)
+Backend|Spring Boot|WebSocket entegrasyonu
+Backend|Spring Boot|Spring Boot Actuator ile uygulama izleme
+Backend|Spring Boot|Uygulama konfigürasyonu profilleri (dev, prod)
+Backend|Spring Boot|Dockerfile ile Spring Boot containerize etmek
+Backend|Spring Boot|Deployment (Heroku, AWS, Render)
+Backend|Spring Boot|Mail gönderimi (Spring Mail)
+Backend|Spring Boot|Dosya yükleme ve indirme
+Backend|Spring Boot|Role-based authorization yapısı
+Backend|Spring Boot|API versiyonlama stratejileri
+Backend|WebSocket|WebSocket nedir ve kullanım alanları
+Backend|WebSocket|WebSocket protokolünün temel yapısı
+Backend|WebSocket|WebSocket handshake işlemi
+Backend|WebSocket|WebSocket client ve server arasındaki fark
+Backend|WebSocket|Node.js ile WebSocket server kurulumu (ws modülü)
+Backend|WebSocket|Client bağlantısı kurma (JavaScript ile)
+Backend|WebSocket|Message gönderme ve alma (onmessage, send)
+Backend|WebSocket|Bağlantı açıldığında işlem yapma (onopen)
+Backend|WebSocket|Bağlantı kapandığında işlem yapma (onclose)
+Backend|WebSocket|Hata yönetimi (onerror)
+Backend|WebSocket|JSON veri gönderimi ve parse işlemleri
+Backend|WebSocket|Ping-pong mesajları ile bağlantı kontrolü
+Backend|WebSocket|Broadcast mesaj gönderme
+Backend|WebSocket|Kullanıcıya özel kanal yönetimi
+Backend|WebSocket|Oturum yönetimi ve kimlik doğrulama
+Backend|WebSocket|JWT ile kullanıcı doğrulama entegrasyonu
+Backend|WebSocket|WebSocket ile gerçek zamanlı chat uygulaması
+Backend|WebSocket|WebSocket ile canlı veri takibi (stock, sensör vs.)
+Backend|WebSocket|WebSocket ile multiplayer oyun altyapısı
+Backend|WebSocket|WebSocket ile dashboard güncelleme
+Backend|WebSocket|Redis ile WebSocket mesaj kuyruğu
+Backend|WebSocket|Load balancing ve ölçeklenebilirlik stratejileri
+Backend|WebSocket|WebSocket endpoint'leri versiyonlama
+Backend|WebSocket|WebSocket güvenlik ayarları (rate limit, input sanitization)
+Backend|WebSocket|WebSocket bağlantılarında zaman aşımı yönetimi
+Backend|WebSocket|WebSocket lifecycle yönetimi
+Backend|WebSocket|WebSocket debug ve loglama teknikleri
+Backend|WebSocket|WebSocket ile veri şifreleme (TLS üzerinden)
+Backend|WebSocket|WebSocket fallback stratejileri (long polling)
+Bulut Platformları|AWS|AWS nedir ve genel servis yapısı
+Bulut Platformları|AWS|IAM kullanıcı ve rol yönetimi
+Bulut Platformları|AWS|EC2 sunucu oluşturma ve yapılandırma
+Bulut Platformları|AWS|S3 ile dosya saklama ve bucket yönetimi
+Bulut Platformları|AWS|RDS veritabanı kurulumu (MySQL, PostgreSQL)
+Bulut Platformları|AWS|Lambda fonksiyon yazma
+Bulut Platformları|AWS|API Gateway ile serverless API oluşturma
+Bulut Platformları|AWS|CloudWatch loglama ve monitoring
+Bulut Platformları|AWS|CloudFormation ile altyapı kodlama
+Bulut Platformları|AWS|Route 53 ile DNS yönetimi
+Bulut Platformları|AWS|Load Balancer kurulumu
+Bulut Platformları|AWS|IAM policy yazımı ve atanması
+Bulut Platformları|AWS|Security Groups ve VPC ayarları
+Bulut Platformları|AWS|Elastic Beanstalk ile hızlı deploy
+Bulut Platformları|AWS|SQS ile kuyruk sistemi oluşturma
+Bulut Platformları|AWS|SES ile e-posta gönderimi
+Bulut Platformları|AWS|AWS CLI komutları ile kaynak yönetimi
+Bulut Platformları|AWS|Auto-scaling yapılandırma
+Bulut Platformları|AWS|Billing yönetimi ve bütçe limiti
+Bulut Platformları|AWS|SSL sertifikası tanımlama (ACM)
+Bulut Platformları|AWS|Static website host etme (S3 ile)
+Bulut Platformları|AWS|Snapshot ve backup işlemleri
+Bulut Platformları|AWS|ECS / EKS ile container yönetimi
+Bulut Platformları|Azure|Azure portal tanımı ve kaynak oluşturma
+Bulut Platformları|Azure|Azure CLI kurulumu ve komutları
+Bulut Platformları|Azure|App Service ile web uygulaması barındırma
+Bulut Platformları|Azure|Azure Functions ile serverless yapı
+Bulut Platformları|Azure|Blob Storage ile dosya saklama
+Bulut Platformları|Azure|Cosmos DB ile NoSQL veritabanı
+Bulut Platformları|Azure|SQL Database kurulumu
+Bulut Platformları|Azure|Virtual Network (VNet) oluşturma
+Bulut Platformları|Azure|Resource Group yönetimi
+Bulut Platformları|Azure|Azure Monitor ile sistem takibi
+Bulut Platformları|Azure|Azure DevOps pipeline oluşturma
+Bulut Platformları|Azure|Role-based access control (RBAC)
+Bulut Platformları|Azure|Logic Apps kullanımı
+Bulut Platformları|Azure|API Management entegrasyonu
+Bulut Platformları|Azure|Application Insights ile hata takibi
+Bulut Platformları|Azure|Key Vault ile secret yönetimi
+Bulut Platformları|Azure|Load balancer yapılandırma
+Bulut Platformları|Azure|Otomatik ölçeklendirme (autoscale)
+Bulut Platformları|Azure|Azure Policy ile güvenlik kuralları
+Bulut Platformları|Azure|Azure Container Apps ile mikro servis barındırma
+Bulut Platformları|Google Cloud|GCP nedir ve genel mimarisi
+Bulut Platformları|Google Cloud|IAM & Admin paneli kullanımı
+Bulut Platformları|Google Cloud|Compute Engine sanal makine kurulumu
+Bulut Platformları|Google Cloud|Cloud Functions oluşturma
+Bulut Platformları|Google Cloud|App Engine deploy süreci
+Bulut Platformları|Google Cloud|Firestore veritabanı kullanımı
+Bulut Platformları|Google Cloud|Cloud Storage ile dosya yönetimi
+Bulut Platformları|Google Cloud|Cloud Build ile CI/CD entegrasyonu
+Bulut Platformları|Google Cloud|Cloud Run ile container deploy
+Bulut Platformları|Google Cloud|Logging ve Monitoring (Stackdriver)
+Bulut Platformları|Google Cloud|API anahtarı ve erişim ayarları
+Bulut Platformları|Google Cloud|Cloud SQL kurulumu ve bağlantı
+Bulut Platformları|Google Cloud|Billing ve proje yönetimi
+Bulut Platformları|Google Cloud|VPC ve firewall yapılandırması
+Bulut Platformları|Google Cloud|BigQuery ile büyük veri analizi
+Bulut Platformları|Google Cloud|Cloud Scheduler kullanımı
+Bulut Platformları|Google Cloud|Cloud Pub/Sub ile mesaj kuyruğu
+Bulut Platformları|Google Cloud|Deployment Manager ile altyapı yönetimi
+Bulut Platformları|Google Cloud|Cloud Shell ile terminal kullanımı
+Bulut Platformları|Google Cloud|GCP CLI (gcloud) ile kaynak yönetimi
+DevOps|Ansible|Ansible nedir ve avantajları
+DevOps|Ansible|Ansible kurulumu ve ortam ayarları
+DevOps|Ansible|Inventory dosyası tanımı
+DevOps|Ansible|Ad-hoc komutlar kullanımı
+DevOps|Ansible|Playbook yazımı (YAML formatı)
+DevOps|Ansible|Hosts ve grup tanımı
+DevOps|Ansible|Task yapısı ve modül kullanımı
+DevOps|Ansible|Package, service, copy modülleri
+DevOps|Ansible|Vars tanımı ve include_vars kullanımı
+DevOps|Ansible|Conditionals (when) ile görev kontrolü
+DevOps|Ansible|Loops (with_items, loop)
+DevOps|Ansible|Handlers ile tetiklenen görevler
+DevOps|Ansible|Templates (Jinja2) kullanımı
+DevOps|Ansible|Roles yapısı oluşturma
+DevOps|Ansible|Role içinde vars, tasks, templates dizinleri
+DevOps|Ansible|Dynamic inventory kullanımı
+DevOps|Ansible|Ansible Vault ile şifreli yapı
+DevOps|Ansible|Ansible Galaxy entegrasyonu
+DevOps|Ansible|Hata yönetimi ve debug işlemleri
+DevOps|Ansible|Register ile çıktı yakalama
+DevOps|Ansible|Block yapısı ile grup task tanımı
+DevOps|Ansible|Ansible ile Docker container yönetimi
+DevOps|Ansible|Ansible ile sistem güncelleme otomasyonu
+DevOps|Ansible|Uzak sunuculara uygulama kurulumu
+DevOps|Ansible|CI/CD sürecinde Ansible kullanımı
+DevOps|Ansible|Ansible Tower/ AWX arayüz kullanımı
+DevOps|Ansible|Ansible ile çoklu ortam yapılandırması
+DevOps|Ansible|SSH bağlantı ve kimlik doğrulama ayarları
+DevOps|Ansible|Ansible log ve çıktı analizi
+DevOps|CI/CD|CI/CD nedir tanımı ve faydaları
+DevOps|CI/CD|Continuous Integration ve Deployment farkı
+DevOps|CI/CD|CI/CD pipeline temel yapısı
+DevOps|CI/CD|Git ile CI/CD entegrasyonu
+DevOps|CI/CD|GitHub Actions kurulumu
+DevOps|CI/CD|GitLab CI/CD dosyası (gitlab-ci.yml)
+DevOps|CI/CD|Jenkins kurulumu ve job tanımı
+DevOps|CI/CD|CircleCI ile pipeline tanımı
+DevOps|CI/CD|Build adımı konfigürasyonu
+DevOps|CI/CD|Test adımı entegrasyonu
+DevOps|CI/CD|Otomatik deployment tanımı
+DevOps|CI/CD|Environment bazlı build (dev/stage/prod)
+DevOps|CI/CD|Docker ile CI/CD pipeline
+DevOps|CI/CD|Docker Hub’a otomatik push
+DevOps|CI/CD|Artifact oluşturma ve saklama
+DevOps|CI/CD|Slack/Discord ile bildirim
+DevOps|CI/CD|Pipeline cache mekanizması
+DevOps|CI/CD|Hata durumunda rollback
+DevOps|CI/CD|Secret yönetimi (GitHub Secrets, Vault)
+DevOps|CI/CD|Pipeline security (signed commit, token)
+DevOps|CI/CD|Manual trigger ve onay adımları
+DevOps|CI/CD|Versioning stratejileri (semver)
+DevOps|CI/CD|Test coverage raporlarının entegrasyonu
+DevOps|CI/CD|Static code analysis araçları (SonarQube)
+DevOps|CI/CD|Pipeline log analizi
+DevOps|CI/CD|İşlem süresi optimizasyonu
+DevOps|CI/CD|Custom Dockerfile build entegrasyonu
+DevOps|CI/CD|Kubernetes entegrasyonu ile deploy
+DevOps|CI/CD|Blue-green deployment
+DevOps|CI/CD|Canary release
+DevOps|Docker & Kubernetes|Docker nedir ve kullanım alanları
+DevOps|Docker & Kubernetes|Docker kurulumu
+DevOps|Docker & Kubernetes|Dockerfile oluşturma
+DevOps|Docker & Kubernetes|Docker image oluşturma (docker build)
+DevOps|Docker & Kubernetes|Docker container başlatma (docker run)
+DevOps|Docker & Kubernetes|Docker container durdurma, silme
+DevOps|Docker & Kubernetes|Volume tanımlama ve bağlama
+DevOps|Docker & Kubernetes|Docker-compose dosyası oluşturma
+DevOps|Docker & Kubernetes|Çoklu container yönetimi (docker-compose up)
+DevOps|Docker & Kubernetes|Ortam değişkenleri ile çalışmak
+DevOps|Docker & Kubernetes|Container loglarını takip etme
+DevOps|Docker & Kubernetes|Docker Hub ile image paylaşımı
+DevOps|Docker & Kubernetes|Docker network yönetimi
+DevOps|Docker & Kubernetes|Image versiyonlama
+DevOps|Docker & Kubernetes|Lightweight image'lar kullanma (Alpine)
+DevOps|Docker & Kubernetes|Kubernetes mimarisini anlama
+DevOps|Docker & Kubernetes|Minikube kurulumu ve kullanımı
+DevOps|Docker & Kubernetes|Pod oluşturma ve yönetme
+DevOps|Docker & Kubernetes|Deployment, Service, Ingress kavramları
+DevOps|Docker & Kubernetes|kubectl komutları ile küme yönetimi
+DevOps|Docker & Kubernetes|ConfigMap ve Secret kullanımı
+DevOps|Docker & Kubernetes|Helm ile paket yönetimi
+DevOps|Docker & Kubernetes|Namespace oluşturma ve ayrıştırma
+DevOps|Docker & Kubernetes|Otomatik ölçeklendirme (Horizontal Pod Autoscaler)
+DevOps|Docker & Kubernetes|Sağlık kontrolleri (liveness, readiness probes)
+DevOps|Docker & Kubernetes|Rolling update ve rollback işlemleri
+DevOps|Docker & Kubernetes|Kubernetes dashboard kurulumu
+DevOps|Docker & Kubernetes|CI/CD entegrasyonu ile kullanım
+DevOps|Docker & Kubernetes|StatefulSet vs Deployment farkları
+DevOps|Docker & Kubernetes|VolumeMounts ile veri kalıcılığı
+DevOps|Docker & Kubernetes|Pod içi container iletişimi
+DevOps|Docker & Kubernetes|Container güvenliği temel prensipler
+DevOps|Docker & Kubernetes|Resource limit ve request ayarları
+DevOps|Docker & Kubernetes|Cluster monitoring araçları
+DevOps|Docker & Kubernetes|LoadBalancer tipi servisler
+DevOps|Docker & Kubernetes|Custom resource definition (CRD)
+DevOps|Docker & Kubernetes|Network policy oluşturma
+DevOps|Docker & Kubernetes|Persistent Volume Claim (PVC) kullanımı
+DevOps|Docker & Kubernetes|Secrets ile güvenli yapılandırma
+DevOps|Docker & Kubernetes|Gerçek zamanlı loglama ve hata ayıklama
+DevOps|Terraform|Terraform nedir ve kullanım amacı
+DevOps|Terraform|Terraform kurulumu ve yapılandırma
+DevOps|Terraform|İlk Terraform projesi oluşturma
+DevOps|Terraform|Terraform dosya yapısı (.tf, .tfvars)
+DevOps|Terraform|Provider tanımı ve versiyon sabitleme
+DevOps|Terraform|Resource tanımı (aws_instance, azurerm_resource_group)
+DevOps|Terraform|Variable tanımlama ve kullanımı
+DevOps|Terraform|Output değişkenleri oluşturma
+DevOps|Terraform|locals ile lokal değişken kullanımı
+DevOps|Terraform|data ile harici veri çekme
+DevOps|Terraform|Module yapısı oluşturma ve çağırma
+DevOps|Terraform|State dosyası ve önemi
+DevOps|Terraform|remote state backend (S3, GCS)
+DevOps|Terraform|Terraform init, plan, apply, destroy komutları
+DevOps|Terraform|Resource dependency tanımı
+DevOps|Terraform|Terraform workspace ile ortam yönetimi
+DevOps|Terraform|Conditional ifadeler
+DevOps|Terraform|for_each ve count ile kaynak oluşturma
+DevOps|Terraform|Template dosyaları kullanımı (templatefile)
+DevOps|Terraform|Dynamic block oluşturma
+DevOps|Terraform|Lifecycle ayarları (prevent_destroy)
+DevOps|Terraform|Provisioner ile script çalıştırma
+DevOps|Terraform|Terraform Registry kullanımı
+DevOps|Terraform|Terraform fmt, validate komutları
+DevOps|Terraform|Terraform ile EC2 kurulum örneği
+DevOps|Terraform|Terraform ile GCP kaynak oluşturma
+DevOps|Terraform|Terraform ile Azure kaynak yönetimi
+DevOps|Terraform|HCL (HashiCorp Configuration Language) yapısı
+DevOps|Terraform|Terraform Cloud entegrasyonu
+DevOps|Terraform|CI/CD ile Terraform pipeline kurulumu
+Girişimcilik|Agile Yöntemler & CRM|Agile manifestosunu anlama
+Girişimcilik|Agile Yöntemler & CRM|Scrum metodolojisini öğrenme
+Girişimcilik|Agile Yöntemler & CRM|Kanban tahtası oluşturma
+Girişimcilik|Agile Yöntemler & CRM|Sprint planlaması yapma
+Girişimcilik|Agile Yöntemler & CRM|Daily stand-up toplantıları yürütme
+Girişimcilik|Agile Yöntemler & CRM|Sprint review ve retrospective uygulama
+Girişimcilik|Agile Yöntemler & CRM|Kullanıcı hikayesi (user story) yazımı
+Girişimcilik|Agile Yöntemler & CRM|Story point ile iş tahmini yapma
+Girişimcilik|Agile Yöntemler & CRM|Product backlog yönetimi
+Girişimcilik|Agile Yöntemler & CRM|Jira veya Trello gibi araçları kullanma
+Girişimcilik|Agile Yöntemler & CRM|Agile'da rol ve sorumluluklar (Scrum Master, Product Owner)
+Girişimcilik|Agile Yöntemler & CRM|Takım içi iş birliği süreçlerini oluşturma
+Girişimcilik|Agile Yöntemler & CRM|Minimum viable product kavramını Agile içinde ele alma
+Girişimcilik|Agile Yöntemler & CRM|Çevik yazılım döngüsünü planlama
+Girişimcilik|Agile Yöntemler & CRM|Test-driven development (TDD) prensiplerini uygulama
+Girişimcilik|Agile Yöntemler & CRM|Sürekli entegrasyon / sürekli dağıtım süreçlerini planlama
+Girişimcilik|Agile Yöntemler & CRM|Sprint içinde değişiklik yönetimi
+Girişimcilik|Agile Yöntemler & CRM|Takım motivasyonu ve ölçümleme
+Girişimcilik|Agile Yöntemler & CRM|CRM sistemlerinin temel kavramları
+Girişimcilik|Agile Yöntemler & CRM|Müşteri segmentasyonu ve veri yönetimi
+Girişimcilik|Finansal Planlama|Gelir-gider kalemlerini listeleme
+Girişimcilik|Finansal Planlama|Nakit akışı tahmini yapma
+Girişimcilik|Finansal Planlama|Başlangıç sermayesi hesaplama
+Girişimcilik|Finansal Planlama|Sabit ve değişken maliyetleri ayırma
+Girişimcilik|Finansal Planlama|Kar-zarar tahmini oluşturma
+Girişimcilik|Finansal Planlama|Bütçe planı oluşturma
+Girişimcilik|Finansal Planlama|Fiyatlandırma stratejisi belirleme
+Girişimcilik|Finansal Planlama|Brüt ve net kâr analizi
+Girişimcilik|Finansal Planlama|Birim ekonomi analizi
+Girişimcilik|Finansal Planlama|Başabaş noktası (break-even) hesaplama
+Girişimcilik|Finansal Planlama|Yatırım ihtiyacı hesaplama
+Girişimcilik|Finansal Planlama|MVP için finansal kaynak belirleme
+Girişimcilik|Finansal Planlama|Giderleri kategorilere ayırma
+Girişimcilik|Finansal Planlama|Finansal tablolar oluşturma (Gelir tablosu vb.)
+Girişimcilik|Finansal Planlama|Yatırımcıya sunum için finans verilerini hazırlama
+Girişimcilik|Finansal Planlama|Finansal simülasyon senaryoları oluşturma
+Girişimcilik|Finansal Planlama|Dönemsel bütçe revizyonu yapma
+Girişimcilik|Finansal Planlama|Startup için maliyet azaltma yöntemleri
+Girişimcilik|Finansal Planlama|Vergi ve yasal maliyetleri hesaplama
+Girişimcilik|Finansal Planlama|Finansal karar alma süreçlerini analiz etme
+Girişimcilik|MVP Geliştirme|Problem doğrulama (problem-solution fit)
+Girişimcilik|MVP Geliştirme|MVP tanımı yapma
+Girişimcilik|MVP Geliştirme|MVP türlerini tanıma (landing page, demo, prototip)
+Girişimcilik|MVP Geliştirme|Kullanıcı akışları oluşturma
+Girişimcilik|MVP Geliştirme|Wireframe tasarlama
+Girişimcilik|MVP Geliştirme|Prototip hazırlama (Figma, Balsamiq vs.)
+Girişimcilik|MVP Geliştirme|Geri bildirim toplama
+Girişimcilik|MVP Geliştirme|Kullanıcı testleri yapma
+Girişimcilik|MVP Geliştirme|Anket ve mülakatlarla MVP doğrulama
+Girişimcilik|MVP Geliştirme|İlk müşteri kitlesine ulaşma
+Girişimcilik|MVP Geliştirme|Temel işlevsellik belirleme
+Girişimcilik|MVP Geliştirme|MVP için teknik çözüm seçimi
+Girişimcilik|MVP Geliştirme|No-code araçları ile MVP geliştirme
+Girişimcilik|MVP Geliştirme|Tek sayfalık MVP sunumu hazırlama
+Girişimcilik|MVP Geliştirme|Versiyon kontrolü planlama (v0.1, v0.2...)
+Girişimcilik|MVP Geliştirme|MVP sonrası iterasyon planı oluşturma
+Girişimcilik|MVP Geliştirme|Geliştirici-ekip yönetimi
+Girişimcilik|MVP Geliştirme|MVP lansman stratejisi belirleme
+Girişimcilik|MVP Geliştirme|Minimum kullanıcı kazanımı hedefleme
+Girişimcilik|MVP Geliştirme|MVP sunumu yapma ve anlatma
+Girişimcilik|Pazar Araştırması|Hedef pazar belirleme
+Girişimcilik|Pazar Araştırması|Pazar büyüklüğü tahmini
+Girişimcilik|Pazar Araştırması|Rakip analizi yapma
+Girişimcilik|Pazar Araştırması|Sektör trendlerini inceleme
+Girişimcilik|Pazar Araştırması|Demografik analiz
+Girişimcilik|Pazar Araştırması|Tüketici davranışlarını analiz etme
+Girişimcilik|Pazar Araştırması|SWOT ile pazara uyum testi
+Girişimcilik|Pazar Araştırması|Persona oluşturma
+Girişimcilik|Pazar Araştırması|Anket hazırlama ve uygulama
+Girişimcilik|Pazar Araştırması|Görüşme ve mülakat teknikleri
+Girişimcilik|Pazar Araştırması|Online pazar analiz araçlarını kullanma
+Girişimcilik|Pazar Araştırması|Google Trends ile analiz
+Girişimcilik|Pazar Araştırması|Sosyal medya analizi
+Girişimcilik|Pazar Araştırması|Arz-talep dengesini inceleme
+Girişimcilik|Pazar Araştırması|Benchmarking (kıyaslama)
+Girişimcilik|Pazar Araştırması|Pazar segmentasyonu
+Girişimcilik|Pazar Araştırması|Niş pazar keşfetme
+Girişimcilik|Pazar Araştırması|Satış verilerini inceleme
+Girişimcilik|Pazar Araştırması|Pazar raporu hazırlama
+Girişimcilik|Pazar Araştırması|Pazar doğrulama (market validation)
+Girişimcilik|SWOT Analizi|Güçlü yönleri belirleme
+Girişimcilik|SWOT Analizi|Zayıf yönleri analiz etme
+Girişimcilik|SWOT Analizi|Fırsatları keşfetme
+Girişimcilik|SWOT Analizi|Tehditleri tanımlama
+Girişimcilik|SWOT Analizi|İç ve dış faktörleri ayırma
+Girişimcilik|SWOT Analizi|SWOT matrisi oluşturma
+Girişimcilik|SWOT Analizi|SWOT örneklerini analiz etme
+Girişimcilik|SWOT Analizi|Rakip SWOT analizi yapma
+Girişimcilik|SWOT Analizi|Ürün bazlı SWOT yapma
+Girişimcilik|SWOT Analizi|Kişisel SWOT çalışması
+Girişimcilik|SWOT Analizi|Departman bazlı SWOT
+Girişimcilik|SWOT Analizi|SWOT sonuçlarını raporlama
+Girişimcilik|SWOT Analizi|SWOT sonrası strateji geliştirme
+Girişimcilik|SWOT Analizi|SWOT + TOWS uygulama
+Girişimcilik|SWOT Analizi|SWOT görselleştirme (infografik)
+Girişimcilik|SWOT Analizi|SWOT için beyin fırtınası yürütme
+Girişimcilik|SWOT Analizi|SWOT'u sunuma entegre etme
+Girişimcilik|SWOT Analizi|Zaman bazlı SWOT (güncel ve geleceğe dönük)
+Girişimcilik|SWOT Analizi|SWOT çıktılarıyla aksiyon planı hazırlama
+Girişimcilik|SWOT Analizi|SWOT şablonlarını karşılaştırma
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Problem tanımı ve çözüm önerisini anlatma
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Hedef pazarın net tanımını yapma
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Değer önerisini netleştirme
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Ürün veya hizmet demosu hazırlama
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|İş modelini anlatma
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Rekabet analizi sunma
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Gelir modeli açıklama
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Gider tahmini ve finansal plan sunma
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Takım üyelerini tanıtma
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Pazar fırsatlarını gösterme
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Traction göstergeleri paylaşma
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Yatırım hedefini belirtme
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Yatırım sonrası kullanım planı oluşturma
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Riskleri ve çözümleri belirtme
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Sunum akışını yapılandırma
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Etkili görsel tasarım kullanma
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Pitch deck uzunluğunu optimize etme
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Sık sorulan sorulara hazırlık yapma
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Sunum provaları yapma
+Girişimcilik|Yatırımcı Sunumu (Pitch Deck)|Q&A (soru-cevap) oturumunu yönetme
+Girişimcilik|İş Modeli Kanvası|Müşteri segmentlerini tanımlama
+Girişimcilik|İş Modeli Kanvası|Değer önerisini belirleme
+Girişimcilik|İş Modeli Kanvası|Dağıtım kanallarını tanımlama
+Girişimcilik|İş Modeli Kanvası|Müşteri ilişkilerini yapılandırma
+Girişimcilik|İş Modeli Kanvası|Gelir akışlarını belirleme
+Girişimcilik|İş Modeli Kanvası|Temel kaynakları analiz etme
+Girişimcilik|İş Modeli Kanvası|Temel faaliyetleri belirleme
+Girişimcilik|İş Modeli Kanvası|Temel iş ortaklarını tanımlama
+Girişimcilik|İş Modeli Kanvası|Maliyet yapısını çıkarma
+Girişimcilik|İş Modeli Kanvası|Kanvas üzerinden analiz yapma
+Girişimcilik|İş Modeli Kanvası|Problem çözüm eşleşmesi
+Girişimcilik|İş Modeli Kanvası|Minimum viable product (MVP) bağlantısı
+Girişimcilik|İş Modeli Kanvası|Pazarla uyum kontrolü
+Girişimcilik|İş Modeli Kanvası|Hedef müşteri profili oluşturma
+Girişimcilik|İş Modeli Kanvası|Ürün-pazar uyumu analizi
+Girişimcilik|İş Modeli Kanvası|İş modeli örnekleri inceleme
+Girişimcilik|İş Modeli Kanvası|Lean canvas ile karşılaştırma
+Girişimcilik|İş Modeli Kanvası|Kanvas revize süreçleri
+Girişimcilik|İş Modeli Kanvası|Girişim kanvas atölyesi hazırlama
+Girişimcilik|İş Modeli Kanvası|Görsel sunum oluşturma (pitch deck entegrasyonu)
+MATLAB Görüntü İşleme|Fourier Dönüşümü|fft2, ifft2
+MATLAB Görüntü İşleme|GUI ile Görüntü İşleme|arayüzde işlem kontrolü
+MATLAB Görüntü İşleme|Geometrik Dönüşümler|döndürme, kaydırma
+MATLAB Görüntü İşleme|Görüntü Boyutlandırma|imresize kullanımı
+MATLAB Görüntü İşleme|Görüntü Dönüşümleri|rgb2gray, im2bw, imadjust kullanımı
+MATLAB Görüntü İşleme|Görüntü Filtreleme|medfilt2, imfilter uygulamaları
+MATLAB Görüntü İşleme|Görüntü İyileştirme|noise removal, contrast adjustment
+MATLAB Görüntü İşleme|Histogram İşlemleri|imhist, histeq
+MATLAB Görüntü İşleme|Hough Dönüşümü|çizgi, daire tespiti
+MATLAB Görüntü İşleme|Image Reading & Writing|imread, imwrite komutları
+MATLAB Görüntü İşleme|Kenar Algılama|edge fonksiyonu ile Sobel, Prewitt
+MATLAB Görüntü İşleme|Maskeleme|mask oluşturma, bitwise işlemler
+MATLAB Görüntü İşleme|Morfolojik İşlemler|imerode, imdilate, imopen, imclose
+MATLAB Görüntü İşleme|Nesne Tespiti|nesne sayısı bulma, etiketleme
+MATLAB Görüntü İşleme|ROI Belirleme|imcrop, manual seçim
+MATLAB Görüntü İşleme|Renk Uzayları|HSV, LAB uzayı
+MATLAB Görüntü İşleme|Segmentasyon|bwlabel, regionprops
+MATLAB Görüntü İşleme|Template Matching|normxcorr2 kullanımı
+MATLAB Görüntü İşleme|Threshold İşlemleri|otsu thresholding
+MATLAB Görüntü İşleme|Video İşleme|VideoReader, frame ayıklama
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|Android Studio kurulumu
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|Yeni proje oluşturma
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|Activity kavramı
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|Fragment kullanımı
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|Intent yapısı
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|UI öğeleri ekleme (TextView, Button)
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|RecyclerView kullanımı
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|ViewModel ve LiveData
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|Navigation Component
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|Jetpack Compose temelleri
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|API bağlantısı (Retrofit)
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|JSON parse işlemleri
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|Firebase Authentication entegrasyonu
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|Firestore veritabanı kullanımı
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|Push notification gönderme
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|Uygulama temaları ve stiller
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|Uygulama ikonu ve splash screen
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|Manifest dosyasını düzenleme
+Mobil Geliştirme|Android Geliştirme (Java/Kotlin)|Play Store için APK üretme ve yükleme
+Mobil Geliştirme|Expo|Expo nedir ve avantajları
+Mobil Geliştirme|Expo|Expo CLI kurulumu
+Mobil Geliştirme|Expo|Expo Go uygulaması ile test
+Mobil Geliştirme|Expo|Proje başlatma (expo init)
+Mobil Geliştirme|Expo|Navigasyon kurulumları
+Mobil Geliştirme|Expo|API ile veri çekme
+Mobil Geliştirme|Expo|AsyncStorage kullanımı
+Mobil Geliştirme|Expo|Kamera, galeri ve medya erişimi
+Mobil Geliştirme|Expo|Expo-modules ile hızlı entegrasyon
+Mobil Geliştirme|Expo|Push bildirim gönderme (expo-notifications)
+Mobil Geliştirme|Expo|Deep linking yapılandırması
+Mobil Geliştirme|Expo|OTA güncellemeler (expo-updates)
+Mobil Geliştirme|Expo|Location API kullanımı
+Mobil Geliştirme|Expo|Auth akışı oluşturma
+Mobil Geliştirme|Expo|Image picker entegrasyonu
+Mobil Geliştirme|Expo|QR kodla test etme
+Mobil Geliştirme|Expo|Kamera ile barkod tarama
+Mobil Geliştirme|Expo|Splash screen ve app icon ayarları
+Mobil Geliştirme|Expo|Build işlemleri (expo build:android / ios)
+Mobil Geliştirme|Expo|EAS CLI ile modern build sistemi
+Mobil Geliştirme|Expo|Expo Snack ile hızlı prototipleme
+Mobil Geliştirme|Expo|Web desteği ile PWA geliştirme
+Mobil Geliştirme|Expo|OTA güncelleme stratejileri
+Mobil Geliştirme|Expo|Expo Router ile yönlendirme
+Mobil Geliştirme|Expo|Expo AV ile ses/video oynatma
+Mobil Geliştirme|Expo|Firebase entegrasyonu
+Mobil Geliştirme|Expo|Sentry ile hata izleme
+Mobil Geliştirme|Expo|Sık kullanılan Expo modül kombinasyonları
+Mobil Geliştirme|Flutter (kodlu)|Flutter nedir ve avantajları
+Mobil Geliştirme|Flutter (kodlu)|Flutter SDK kurulumu
+Mobil Geliştirme|Flutter (kodlu)|Yeni proje oluşturma (flutter create)
+Mobil Geliştirme|Flutter (kodlu)|Widget kavramı ve widget hiyerarşisi
+Mobil Geliştirme|Flutter (kodlu)|Stateless vs Stateful widget
+Mobil Geliştirme|Flutter (kodlu)|Scaffold yapısı
+Mobil Geliştirme|Flutter (kodlu)|AppBar, BottomNavigationBar kullanımı
+Mobil Geliştirme|Flutter (kodlu)|Text, Button, Icon widget'ları
+Mobil Geliştirme|Flutter (kodlu)|ListView, GridView
+Mobil Geliştirme|Flutter (kodlu)|Form ve TextFormField widget'ları
+Mobil Geliştirme|Flutter (kodlu)|Navigation (push, pop, named routes)
+Mobil Geliştirme|Flutter (kodlu)|State yönetimi (setState, Provider)
+Mobil Geliştirme|Flutter (kodlu)|Firebase Authentication entegrasyonu
+Mobil Geliştirme|Flutter (kodlu)|Firestore ile veri okuma ve yazma
+Mobil Geliştirme|Flutter (kodlu)|REST API'den veri çekme (http, dio)
+Mobil Geliştirme|Flutter (kodlu)|JSON parsing işlemleri
+Mobil Geliştirme|Flutter (kodlu)|Push notification (firebase_messaging)
+Mobil Geliştirme|Flutter (kodlu)|Kamera ve galeri entegrasyonu
+Mobil Geliştirme|Flutter (kodlu)|Harita kullanımı (google_maps_flutter)
+Mobil Geliştirme|Flutter (kodlu)|Uygulama içi satın alma
+Mobil Geliştirme|Flutter (kodlu)|Kod paketleme ve yapılandırma (flavors)
+Mobil Geliştirme|Flutter (kodlu)|Uygulama yayınlama (Play Store, App Store)
+Mobil Geliştirme|Flutter (kodlu)|Widget testleri yazma
+Mobil Geliştirme|Flutter (kodlu)|UI testleri (integration_test)
+Mobil Geliştirme|Flutter (kodlu)|Responsive UI tasarımı
+Mobil Geliştirme|Flutter (kodlu)|Lottie animasyon kullanımı
+Mobil Geliştirme|Flutter (kodlu)|Simgeler ve splash ekranı
+Mobil Geliştirme|Flutter (kodlu)|Local veri saklama (shared_preferences)
+Mobil Geliştirme|Flutter (kodlu)|Kod refactor ve reusable widget
+Mobil Geliştirme|Flutter (kodlu)|Custom widget geliştirme
+Mobil Geliştirme|React Native|React Native nedir ve avantajları
+Mobil Geliştirme|React Native|React Native ortam kurulumu (Expo/CLI)
+Mobil Geliştirme|React Native|Yeni proje oluşturma (npx react-native init)
+Mobil Geliştirme|React Native|Komponent mantığı (View, Text, Image)
+Mobil Geliştirme|React Native|StyleSheet ile stillendirme
+Mobil Geliştirme|React Native|Flexbox yapısı ile düzenleme
+Mobil Geliştirme|React Native|TextInput ve Button kullanımı
+Mobil Geliştirme|React Native|ScrollView ve FlatList kullanımı
+Mobil Geliştirme|React Native|Navigasyon yapısı (react-navigation)
+Mobil Geliştirme|React Native|Stack, Tab ve Drawer navigasyonu
+Mobil Geliştirme|React Native|React Context API kullanımı
+Mobil Geliştirme|React Native|useState, useEffect hook'ları
+Mobil Geliştirme|React Native|AsyncStorage ile veri saklama
+Mobil Geliştirme|React Native|API'den veri çekme (fetch, axios)
+Mobil Geliştirme|React Native|JSON verisi gösterme
+Mobil Geliştirme|React Native|Formik ve Yup ile form doğrulama
+Mobil Geliştirme|React Native|Push bildirim entegrasyonu
+Mobil Geliştirme|React Native|Harita entegrasyonu (react-native-maps)
+Mobil Geliştirme|React Native|Kamera ve galeri erişimi
+Mobil Geliştirme|React Native|Firebase entegrasyonu
+Mobil Geliştirme|React Native|Platform bağımlı kod yazımı (iOS vs Android)
+Mobil Geliştirme|React Native|Uygulama paketleme (apk, ipa)
+Mobil Geliştirme|React Native|Expo modülleri ile hızlı geliştirme
+Mobil Geliştirme|React Native|Uygulama yayınlama süreci (App Store, Play Store)
+Mobil Geliştirme|React Native|Test ve debug işlemleri (Flipper, LogBox)
+Mobil Geliştirme|React Native|React Native Paper veya UI Kitten kullanımı
+Mobil Geliştirme|React Native|Uygulama simgesi ve splash ekranı
+Mobil Geliştirme|React Native|Responsiveness ve medya sorguları
+Mobil Geliştirme|React Native|Kod paylaşımı ve modüler yapı
+Mobil Geliştirme|React Native|Lottie animasyonları kullanma
+Mobil Geliştirme|Swift (iOS)|Swift programlama dili temelleri
+Mobil Geliştirme|Swift (iOS)|Xcode kurulumu ve proje oluşturma
+Mobil Geliştirme|Swift (iOS)|ViewController tanımı ve yaşam döngüsü
+Mobil Geliştirme|Swift (iOS)|Storyboard ile UI tasarımı
+Mobil Geliştirme|Swift (iOS)|Auto Layout ve Constraint mantığı
+Mobil Geliştirme|Swift (iOS)|IBOutlet ve IBAction tanımı
+Mobil Geliştirme|Swift (iOS)|TableView ve CollectionView kullanımı
+Mobil Geliştirme|Swift (iOS)|NavigationController ve geçişler
+Mobil Geliştirme|Swift (iOS)|Delegation pattern
+Mobil Geliştirme|Swift (iOS)|SwiftUI ile arayüz geliştirme
+Mobil Geliştirme|Swift (iOS)|Combine framework ile veri yönetimi
+Mobil Geliştirme|Swift (iOS)|Local veri saklama (UserDefaults, CoreData)
+Mobil Geliştirme|Swift (iOS)|Network işlemleri (URLSession, Alamofire)
+Mobil Geliştirme|Swift (iOS)|Firebase Authentication ve Firestore entegrasyonu
+Mobil Geliştirme|Swift (iOS)|Push bildirim gönderimi (APNs, Firebase)
+Mobil Geliştirme|Swift (iOS)|Kamera ve galeri entegrasyonu
+Mobil Geliştirme|Swift (iOS)|Uygulama ikonları ve splash ekran
+Mobil Geliştirme|Swift (iOS)|App Store’a yükleme adımları
+Mobil Geliştirme|Swift (iOS)|TestFlight ile test süreci
+Mobil Geliştirme|Swift (iOS)|Uygulama içi satın alma entegrasyonu
+Mobil Geliştirme|Swift (iOS)|Swift Package Manager ile bağımlılık yönetimi
+No-Code / Low-Code|FlutterFlow|FlutterFlow arayüzüne giriş
+No-Code / Low-Code|FlutterFlow|Yeni uygulama başlatma
+No-Code / Low-Code|FlutterFlow|Sayfa (page) oluşturma ve düzenleme
+No-Code / Low-Code|FlutterFlow|Widget ekleme ve özelleştirme
+No-Code / Low-Code|FlutterFlow|Navigasyon (sayfalar arası geçiş)
+No-Code / Low-Code|FlutterFlow|Form oluşturma ve input yönetimi
+No-Code / Low-Code|FlutterFlow|Firebase entegrasyonu
+No-Code / Low-Code|FlutterFlow|Authentication ayarları
+No-Code / Low-Code|FlutterFlow|Firestore veri modeli oluşturma
+No-Code / Low-Code|FlutterFlow|API bağlantıları kurma
+No-Code / Low-Code|FlutterFlow|JSON verisi ile çalışma
+No-Code / Low-Code|FlutterFlow|Liste (ListView) tasarımı
+No-Code / Low-Code|FlutterFlow|Şartlı görünürlük (visibility conditions)
+No-Code / Low-Code|FlutterFlow|Animasyonlar ekleme
+No-Code / Low-Code|FlutterFlow|Uygulama teması ve renk paleti belirleme
+No-Code / Low-Code|FlutterFlow|Custom widget kullanımı (Flutter kod entegrasyonu)
+No-Code / Low-Code|FlutterFlow|Responsive tasarım teknikleri
+No-Code / Low-Code|FlutterFlow|Deploy (apk/ipa) oluşturma
+No-Code / Low-Code|FlutterFlow|Sürükle-bırak ile hızlı prototipleme
+No-Code / Low-Code|FlutterFlow|Uygulama test etme ve hata ayıklama
+Programlama|C|Değişken tanımlama
+Programlama|C|Veri türleri (int, float, char, double)
+Programlama|C|Aritmetik işlemler
+Programlama|C|Koşullu ifadeler (if, else, switch)
+Programlama|C|Döngüler (for, while, do-while)
+Programlama|C|Fonksiyon tanımı
+Programlama|C|Fonksiyonlara parametre geçme
+Programlama|C|Geriye değer döndürme
+Programlama|C|Array (dizi) kullanımı
+Programlama|C|Pointer kavramı
+Programlama|C|Pointer ile fonksiyonlar
+Programlama|C|Pointer ile dizi işlemleri
+Programlama|C|Struct tanımlama
+Programlama|C|Struct içinde pointer kullanımı
+Programlama|C|Dosya işlemleri (fopen, fread, fwrite)
+Programlama|C|Bellek yönetimi (malloc, free)
+Programlama|C|Preprocessor direktifleri (#define, #include)
+Programlama|C|Makrolar
+Programlama|C|Header dosyaları oluşturma
+Programlama|C|C dilinde hata ayıklama teknikleri (gdb)
+Programlama|C++|Sınıf tanımı (class)
+Programlama|C++|Nesne oluşturma
+Programlama|C++|Kapsülleme (encapsulation)
+Programlama|C++|Kalıtım (inheritance)
+Programlama|C++|Çok biçimlilik (polymorphism)
+Programlama|C++|Operator overloading
+Programlama|C++|Constructor ve Destructor kullanımı
+Programlama|C++|Namespace kullanımı
+Programlama|C++|Exception handling (try-catch)
+Programlama|C++|Standard Template Library (STL)
+Programlama|C++|STL: vector, map, set, list kullanımı
+Programlama|C++|Lambda fonksiyonlar
+Programlama|C++|Function overloading
+Programlama|C++|Virtual function tanımı
+Programlama|C++|Pure virtual function ve abstract class
+Programlama|C++|Smart pointer kullanımı (unique_ptr, shared_ptr)
+Programlama|C++|File I/O işlemleri (fstream)
+Programlama|C++|Temel algoritmalar (sort, find, etc.)
+Programlama|C++|Template fonksiyon ve sınıf kullanımı
+Programlama|C++|Dynamic casting
+Programlama|C++|C++11 ve sonrası özellikler (auto, nullptr, etc.)
+Programlama|Java|Sınıf ve nesne oluşturma
+Programlama|Java|Primitive veri tipleri
+Programlama|Java|Koşullu yapılar (if-else, switch)
+Programlama|Java|Döngüler (for, while, do-while)
+Programlama|Java|Metot tanımlama ve çağırma
+Programlama|Java|Overloading ve overriding
+Programlama|Java|Dizi ve arraylist kullanımı
+Programlama|Java|String işlemleri
+Programlama|Java|Paket yapısı ve import kullanımı
+Programlama|Java|Erişim belirleyiciler (public, private)
+Programlama|Java|Constructor kullanımı
+Programlama|Java|Kalıtım ve super anahtar kelimesi
+Programlama|Java|Abstract ve interface kavramı
+Programlama|Java|Exception handling (try-catch-finally)
+Programlama|Java|Dosya okuma/yazma (FileReader, FileWriter)
+Programlama|Java|Collections Framework (List, Map, Set)
+Programlama|Java|Lambda ifadeleri
+Programlama|Java|Stream API kullanımı
+Programlama|Java|JDBC ile veritabanı bağlantısı
+Programlama|Java|Swing ile arayüz oluşturma
+Programlama|Kotlin|Kotlin kurulum ve temel yapı
+Programlama|Kotlin|Değişken tanımlama (val, var)
+Programlama|Kotlin|Fonksiyon oluşturma
+Programlama|Kotlin|Null safety özellikleri
+Programlama|Kotlin|Koşullu ifadeler (if, when)
+Programlama|Kotlin|Döngüler (for, while)
+Programlama|Kotlin|Koleksiyonlar ve işlemleri (List, Set, Map)
+Programlama|Kotlin|Class ve constructor tanımlama
+Programlama|Kotlin|Inheritance ve interface kullanımı
+Programlama|Kotlin|Extension function tanımı
+Programlama|Kotlin|Lambda ifadeleri
+Programlama|Kotlin|Scope function’lar (let, run, apply)
+Programlama|Kotlin|Smart casting
+Programlama|Kotlin|Exception handling
+Programlama|Kotlin|Android ile Kotlin entegrasyonu
+Programlama|Kotlin|View binding
+Programlama|Kotlin|Coroutines ile asenkron programlama
+Programlama|Kotlin|Retrofit ile API bağlantısı
+Programlama|Kotlin|Room veritabanı kullanımı
+Python|Dosya ve I/O İşlemleri|"open(""dosya.txt"", ""r"") ile bir dosyayı okuma modunda açma"
+Python|Dosya ve I/O İşlemleri|file.read() kullanarak dosyanın tüm içeriğini okuma veya file.readline() ile satır satır okuma
+Python|Dosya ve I/O İşlemleri|Açılan dosyayı file.close() ile kapatma veya with open yapısıyla otomatik kapatılmasını sağlama
+Python|Dosya ve I/O İşlemleri|"open(""yeni.txt"", ""w"") ile yazma modunda açıp file.write(""metin"") ile dosyaya veri yazma"
+Python|Dosya ve I/O İşlemleri|"Dosya açılış modlarını anlama: okuma (""r""), yazma (""w""), ekleme (""a""), ikili (""b"") modlar"
+Python|Dosya ve I/O İşlemleri|"İkili dosya okuma/yazma (""rb"", ""wb"") modlarında bytes objeleriyle çalışma"
+Python|Dosya ve I/O İşlemleri|Dosya imlecini file.seek(offset) ile istenen konuma taşıma ve file.tell() ile mevcut konumu öğrenme
+Python|Dosya ve I/O İşlemleri|"os.path.getsize(""dosya.txt"") ile bir dosyanın boyutunu bayt cinsinden öğrenme"
+Python|Dosya ve I/O İşlemleri|Bir dizindeki dosyaları listeleme (os.listdir(path)) veya glob desenleriyle dosya arama (glob.glob('*.txt'))
+Python|Dosya ve I/O İşlemleri|Komut satırı argümanlarını sys.argv ile okuma (dışarıdan parametre alma)
+Python|Dosya ve I/O İşlemleri|print() fonksiyonunda sep ve end parametrelerini kullanarak çıktıyı biçimlendirme
+Python|Dosya ve I/O İşlemleri|input() ile kullanıcıdan girdi alıp bir dosyaya yazma veya işleme
+Python|Dosya ve I/O İşlemleri|Terminal çıktısını renklendirmek veya biçimlendirmek için kütüphane kullanımı (örn. colorama)
+Python|Dosya ve I/O İşlemleri|JSON dosyalarını okumak/yazmak için json modülünü kullanma (json.load, json.dump)
+Python|Dosya ve I/O İşlemleri|CSV dosyalarını okumak/yazmak için csv modülünü kullanma (reader/writer objeleri)
+Python|Dosya ve I/O İşlemleri|pathlib.Path nesnelerini kullanarak platform bağımsız dosya yolu işlemleri yapma
+Python|Dosya ve I/O İşlemleri|Dosya izinlerini değiştirme veya yeni dizin oluşturma gibi işlemler için os modülü fonksiyonlarını kullanma (os.chmod, os.makedirs)
+Python|Fonksiyonlar ve Fonksiyonel Programlama|def anahtar kelimesi ile parametre alabilen fonksiyon tanımlama
+Python|Fonksiyonlar ve Fonksiyonel Programlama|Fonksiyon içinde return ifadesiyle değer döndürme
+Python|Fonksiyonlar ve Fonksiyonel Programlama|Varsayılan parametre değerleri belirleyerek fonksiyon çağrılarında opsiyonellik sağlama
+Python|Fonksiyonlar ve Fonksiyonel Programlama|"Anahtar kelime argümanları ile fonksiyon çağırma (func(name=""Ali""))"
+Python|Fonksiyonlar ve Fonksiyonel Programlama|Esnek sayıda argüman alma: *args (tuple şeklinde konumlu argümanlar) ve **kwargs (sözlük şeklinde anahtar argümanlar) kullanımı
+Python|Fonksiyonlar ve Fonksiyonel Programlama|Lambda (anonim fonksiyon) ifadeleriyle tek satırlık küçük fonksiyonlar tanımlama
+Python|Fonksiyonlar ve Fonksiyonel Programlama|Fonksiyonların dokümantasyon dizgisi (docstring) yazarak help() ile erişilebilir yardım oluşturma
+Python|Fonksiyonlar ve Fonksiyonel Programlama|Fonksiyonları bir değişkene atayarak veya başka fonksiyonlara argüman geçirerek first-class citizen olarak kullanma
+Python|Fonksiyonlar ve Fonksiyonel Programlama|İç içe fonksiyon tanımlama (bir fonksiyon içinde başka fonksiyon tanımlamak)
+Python|Fonksiyonlar ve Fonksiyonel Programlama|Bir fonksiyondan bir iç fonksiyonu döndürme (closure oluşturarak dış değişkene erişen iç fonksiyon)
+Python|Fonksiyonlar ve Fonksiyonel Programlama|map() fonksiyonunu kullanarak bir dizinin her elemanına bir fonksiyonu uygulama
+Python|Fonksiyonlar ve Fonksiyonel Programlama|filter() fonksiyonuyla belirli bir koşulu sağlamayan elemanları filtreleme
+Python|Fonksiyonlar ve Fonksiyonel Programlama|functools.reduce() ile bir diziyi tek bir değere indirgeme (kümülatif işlem uygulama)
+Python|Fonksiyonlar ve Fonksiyonel Programlama|List comprehension içinde lambda veya koşul kullanarak kompleks listeler oluşturma
+Python|Fonksiyonlar ve Fonksiyonel Programlama|Özyineli (recursive) fonksiyon tanımlayıp çağırarak kendi kendini çağıran işlemler yapma (ör. faktöriyel)
+Python|Fonksiyonlar ve Fonksiyonel Programlama|Fonksiyon parametrelerinin referans veya kopya olarak geçildiğini test etme (mutable tipler değişebilirliği)
+Python|Fonksiyonlar ve Fonksiyonel Programlama|Yüksek mertebe fonksiyon kavramını anlama (fonksiyonların parametre veya dönüş değeri olabilmesi)
+Python|Fonksiyonlar ve Fonksiyonel Programlama|Değişken etki alanı (scope) kurallarını kavrama (yerel ve global değişkenler, global anahtar kelimesi)
+Python|Fonksiyonlar ve Fonksiyonel Programlama|yield anahtar kelimesi ile jeneratör (generator) fonksiyonlar tanımlama
+Python|Fonksiyonlar ve Fonksiyonel Programlama|Dekoratörlerin temelini anlamak için fonksiyonların da obje olduğunu ve argüman olarak aktarılabildiğini kavrama
+Python|Hata Ayıklama ve Hata Yönetimi|Kod içine print ifadeleri koyarak değişken değerlerini takip etme (basit debug tekniği)
+Python|Hata Ayıklama ve Hata Yönetimi|Python pdb modülünü kullanarak satır satır ilerleme ve etkileşimli debug yapma
+Python|Hata Ayıklama ve Hata Yönetimi|try/except blokları ile olası hataları (exceptions) yakalama
+Python|Hata Ayıklama ve Hata Yönetimi|Belirli exception tiplerini yakalama (ör. ValueError, KeyError gibi) ve ayrı except bloklarında ele alma
+Python|Hata Ayıklama ve Hata Yönetimi|finally bloğunu kullanarak hata olsa da olmasa da çalışacak temizleme işlemleri tanımlama
+Python|Hata Ayıklama ve Hata Yönetimi|else bloğunu kullanarak hata oluşmadığında çalışacak kodları belirtme
+Python|Hata Ayıklama ve Hata Yönetimi|Özel hata türleri oluşturma (Exception sınıfından miras alan kendi hata sınıfını yazma)
+Python|Hata Ayıklama ve Hata Yönetimi|"raise ifadesi ile bilinçli olarak hata fırlatma (ör. parametre geçerli değilse raise ValueError(""mesaj""))"
+Python|Hata Ayıklama ve Hata Yönetimi|Hata iz bilgisini (traceback) okuyarak hatanın hangi satırdan kaynaklandığını belirleme
+Python|Hata Ayıklama ve Hata Yönetimi|Hata mesajlarını arama motorunda arayarak yaygın çözüm yöntemlerini araştırma
+Python|Hata Ayıklama ve Hata Yönetimi|assert ifadesini kullanarak koşul sağlamazsa otomatik AssertionError fırlatılması (savunma programlama)
+Python|Hata Ayıklama ve Hata Yönetimi|logging kütüphanesini kullanarak farklı seviyelerde (DEBUG, INFO, ERROR) log mesajları yazma
+Python|Hata Ayıklama ve Hata Yönetimi|IDE veya editör üzerinden breakpoint koyarak kodu adım adım yürütme ve değişkenleri inceleme
+Python|Hata Ayıklama ve Hata Yönetimi|Döngülerde ve fonksiyonlarda değişken değerlerini izleyerek hatayı tekrar üretme (reproduce etme) adımları oluşturma
+Python|Hata Ayıklama ve Hata Yönetimi|Kodun potansiyel hata noktalarına koşul kontrolleri ekleyerek proaktif önlem alma
+Python|Hata Ayıklama ve Hata Yönetimi|Python’da yaygın özel durum (exception) türlerini öğrenme ve anlamları (IndexError, TypeError, OSError vb.)
+Python|Hata Ayıklama ve Hata Yönetimi|Exception yakalarken mümkün olduğunca spesifik tipleri yakalama, genel except Exception: kullanımından kaçınma
+Python|Keras Görüntü Modelleri|CNN modeli oluşturma
+Python|Keras Görüntü Modelleri|Katmanlar tanımlama (Conv2D, MaxPooling2D)
+Python|Keras Görüntü Modelleri|Flatten ve Dense katmanlarını kullanma
+Python|Keras Görüntü Modelleri|Model compile etme
+Python|Keras Görüntü Modelleri|Model fit (eğitim) işlemi
+Python|Keras Görüntü Modelleri|Model değerlendirme (evaluate)
+Python|Keras Görüntü Modelleri|Tahmin yapma (predict)
+Python|Keras Görüntü Modelleri|Görsel verileri yeniden boyutlandırma
+Python|Keras Görüntü Modelleri|Görsel verileri normalize etme
+Python|Keras Görüntü Modelleri|One-hot encoding
+Python|Keras Görüntü Modelleri|Eğitim ve doğrulama verisini ayırma
+Python|Keras Görüntü Modelleri|Model geçmişini takip etme (history)
+Python|Keras Görüntü Modelleri|Erken durdurma (EarlyStopping) kullanımı
+Python|Keras Görüntü Modelleri|Dropout ile overfitting önleme
+Python|Keras Görüntü Modelleri|Data augmentation uygulama
+Python|Keras Görüntü Modelleri|Pretrained model yükleme (VGG, ResNet)
+Python|Keras Görüntü Modelleri|Transfer learning uygulama
+Python|Keras Görüntü Modelleri|Katmanları dondurma ve fine-tuning
+Python|Keras Görüntü Modelleri|Modeli kaydetme (save) ve yükleme (load_model)
+Python|Keras Görüntü Modelleri|Confusion matrix hesaplama ve görselleştirme
+Python|Kontrol Akışı (Koşullar ve Döngüler)|if ile koşullu durumları kontrol etme ve blok içini girintiyle belirtme
+Python|Kontrol Akışı (Koşullar ve Döngüler)|elif ve else kullanarak birden fazla durumu sıralı olarak kontrol etme
+Python|Kontrol Akışı (Koşullar ve Döngüler)|Tek satırda koşullu ifade (ternary) kullanımı (x = a if cond else b)
+Python|Kontrol Akışı (Koşullar ve Döngüler)|for döngüsüyle yinelenebilir bir nesne üzerinde yineleme yapma (ör. liste elemanlarını dolaşma)
+Python|Kontrol Akışı (Koşullar ve Döngüler)|while döngüsüyle koşul sağlandığı sürece tekrar eden işlemler yapma
+Python|Kontrol Akışı (Koşullar ve Döngüler)|Döngü içinde break ifadesiyle döngüyü tamamen sonlandırma
+Python|Kontrol Akışı (Koşullar ve Döngüler)|Döngü içinde continue ifadesiyle o adımı sonlandırıp sonraki adıma geçme
+Python|Kontrol Akışı (Koşullar ve Döngüler)|range(start, stop, step) kullanarak belirli adımlarla döngü sayacı oluşturma
+Python|Kontrol Akışı (Koşullar ve Döngüler)|İç içe döngüler yazarak çok boyutlu yapıları dolaşma (nested loops)
+Python|Kontrol Akışı (Koşullar ve Döngüler)|Hiçbir işlem yapmayan yer tutucu blok için pass ifadesini kullanma
+Python|Kontrol Akışı (Koşullar ve Döngüler)|Koşul ifadelerinde truthy/falsy değerlerin davranışını anlama (0, boş string vs False kabul edilir)
+Python|Kontrol Akışı (Koşullar ve Döngüler)|Döngü ile toplayarak veya çarparak hesaplama yapma (ör. faktöriyel hesaplamak için while döngüsü)
+Python|Kontrol Akışı (Koşullar ve Döngüler)|enumerate() ile bir döngüde hem indeks hem değer elde etme
+Python|Kontrol Akışı (Koşullar ve Döngüler)|zip() ile birden fazla listeyi paralel olarak aynı döngüde yürütme
+Python|Kontrol Akışı (Koşullar ve Döngüler)|Liste üreteçlerinde (comprehension) koşul ifadesi kullanarak filtreleme yapma
+Python|Kontrol Akışı (Koşullar ve Döngüler)|Sonsuz döngü oluşturma (while True:) ve içeride koşula göre break ile çıkış yapma
+Python|Kontrol Akışı (Koşullar ve Döngüler)|Döngülerin else bloğunu kullanarak döngü tamamlandıktan sonra koşullu işlem yapma
+Python|Kontrol Akışı (Koşullar ve Döngüler)|Koşul ifadelerini parantezle gruplandırarak karmaşık koşulları okunaklı hale getirme
+Python|Kontrol Akışı (Koşullar ve Döngüler)|Karşılaştırma operatörlerini zincirleme (5 < x < 10) ile aralık kontrolü yapma
+Python|Modüller ve Paket Yönetimi|Mevcut bir modülü programa dahil etme (import modul_adı)
+Python|Modüller ve Paket Yönetimi|Bir modülden belirli bir bileşeni içe aktarma (from math import pi, sqrt)
+Python|Modüller ve Paket Yönetimi|Modülü kısaltma adıyla import etme (import numpy as np)
+Python|Modüller ve Paket Yönetimi|Kendi yazdığın Python dosyasını modül gibi kullanma (aynı klasörde dosyayı import etme)
+Python|Modüller ve Paket Yönetimi|Paket kavramını anlama (klasör içinde __init__.py bulunması paketi tanımlar)
+Python|Modüller ve Paket Yönetimi|Standart kütüphane modüllerini kullanma (örn. math, datetime, os, sys)
+Python|Modüller ve Paket Yönetimi|pip komutuyla bir paketi yükleme (pip install paket_adı)
+Python|Modüller ve Paket Yönetimi|Sanal ortam (virtual environment) oluşturarak projeye özel paket kurulumunu sağlama
+Python|Modüller ve Paket Yönetimi|Proje bağımlılıklarını requirements.txt dosyasında listeleme (pip freeze > requirements.txt)
+Python|Modüller ve Paket Yönetimi|Bir modülün dosya sistemindeki konumunu inceleme (modul_adı.__file__)
+Python|Modüller ve Paket Yönetimi|Python modül arama yolunu (sys.path) ve PYTHONPATH ortam değişkenini anlama
+Python|Modüller ve Paket Yönetimi|Pip ile paket versiyonunu yükseltme (pip install --upgrade paket_adı) veya belirli versiyonu yükleme
+Python|Modüller ve Paket Yönetimi|conda kullanarak paket ve ortam yönetimi (conda ortamı oluşturma ve paket kurma)
+Python|Modüller ve Paket Yönetimi|pip vs conda farklarını anlama (pip Python paketleri, conda çoklu dil ve bağımlılık)
+Python|Modüller ve Paket Yönetimi|pip ile paket kaldırma (pip uninstall paket_adı)
+Python|Modüller ve Paket Yönetimi|Geliştirme modunda kurulum (pip install -e .) ile kendi yazdığın paketi sistemde bağlantılı hale getirme
+Python|Modüller ve Paket Yönetimi|setup.py veya pyproject.toml kullanarak paketi dışarı dağıtılabilir şekilde yapılandırma
+Python|Modüller ve Paket Yönetimi|PyPI (Python Package Index) üzerinden paket yayınlama sürecine (hesap oluşturma, twine upload) aşina olma
+Python|Nesne Yönelimli Programlama|class anahtar kelimesi ile yeni bir sınıf tanımlama
+Python|Nesne Yönelimli Programlama|Sınıfa ait nitelikler (özellikler) ve metodlar tanımlayarak nesne modelini oluşturma
+Python|Nesne Yönelimli Programlama|Tanımlanan bir sınıftan örnek (obje) oluşturma (obje = SınıfAdı())
+Python|Nesne Yönelimli Programlama|Yapıcı (constructor) metod olarak __init__ tanımlayarak nesne oluşturulurken başlangıç değerlerini atama
+Python|Nesne Yönelimli Programlama|Sınıf metodlarında self parametresini kullanarak örnek seviyesindeki verilere erişme
+Python|Nesne Yönelimli Programlama|Sınıf değişkenleri (tüm örneklerce paylaşılan) vs. örnek değişkenleri (her nesneye özgü) farkını anlama
+Python|Nesne Yönelimli Programlama|Kalıtım (inheritance) kullanarak bir sınıftan alt sınıf türetme ve özelliklerini miras alma
+Python|Nesne Yönelimli Programlama|Alt sınıfta super() çağırarak üst sınıfın yöntemlerini çağırma veya genişletme
+Python|Nesne Yönelimli Programlama|Metod geçersiz kılma (override) ile üst sınıftaki bir metodu alt sınıfta yeniden tanımlama
+Python|Nesne Yönelimli Programlama|Çok biçimlilik (polymorphism) kavramını uygulama (aynı arayüzü paylaşan farklı sınıfların farklı davranması)
+Python|Nesne Yönelimli Programlama|Python'da çoklu kalıtım yapma ve Method Resolution Order (MRO) kavramını anlama
+Python|Nesne Yönelimli Programlama|Özel metodlar (__str__, __len__, __repr__ gibi dunder methodlar) tanımlayarak nesnelere özel davranış kazandırma
+Python|Nesne Yönelimli Programlama|Operatör yöntemlerini aşırı yükleme (overload) yapma (ör. __add__ ile nesneleri + operatörüyle toplama yeteneği)
+Python|Nesne Yönelimli Programlama|Kapsülleme (encapsulation) için adlandırma anlaşmaları (_tek tire, __çift tire) ile özel alanları gizleme yaklaşımı
+Python|Nesne Yönelimli Programlama|@classmethod ve @staticmethod dekoratörlerini kullanarak sınıf seviyesinde metodlar tanımlama
+Python|Nesne Yönelimli Programlama|Nesne örneklerini karşılaştırmak için __eq__, __lt__ gibi karşılaştırma metodlarını tanımlama
+Python|Nesne Yönelimli Programlama|Sınıfları karma (hash) yapılabilir yapmak için __hash__ metodunu tanımlama (immutable nesneler için)
+Python|Nesne Yönelimli Programlama|OOP tasarım prensiplerine giriş yapma (SOLID prensiplerini Python örnekleri ile düşünme)
+Python|OpenCV|Görüntü okuma (cv2.imread)
+Python|OpenCV|Görüntü gösterme (cv2.imshow)
+Python|OpenCV|Görüntü kaydetme (cv2.imwrite)
+Python|OpenCV|Video okuma ve gösterme (cv2.VideoCapture)
+Python|OpenCV|Renk dönüşümü (BGR2GRAY, BGR2RGB)
+Python|OpenCV|Görüntü yeniden boyutlandırma (resize)
+Python|OpenCV|Görüntü kırpma
+Python|OpenCV|GaussianBlur filtresi
+Python|OpenCV|MedianBlur filtresi
+Python|OpenCV|Kenar bulma (Canny edge detection)
+Python|OpenCV|Görüntü eşikleme (thresholding)
+Python|OpenCV|Adaptif eşikleme
+Python|OpenCV|Maskeleme işlemleri
+Python|OpenCV|ROI (Region of Interest) seçimi
+Python|OpenCV|Morfolojik işlemler (erode, dilate)
+Python|OpenCV|Kontur tespiti (cv2.findContours)
+Python|OpenCV|Kontur çizme (cv2.drawContours)
+Python|OpenCV|Görüntüye şekil çizme (çizgi, dikdörtgen, daire)
+Python|OpenCV|Yazı yazma (cv2.putText)
+Python|OpenCV|Görüntüyü döndürme ve yansıtma
+Python|OpenCV|Perspektif dönüşüm (warpPerspective)
+Python|OpenCV|Hough dönüşümü ile çizgi tespiti
+Python|OpenCV|Yüz tanıma (Haar Cascade)
+Python|OpenCV|Nesne takibi
+Python|OpenCV|Hareket algılama
+Python|OpenCV|Renk bazlı nesne takibi (HSV)
+Python|OpenCV|Çerçeve üzerine bounding box çizme
+Python|OpenCV|Şablon eşleştirme (template matching)
+Python|OpenCV|Histogram hesaplama ve eşitleme
+Python|OpenCV|Görüntü histogramı karşılaştırma
+Python|OpenCV|Video kaydı (cv2.VideoWriter)
+Python|OpenCV|Trackbar ile etkileşimli filtre ayarı
+Python|OpenCV|Fare olayları ile etkileşim
+Python|OpenCV|Renk uzayı değişimi (LAB, YUV)
+Python|OpenCV|Perspektif düzeltme
+Python|OpenCV|Görüntüleri birleştirme (concat)
+Python|OpenCV|Filtre maskesi oluşturma
+Python|OpenCV|Kenar yoğunluğu hesaplama
+Python|OpenCV|Görüntü farkı alma
+Python|OpenCV|Segmentasyon (Watershed algoritması)
+Python|PyTorch|Tensor oluşturma (torch.tensor)
+Python|PyTorch|Tensor boyutlarını kontrol etme (shape, ndim)
+Python|PyTorch|Tensor yeniden boyutlandırma (view, reshape)
+Python|PyTorch|Tensor veri tipi değiştirme (float, int)
+Python|PyTorch|NumPy ile dönüşüm (tensor <-> numpy)
+Python|PyTorch|Otomatik türev hesaplama (autograd)
+Python|PyTorch|Gradient izleme (requires_grad)
+Python|PyTorch|Basit lineer model tanımlama
+Python|PyTorch|Loss function tanımlama (nn.MSELoss, nn.CrossEntropyLoss)
+Python|PyTorch|Optimizer kullanımı (SGD, Adam)
+Python|PyTorch|İleri yayılım (forward pass)
+Python|PyTorch|Geri yayılım (backward pass)
+Python|PyTorch|Eğitim döngüsü oluşturma
+Python|PyTorch|Test döngüsü oluşturma
+Python|PyTorch|torch.nn.Module sınıfı kullanımı
+Python|PyTorch|Katmanlar ekleme (nn.Linear, nn.Conv2d, vs)
+Python|PyTorch|Dataset ve DataLoader sınıfları
+Python|PyTorch|Verileri batch'lere ayırma
+Python|PyTorch|Eğitim ve doğrulama ayrımı yapma
+Python|PyTorch|Modelin doğruluk/başarı metrikleri
+Python|PyTorch|Model kaydetme (torch.save)
+Python|PyTorch|Model yükleme (torch.load)
+Python|PyTorch|Modeli CPU ve GPU arasında taşıma (to(device))
+Python|PyTorch|CUDA kullanımı
+Python|PyTorch|Transfer learning uygulamaları
+Python|PyTorch|torchsummary ile model özeti
+Python|PyTorch|torchviz ile model görselleştirme
+Python|PyTorch|Farklı veri setleriyle çalışma (MNIST, CIFAR-10, vb.)
+Python|PyTorch|Custom dataset sınıfı yazma
+Python|PyTorch|torchvision ile hazır veri setleri kullanma
+Python|PyTorch|torchvision.transforms ile veri artırma
+Python|PyTorch|Model checkpoint oluşturma
+Python|PyTorch|Learning rate scheduling
+Python|PyTorch|Overfitting ve regularization
+Python|PyTorch|Cross-validation uygulama
+Python|PyTorch|Confusion matrix çizimi
+Python|PyTorch|Eğitim geçmişi kaydı ve grafikleri
+Python|PyTorch|Early stopping mantığı
+Python|PyTorch|Multiple GPU ile eğitim
+Python|PyTorch|TorchScript ile modeli optimize etme
+Python|SQL|SQL sorgusu yazma (SELECT)
+Python|SQL|Tablo oluşturma (CREATE TABLE)
+Python|SQL|Veri ekleme (INSERT INTO)
+Python|SQL|Veri güncelleme (UPDATE)
+Python|SQL|Veri silme (DELETE)
+Python|SQL|WHERE koşulu kullanımı
+Python|SQL|Mantıksal operatörler (AND, OR, NOT)
+Python|SQL|LIKE operatörü ile arama
+Python|SQL|BETWEEN ile aralık filtreleme
+Python|SQL|IN ile çoklu seçim
+Python|SQL|NULL değer kontrolü (IS NULL, IS NOT NULL)
+Python|SQL|GROUP BY ile gruplama
+Python|SQL|HAVING ile grup sonrası filtreleme
+Python|SQL|ORDER BY ile sıralama
+Python|SQL|JOIN işlemleri (INNER, LEFT, RIGHT, FULL OUTER)
+Python|SQL|Alt sorgular (Subqueries)
+Python|SQL|View oluşturma (CREATE VIEW)
+Python|SQL|Index kullanımı (CREATE INDEX)
+Python|SQL|Primary key ve foreign key kullanımı
+Python|SQL|SQL Injection'dan korunma yaklaşımları
+Python|SQL|SQL ile veri tipi tanımlama (INT, VARCHAR, DATE, BOOL)
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|math modülü ile matematiksel işlemler yapma (ceil, floor, factorial, sqrt vs.)
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|datetime modülü ile tarih ve saat nesneleri oluşturma, formatlama (bugün: datetime.datetime.now())
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|random modülü ile rastgele sayılar üretme (random.randint, random.choice)
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|os modülü ile işletim sistemi işlemleri yapma (geçerli dizin: os.getcwd(), dizin listeleme: os.listdir())
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|sys modülü ile Python çalışma ortamına erişim (argv komut satırı argümanları, sys.platform)
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|json modülü ile JSON formatlı verileri serileştirme ve okuma (json.dumps, json.loads)
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|re modülü ile düzenli ifadeler kullanarak metin aramaları yapma ve değiştirme
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|time modülü ile zamanı ölçme (başlangıç = time.time(); süre = time.time() - başlangıç) ve bekletme (time.sleep(5))
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|itertools modülü ile permütasyon, kombinasyon gibi yineleme araçlarını kullanma
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|functools modülü ile kullanışlı yüksek seviye fonksiyonlar (functools.lru_cache ile sonuçları önbellekleme)
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|Yerleşik fonksiyonları kullanma: len(), sum(), min(), max() temel hesaplamalar
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|enumerate ve zip ile yerleşik yineleme yardımcılarını kullanma
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|Tüm elemanlar için koşul kontrolü (all()) veya en az bir eleman için (any()) sonucunu öğrenme
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|format() fonksiyonuyla string biçimlendirme veya f-string kullanımı
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|dir() ve help() kullanarak bir modülün/nesnenin özelliklerini ve dokümantasyonunu keşfetme
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|collections modülünden Counter (eleman sayımı), OrderedDict (sıralı sözlük) gibi yapıları kullanma
+Python|Standart Kütüphane & Yerleşik Fonksiyonlar|heapq modülü ile listeyi öncelik kuyruğu (min-heap) gibi kullanarak en küçük/büyük eleman takibi
+Python|Temel Söz Dizimi|Python REPL ortamında etkileşimli kod yürütme
+Python|Temel Söz Dizimi|.py uzantılı bir dosya oluşturup Python yorumlayıcısıyla çalıştırma
+Python|Temel Söz Dizimi|print() fonksiyonuyla konsola metin ve değişken değeri yazdırma
+Python|Temel Söz Dizimi|# kullanarak kod içinde yorum satırları ekleme
+Python|Temel Söz Dizimi|Değişken tanımlama ve isimlendirme kurallarına uyma (harf, sayı, alt çizgi)
+Python|Temel Söz Dizimi|Temel veri tiplerini kullanma (int, float, str, bool)
+Python|Temel Söz Dizimi|"Veri tipleri arasında dönüşüm yapma (ör. int(""5""), str(123))"
+Python|Temel Söz Dizimi|Aritmetik operatörleri kullanarak hesaplama yapma (+, -, *, /, //, %)
+Python|Temel Söz Dizimi|Karşılaştırma operatörleri ile karşılaştırma yapma (==, !=, <, >, <=, >=)
+Python|Temel Söz Dizimi|Mantıksal operatörlerle koşul ifadesi oluşturma (and, or, not)
+Python|Temel Söz Dizimi|Girinti (indentation) kullanarak kod bloklarını tanımlama (fonksiyon, döngü, koşul)
+Python|Temel Söz Dizimi|Satır sonu devamını sağlamak için \ karakterini kullanma
+Python|Temel Söz Dizimi|Üç tırnak ''' kullanarak çok satırlı string tanımlama
+Python|Temel Söz Dizimi|type() ile bir değişkenin tipini öğrenme
+Python|Temel Söz Dizimi|input() fonksiyonuyla kullanıcı girdisi alma
+Python|Temel Söz Dizimi|f-string veya format() ile metin biçimlendirme (değişkenleri string içinde kullanma)
+Python|Temel Söz Dizimi|Özel karakterleri string içinde kullanma (ör. yeni satır için \n, tab için \t)
+Python|Temel Söz Dizimi|Söz dizimi hatası (SyntaxError) aldığında hata mesajını okuyup hatayı düzeltme
+Python|Temel Söz Dizimi|Çalışan Python sürümünü kontrol etme ve kodu uygun sürüme göre yazma (sys.version)
+Python|TensorFlow / Keras|Model oluşturma (Sequential API)
+Python|TensorFlow / Keras|Model oluşturma (Functional API)
+Python|TensorFlow / Keras|Katmanlar ekleme (Dense, Conv2D, Flatten, vs)
+Python|TensorFlow / Keras|Modeli derleme (compile)
+Python|TensorFlow / Keras|Model eğitimi (fit)
+Python|TensorFlow / Keras|Model değerlendirme (evaluate)
+Python|TensorFlow / Keras|Tahmin yapma (predict)
+Python|TensorFlow / Keras|Eğitim verisi hazırlama (veri ölçekleme, yeniden şekillendirme)
+Python|TensorFlow / Keras|One-hot encoding
+Python|TensorFlow / Keras|Aktivasyon fonksiyonları (relu, sigmoid, softmax)
+Python|TensorFlow / Keras|Kayıp fonksiyonları (loss functions)
+Python|TensorFlow / Keras|Optimizasyon algoritmaları (SGD, Adam)
+Python|TensorFlow / Keras|Eğitim geçmişini takip etme (history)
+Python|TensorFlow / Keras|Erken durdurma (EarlyStopping)
+Python|TensorFlow / Keras|Model ağırlıklarını kaydetme ve yükleme
+Python|TensorFlow / Keras|Model mimarisini görselleştirme (plot_model)
+Python|TensorFlow / Keras|Callbacks kullanımı (ModelCheckpoint, ReduceLROnPlateau)
+Python|TensorFlow / Keras|Dropout ile overfitting önleme
+Python|TensorFlow / Keras|Normalizasyon (BatchNormalization)
+Python|TensorFlow / Keras|TensorBoard ile görselleştirme
+Python|TensorFlow / Keras|Modeli dışa aktarma (SavedModel, HDF5)
+Python|TensorFlow / Keras|Transfer learning uygulama (önceden eğitilmiş model kullanımı)
+Python|Veri Türleri ve Yapıları|Sayısal türlerle işlem yapma (tam sayı aritmetiği, ondalıklı sayı hesaplama)
+Python|Veri Türleri ve Yapıları|Metin türünde (string) değişken oluşturma ve birleştirme (concatenation)
+Python|Veri Türleri ve Yapıları|Boolean (True/False) değerlerle koşul ifadeleri ve mantıksal işlemler yapma
+Python|Veri Türleri ve Yapıları|Liste (list) tanımlama ve indeks ile eleman erişimi (başlangıç indeksi 0)
+Python|Veri Türleri ve Yapıları|Listelere eleman ekleme (append), araya ekleme (insert) ve silme (remove, pop)
+Python|Veri Türleri ve Yapıları|Demet (tuple) oluşturma ve demetin değişmez (immutable) olduğunu anlama
+Python|Veri Türleri ve Yapıları|Sözlük (dict) oluşturma ve anahtar-değer (key:value) çiftleriyle çalışma
+Python|Veri Türleri ve Yapıları|"Sözlükten değer okuma (dict.get(""anahtar"")) ve sözlüğe yeni anahtar ekleme"
+Python|Veri Türleri ve Yapıları|Küme (set) oluşturma ve küme operasyonları (kesişim, birliktelik, fark) yapma
+Python|Veri Türleri ve Yapıları|Bir veri yapısını başka türe dönüştürme (list -> set, tuple -> list vs.)
+Python|Veri Türleri ve Yapıları|Dilimleme (slicing) kullanarak liste veya string alt bölümlerini alma (list[a:b])
+Python|Veri Türleri ve Yapıları|range() fonksiyonuyla belirli aralıkta sayılar üreterek liste oluşturma (list(range(5)))
+Python|Veri Türleri ve Yapıları|Liste üreteçleri (list comprehension) ile tek satırda liste oluşturma ve filtreleme
+Python|Veri Türleri ve Yapıları|Değişebilir (list, dict) ve değişmez (tuple, str) türlerin farkını anlama
+Python|Veri Türleri ve Yapıları|Bir listeyi kopyalarken yüzeysel kopya vs. derin kopya farkını bilme (copy() modülü)
+Python|Veri Türleri ve Yapıları|İç içe (nested) veri yapıları oluşturma (listeler içinde liste, sözlük içinde sözlük vb.)
+Python|Veri Türleri ve Yapıları|None değerini kullanma ve NoneType tipinin özel olduğunu anlama
+Python|Veri Türleri ve Yapıları|Bir objenin bellek adresini id() fonksiyonuyla inceleme (ileri seviye)
+Python|Veri Türleri ve Yapıları|collections modülünden deque, Counter gibi ek veri yapıları kullanma
+Python|Üretken Yapay Zeka Araçları|Metinden görüntü üretme (text-to-image)
+Python|Üretken Yapay Zeka Araçları|DALL·E ile görsel oluşturma
+Python|Üretken Yapay Zeka Araçları|Stable Diffusion kullanımı
+Python|Üretken Yapay Zeka Araçları|Prompt mühendisliği temelleri
+Python|Üretken Yapay Zeka Araçları|Prompt kalitesi optimizasyonu
+Python|Üretken Yapay Zeka Araçları|Görsel stil değiştirme (style transfer)
+Python|Üretken Yapay Zeka Araçları|Yüz üretimi ve değiştirme
+Python|Üretken Yapay Zeka Araçları|Görsel boyutlandırma ve çözünürlük ayarları
+Python|Üretken Yapay Zeka Araçları|Negative prompt kullanımı
+Python|Üretken Yapay Zeka Araçları|Img2Img dönüştürme
+Python|Üretken Yapay Zeka Araçları|Görsel filtreleme ve düzenleme
+Python|Üretken Yapay Zeka Araçları|Üretilen görsellerin toplu indirilmesi
+Python|Üretken Yapay Zeka Araçları|GUI araçları ile kullanım (AUTOMATIC1111 arayüzü vb.)
+Python|Üretken Yapay Zeka Araçları|OpenAI API kullanarak üretim
+Python|Üretken Yapay Zeka Araçları|DreamBooth eğitimi (kendi yüzünü öğretme)
+Python|Üretken Yapay Zeka Araçları|HuggingFace ile model yönetimi
+Python|Üretken Yapay Zeka Araçları|Lora ile hafif ince ayar yapma
+Python|Üretken Yapay Zeka Araçları|Modeller arası karşılaştırma (DALL·E vs. Midjourney)
+Python|Üretken Yapay Zeka Araçları|Prompt veri tabanı oluşturma
+Python|Üretken Yapay Zeka Araçları|Token sayısı sınırlaması ve optimizasyon
+Python|Üretken Yapay Zeka Araçları|Üretkenlik değerlendirmesi (gerçeklik, özgünlük, çözünürlük)
+Sürüm Kontrolü|Git|Git nedir tanımı
+Sürüm Kontrolü|Git|Git kurulumu
+Sürüm Kontrolü|Git|Yerel repo oluşturma (git init)
+Sürüm Kontrolü|Git|Değişiklikleri izleme (git status)
+Sürüm Kontrolü|Git|Dosya ekleme (git add)
+Sürüm Kontrolü|Git|Commit oluşturma (git commit)
+Sürüm Kontrolü|Git|Commit geçmişini görüntüleme (git log)
+Sürüm Kontrolü|Git|Değişiklikleri geri alma (git checkout)
+Sürüm Kontrolü|Git|Branch oluşturma (git branch)
+Sürüm Kontrolü|Git|Branch değiştirme (git checkout)
+Sürüm Kontrolü|Git|Branch birleştirme (git merge)
+Sürüm Kontrolü|Git|Çakışma çözümü
+Sürüm Kontrolü|Git|Remote repository ekleme (git remote add)
+Sürüm Kontrolü|Git|GitHub’a push etme (git push)
+Sürüm Kontrolü|Git|Değişiklik çekme (git pull)
+Sürüm Kontrolü|Git|Etiket oluşturma (git tag)
+Sürüm Kontrolü|Git|.gitignore dosyası kullanımı
+Sürüm Kontrolü|Git|Stash işlemleri (git stash)
+Sürüm Kontrolü|Git|Rebase işlemi
+Sürüm Kontrolü|Git|Git reflog ile geçmişe dönme
+Sürüm Kontrolü|GitHub|GitHub hesabı oluşturma
+Sürüm Kontrolü|GitHub|Repository oluşturma
+Sürüm Kontrolü|GitHub|Proje README yazımı
+Sürüm Kontrolü|GitHub|GitHub Pages ile site yayınlama
+Sürüm Kontrolü|GitHub|GitHub üzerinden repo klonlama
+Sürüm Kontrolü|GitHub|GitHub’a push/pull işlemleri
+Sürüm Kontrolü|GitHub|Branch yönetimi
+Sürüm Kontrolü|GitHub|Pull request oluşturma
+Sürüm Kontrolü|GitHub|Merge işlemleri
+Sürüm Kontrolü|GitHub|Kod üzerinde yorum yapma
+Sürüm Kontrolü|GitHub|Commit geçmişini inceleme
+Sürüm Kontrolü|GitHub|Fork işlemi
+Sürüm Kontrolü|GitHub|GitHub Issues kullanımı
+Sürüm Kontrolü|GitHub|GitHub Projects ile proje yönetimi
+Sürüm Kontrolü|GitHub|Actions ile CI/CD otomasyonu
+Sürüm Kontrolü|GitHub|Release oluşturma
+Sürüm Kontrolü|GitHub|GitHub Gists kullanımı
+Sürüm Kontrolü|GitHub|GitHub Desktop ile GUI kullanımı
+Sürüm Kontrolü|GitHub|Katkı rehberi (contributing.md) oluşturma
+Sürüm Kontrolü|GitHub|Lisans dosyası (LICENSE) ekleme
+Tasarım|Adobe Photoshop|Arayüz ve araçları tanıma
+Tasarım|Adobe Photoshop|Yeni belge oluşturma
+Tasarım|Adobe Photoshop|Katmanlarla çalışma
+Tasarım|Adobe Photoshop|Seçim araçları (Lasso, Magic Wand)
+Tasarım|Adobe Photoshop|Renk ayarlamaları (Hue/Saturation, Brightness)
+Tasarım|Adobe Photoshop|Katman maskesi oluşturma
+Tasarım|Adobe Photoshop|Fırça aracı kullanımı
+Tasarım|Adobe Photoshop|Yazı aracı ile metin düzenleme
+Tasarım|Adobe Photoshop|Katman stilleri (gölge, parlama vb.)
+Tasarım|Adobe Photoshop|Görsel kırpma ve yeniden boyutlandırma
+Tasarım|Adobe Photoshop|Filtre efektleri (blur, sharpen vs.)
+Tasarım|Adobe Photoshop|Arka plan temizleme
+Tasarım|Adobe Photoshop|Görsel birleştirme (composite)
+Tasarım|Adobe Photoshop|Seçili bölgeyi içerikle doldurma
+Tasarım|Adobe Photoshop|Smart object ile çalışmak
+Tasarım|Adobe Photoshop|Perspektif düzeltme
+Tasarım|Adobe Photoshop|Renk grupları ve paletler
+Tasarım|Adobe Photoshop|PNG, JPG, PSD olarak dışa aktarma
+Tasarım|Adobe Photoshop|Klavye kısayollarını öğrenme
+Tasarım|Adobe Photoshop|Mockup ve şablonlarla tasarım yapma
+Tasarım|Figma|Figma arayüzünü tanıma
+Tasarım|Figma|Yeni proje oluşturma
+Tasarım|Figma|Frame ve layout oluşturma
+Tasarım|Figma|Şekiller ekleme (rectangle, circle, vs.)
+Tasarım|Figma|Yazı tipi ve stil ayarları
+Tasarım|Figma|Renk ve dolgu ayarları
+Tasarım|Figma|Shadow ve efekt kullanımı
+Tasarım|Figma|Bileşen (component) oluşturma
+Tasarım|Figma|Bileşen örneklerini (instance) kullanma
+Tasarım|Figma|Otomatik hizalama ve dağıtım
+Tasarım|Figma|Grid sistemi tanımlama
+Tasarım|Figma|Sayfa yönetimi
+Tasarım|Figma|Bağlantılar ile etkileşimli prototip oluşturma
+Tasarım|Figma|Prototip animasyonlarını tanımlama
+Tasarım|Figma|Mobil ve masaüstü tasarım arayüzü oluşturma
+Tasarım|Figma|Responsive tasarım teknikleri
+Tasarım|Figma|Paylaşım ve yorum alma
+Tasarım|Figma|Versiyon kontrolü
+Tasarım|Figma|Export işlemleri (PNG, SVG, PDF)
+Tasarım|Figma|FigJam ile beyin fırtınası ve akış çizimi
+Testing|Unit / Integration Testing|Unit test nedir tanımı
+Testing|Unit / Integration Testing|Test senaryosu yazma
+Testing|Unit / Integration Testing|Test framework kurulumu (Jest, JUnit, Pytest)
+Testing|Unit / Integration Testing|Basit test fonksiyonu yazma
+Testing|Unit / Integration Testing|Assertion kullanımı
+Testing|Unit / Integration Testing|Test coverage nedir
+Testing|Unit / Integration Testing|Test result analizi
+Testing|Unit / Integration Testing|Mock nesne oluşturma
+Testing|Unit / Integration Testing|Mock veri ile test senaryosu oluşturma
+Testing|Unit / Integration Testing|Test class yapısı
+Testing|Unit / Integration Testing|setUp ve tearDown metotları
+Testing|Unit / Integration Testing|Test bağımsızlığı prensipleri
+Testing|Unit / Integration Testing|Parametrize testler
+Testing|Unit / Integration Testing|Test context oluşturma
+Testing|Unit / Integration Testing|API testleri (GET, POST, PUT, DELETE)
+Testing|Unit / Integration Testing|Integration test nedir
+Testing|Unit / Integration Testing|Birden fazla servis entegre test
+Testing|Unit / Integration Testing|Veritabanı ile test senaryosu
+Testing|Unit / Integration Testing|Test veri üretimi
+Testing|Unit / Integration Testing|CI/CD süreçlerinde otomatik test
+Testing|Unit / Integration Testing|Test doubles (stub, fake, mock, spy)
+Testing|Unit / Integration Testing|Snapshot testing
+Testing|Unit / Integration Testing|Regression testing
+Testing|Unit / Integration Testing|Error handling test senaryosu
+Testing|Unit / Integration Testing|Edge case testleri
+Testing|Unit / Integration Testing|Test suite organizasyonu
+Testing|Unit / Integration Testing|Kod değişikliğinde test otomasyonu
+Testing|Unit / Integration Testing|Fail ve pass koşullarını anlamak
+Testing|Unit / Integration Testing|Test raporları oluşturma (HTML, XML)
+Testing|Unit / Integration Testing|Mock service oluşturma (msw, wiremock)
+Testing|Unit / Integration Testing|Test fixture yönetimi
+Testing|Unit / Integration Testing|Exception fırlatma testi
+Testing|Unit / Integration Testing|Test order yönetimi
+Testing|Unit / Integration Testing|Localhost test ortamı kurulumu
+Testing|Unit / Integration Testing|Kod kapsama oranını ölçme (coverage tools)
+Testing|Unit / Integration Testing|Retry mekanizması ile test
+Testing|Unit / Integration Testing|Smoke test ile temel kontrol
+Testing|Unit / Integration Testing|End-to-end test kavramı ile farkları
+Veri Bilimi|Matplotlib|Çizgi grafiği oluşturma (plt.plot)
+Veri Bilimi|Matplotlib|Çubuk grafiği (bar chart) çizme
+Veri Bilimi|Matplotlib|Histogram oluşturma (plt.hist)
+Veri Bilimi|Matplotlib|Dağılım grafiği (plt.scatter)
+Veri Bilimi|Matplotlib|Grafik başlık ve etiketleri ayarlama
+Veri Bilimi|Matplotlib|Birden fazla grafik (subplot)
+Veri Bilimi|Matplotlib|Eksen aralıklarını değiştirme (set_xlim, set_ylim)
+Veri Bilimi|Matplotlib|Renk, çizgi tipi, işaretleyici özelleştirme
+Veri Bilimi|Matplotlib|Grafik açıklamaları (legend)
+Veri Bilimi|Matplotlib|Grafik kaydetme (savefig)
+Veri Bilimi|Matplotlib|Yatay ve dikey çizgiler (axhline, axvline)
+Veri Bilimi|Matplotlib|Stil ayarları (seaborn, ggplot temaları)
+Veri Bilimi|Matplotlib|Arka plan renklendirme
+Veri Bilimi|Matplotlib|Yazı tipi ayarları (fontdict)
+Veri Bilimi|Matplotlib|Interaktif grafikler (Jupyter ile)
+Veri Bilimi|Matplotlib|Otomatik etiketleme ve sayısal gösterim
+Veri Bilimi|Matplotlib|3D grafikler oluşturma (Axes3D)
+Veri Bilimi|Matplotlib|Grafik içine not (annotate) ekleme
+Veri Bilimi|Matplotlib|Logaritmik eksen kullanımı
+Veri Bilimi|Matplotlib|Zamana dayalı veri çizimi
+Veri Bilimi|NumPy|Array oluşturma (np.array)
+Veri Bilimi|NumPy|Array boyutlarını öğrenme (shape, ndim)
+Veri Bilimi|NumPy|Array yeniden boyutlandırma (reshape)
+Veri Bilimi|NumPy|Sıfır/ön tanımlı array oluşturma (zeros, ones, full)
+Veri Bilimi|NumPy|Rastgele sayı üretme (random)
+Veri Bilimi|NumPy|Array indeksleme ve slicing
+Veri Bilimi|NumPy|Boolean indeksleme
+Veri Bilimi|NumPy|Koşullu seçim
+Veri Bilimi|NumPy|Vektörleştirilmiş işlemler (broadcasting)
+Veri Bilimi|NumPy|Matematiksel işlemler (np.sum, np.mean, np.std)
+Veri Bilimi|NumPy|Matris işlemleri (dot, matmul)
+Veri Bilimi|NumPy|Transpoz alma (T)
+Veri Bilimi|NumPy|Arrayleri birleştirme (concatenate, stack)
+Veri Bilimi|NumPy|Arrayleri ayırma (split)
+Veri Bilimi|NumPy|np.where ile koşullu değer atama
+Veri Bilimi|NumPy|np.unique ile benzersiz değerleri bulma
+Veri Bilimi|NumPy|NaN ile çalışma (np.isnan)
+Veri Bilimi|NumPy|Array kopyalama (copy)
+Veri Bilimi|NumPy|Array veri tipi dönüştürme (astype)
+Veri Bilimi|NumPy|Satır/sütun ekleme ve silme (insert, delete)
+Veri Bilimi|NumPy|np.arange, np.linspace ile sayısal diziler oluşturma
+Veri Bilimi|Pandas|DataFrame oluşturma
+Veri Bilimi|Pandas|CSV dosyası okuma/yazma
+Veri Bilimi|Pandas|Excel dosyası ile çalışma
+Veri Bilimi|Pandas|JSON verisini okuma
+Veri Bilimi|Pandas|Veri türlerini kontrol etme (dtypes)
+Veri Bilimi|Pandas|Kolon isimlerini değiştirme
+Veri Bilimi|Pandas|Satır/sütun seçme (loc, iloc)
+Veri Bilimi|Pandas|Filtreleme ve koşullu seçim
+Veri Bilimi|Pandas|Yeni sütun oluşturma
+Veri Bilimi|Pandas|Değer atama ve değiştirme
+Veri Bilimi|Pandas|NaN verileri tespit etme
+Veri Bilimi|Pandas|NaN verileri doldurma (fillna)
+Veri Bilimi|Pandas|NaN verileri silme (dropna)
+Veri Bilimi|Pandas|Veri birleştirme (merge, join)
+Veri Bilimi|Pandas|Gruplama (groupby)
+Veri Bilimi|Pandas|Özetleme işlemleri (mean, sum, count)
+Veri Bilimi|Pandas|Pivot tablo oluşturma
+Veri Bilimi|Pandas|Zaman serisi verileri ile çalışma
+Veri Bilimi|Pandas|Histogram çizdirme
+Veri Bilimi|Pandas|Apply kullanımı ile veri dönüştürme
+Veri Bilimi|Scikit-learn|sklearn ile model oluşturma (fit)
+Veri Bilimi|Scikit-learn|Tahmin yapma (predict)
+Veri Bilimi|Scikit-learn|Eğitim/test veri ayırma (train_test_split)
+Veri Bilimi|Scikit-learn|Doğruluk ölçümleri (accuracy_score)
+Veri Bilimi|Scikit-learn|Regresyon modeli oluşturma (LinearRegression)
+Veri Bilimi|Scikit-learn|Sınıflandırma (LogisticRegression, KNN, SVC)
+Veri Bilimi|Scikit-learn|Karar ağaçları ve rastgele orman
+Veri Bilimi|Scikit-learn|Modeli kaydetme/yükleme (joblib, pickle)
+Veri Bilimi|Scikit-learn|Pipeline oluşturma
+Veri Bilimi|Scikit-learn|Veri ölçekleme (StandardScaler, MinMaxScaler)
+Veri Bilimi|Scikit-learn|One-hot encoding (ColumnTransformer)
+Veri Bilimi|Scikit-learn|GridSearchCV ile model optimizasyonu
+Veri Bilimi|Scikit-learn|Cross-validation uygulama
+Veri Bilimi|Scikit-learn|PCA ile boyut indirgeme
+Veri Bilimi|Scikit-learn|K-means ile kümeleme
+Veri Bilimi|Scikit-learn|Model karışıklık matrisi (confusion matrix)
+Veri Bilimi|Scikit-learn|ROC ve AUC eğrisi
+Veri Bilimi|Scikit-learn|Sınıf ağırlıkları ile model dengeleme
+Veri Bilimi|Scikit-learn|Outlier deteksiyonu (Isolation Forest)
+Veri Bilimi|Scikit-learn|Eksik veri tahmini (imputer)
+Veri Bilimi|Seaborn|Otomatik tema ile grafik çizimi
+Veri Bilimi|Seaborn|Kategorik verilerle barplot oluşturma
+Veri Bilimi|Seaborn|countplot ile sayısal gösterim
+Veri Bilimi|Seaborn|boxplot ile dağılım inceleme
+Veri Bilimi|Seaborn|violinplot ile varyans analizi
+Veri Bilimi|Seaborn|heatmap ile korelasyon matrisi
+Veri Bilimi|Seaborn|pairplot ile değişkenler arası ilişki
+Veri Bilimi|Seaborn|scatterplot ile veri noktalarını karşılaştırma
+Veri Bilimi|Seaborn|lineplot ile eğilim analizi
+Veri Bilimi|Seaborn|swarmplot ile yoğunluk grafiği
+Veri Bilimi|Seaborn|hue parametresi ile kategorik ayrım
+Veri Bilimi|Seaborn|style ve palette parametreleri
+Veri Bilimi|Seaborn|subplot yönetimi ve düzenleme
+Veri Bilimi|Seaborn|Eksik veri görselleştirme (missingno ile)
+Veri Bilimi|Seaborn|Anlamlı grafik başlıkları ve eksen adları
+Veri Bilimi|Seaborn|Grafik açıklamaları ile detaylandırma
+Veri Bilimi|Seaborn|Outlier tespiti için görselleştirme
+Veri Bilimi|Seaborn|Zaman serisi ile heatmap üretimi
+Veri Bilimi|Seaborn|Grafiklerin yazıya uygun çözünürlükte kaydı
+Veri Görselleştirme|Power BI|Power BI nedir ve ne işe yarar
+Veri Görselleştirme|Power BI|Power BI Desktop kurulumu
+Veri Görselleştirme|Power BI|Veri kaynaklarıyla bağlantı kurma (Excel, SQL, Web)
+Veri Görselleştirme|Power BI|Power Query ile veri temizleme
+Veri Görselleştirme|Power BI|DAX (Data Analysis Expressions) nedir
+Veri Görselleştirme|Power BI|DAX ile hesaplamalar (SUM, AVERAGE, COUNT)
+Veri Görselleştirme|Power BI|Ölçü (measure) ve hesaplanan sütun oluşturma
+Veri Görselleştirme|Power BI|Grafik türleri (bar, pie, line, map)
+Veri Görselleştirme|Power BI|Dilimleyici (slicer) ve filtre kullanımı
+Veri Görselleştirme|Power BI|Dashboard oluşturma
+Veri Görselleştirme|Power BI|Power BI Service ile rapor yayınlama
+Veri Görselleştirme|Power BI|Zaman serisi görselleştirme
+Veri Görselleştirme|Power BI|KPI ve Card visual kullanımı
+Veri Görselleştirme|Power BI|Interaktif görsel bağlantıları
+Veri Görselleştirme|Power BI|Conditional formatting
+Veri Görselleştirme|Power BI|Bookmark ve Button ile etkileşim
+Veri Görselleştirme|Power BI|Rapor paylaşımı ve yetkilendirme
+Veri Görselleştirme|Power BI|Power BI Mobile ile erişim
+Veri Görselleştirme|Power BI|Power BI ile veri modelleme
+Veri Görselleştirme|Power BI|Drill through ve tooltip ayarları
+Veri Görselleştirme|Tableau|Tableau nedir ve özellikleri
+Veri Görselleştirme|Tableau|Tableau Public ve Tableau Desktop farkları
+Veri Görselleştirme|Tableau|Veri bağlantısı kurma (Excel, SQL Server)
+Veri Görselleştirme|Tableau|Veri kaynağı düzenleme
+Veri Görselleştirme|Tableau|Sheet ve Dashboard oluşturma
+Veri Görselleştirme|Tableau|Filtreleme ve sıralama teknikleri
+Veri Görselleştirme|Tableau|Grafik türleri ve özelleştirme
+Veri Görselleştirme|Tableau|Calculated field kullanımı
+Veri Görselleştirme|Tableau|Parameters ile dinamik kontrol
+Veri Görselleştirme|Tableau|Dual-axis grafikleri
+Veri Görselleştirme|Tableau|Tooltip özelleştirme
+Veri Görselleştirme|Tableau|Heatmap ve TreeMap oluşturma
+Veri Görselleştirme|Tableau|KPI dashboard oluşturma
+Veri Görselleştirme|Tableau|Story oluşturma
+Veri Görselleştirme|Tableau|Aksiyon tanımları (highlight, filter)
+Veri Görselleştirme|Tableau|Zaman serisi görselleştirme
+Veri Görselleştirme|Tableau|LOD ifadeleri (fixed, include, exclude)
+Veri Görselleştirme|Tableau|Rapor paylaşımı ve yayınlama (Tableau Server)
+Veri Görselleştirme|Tableau|Veri blend ve join işlemleri
+Veri Görselleştirme|Tableau|Coğrafi veri ile çalışma (maps)
+Veri Görselleştirme|Tableau|Otomasyon için Tableau Prep kullanımı
+Web Geliştirme|CSS|CSS dosyası bağlama
+Web Geliştirme|CSS|Seçiciler (selectors)
+Web Geliştirme|CSS|Renk tanımlama (hex, rgb, hsl)
+Web Geliştirme|CSS|Yazı tipi ve boyutu ayarlama
+Web Geliştirme|CSS|Kenar boşlukları (margin, padding)
+Web Geliştirme|CSS|Çerçeve (border) özellikleri
+Web Geliştirme|CSS|Arka plan ayarları (background)
+Web Geliştirme|CSS|Box model kavramı
+Web Geliştirme|CSS|Display türleri (block, inline, flex, grid)
+Web Geliştirme|CSS|Flexbox ile hizalama
+Web Geliştirme|CSS|Grid sistem ile düzenleme
+Web Geliştirme|CSS|Pozisyonlandırma (relative, absolute, fixed)
+Web Geliştirme|CSS|Overflow, z-index kullanımı
+Web Geliştirme|CSS|Pseudo class ve elementler
+Web Geliştirme|CSS|Geçiş efektleri (transitions)
+Web Geliştirme|CSS|Animasyon oluşturma (keyframes)
+Web Geliştirme|CSS|Medya sorguları (media queries)
+Web Geliştirme|CSS|Değişken tanımlama (custom properties)
+Web Geliştirme|CSS|Temiz CSS yazım prensipleri (BEM metodolojisi)
+Web Geliştirme|HTML|HTML temel yapısı (html, head, body)
+Web Geliştirme|HTML|Metin etiketleri (h1-h6, p, span)
+Web Geliştirme|HTML|Bağlantı verme (a tag)
+Web Geliştirme|HTML|Görsel ekleme (img tag)
+Web Geliştirme|HTML|Liste yapıları (ul, ol, li)
+Web Geliştirme|HTML|Tablo oluşturma (table, tr, td)
+Web Geliştirme|HTML|Form oluşturma (form, input, textarea)
+Web Geliştirme|HTML|Buton ekleme (button)
+Web Geliştirme|HTML|Checkbox ve radio button kullanımı
+Web Geliştirme|HTML|Label ile input eşleştirme
+Web Geliştirme|HTML|HTML5 semantik etiketler (section, article, aside)
+Web Geliştirme|HTML|Iframe kullanımı
+Web Geliştirme|HTML|Video ve ses ekleme (video, audio)
+Web Geliştirme|HTML|Meta etiketler (charset, viewport)
+Web Geliştirme|HTML|HTML ile bağlantı kurma (link, script)
+Web Geliştirme|HTML|HTML içi yorum satırları
+Web Geliştirme|HTML|HTML form doğrulama
+Web Geliştirme|HTML|HTML'de data-* attribute kullanımı
+Web Geliştirme|HTML|HTML entity karakterleri kullanımı
+Web Geliştirme|JavaScript|Değişken tanımlama (var, let, const)
+Web Geliştirme|JavaScript|Veri tipleri (number, string, boolean, object, array)
+Web Geliştirme|JavaScript|Aritmetik ve mantıksal operatörler
+Web Geliştirme|JavaScript|Koşullu ifadeler (if, else, switch)
+Web Geliştirme|JavaScript|Döngüler (for, while, do-while, for...of)
+Web Geliştirme|JavaScript|Fonksiyon tanımlama (function, arrow function)
+Web Geliştirme|JavaScript|Array metodları (map, filter, reduce, forEach)
+Web Geliştirme|JavaScript|Object ile çalışma (property erişimi, destructuring)
+Web Geliştirme|JavaScript|Event handling (onclick, addEventListener)
+Web Geliştirme|JavaScript|DOM erişimi ve düzenleme (getElementById, querySelector)
+Web Geliştirme|JavaScript|DOM elemanı oluşturma ve silme
+Web Geliştirme|JavaScript|Zamanlayıcılar (setTimeout, setInterval)
+Web Geliştirme|JavaScript|Form verisi alma ve doğrulama
+Web Geliştirme|JavaScript|JSON veri işleme
+Web Geliştirme|JavaScript|Fetch API kullanımı
+Web Geliştirme|JavaScript|Async/Await kullanımı
+Web Geliştirme|JavaScript|Hata yönetimi (try, catch, finally)
+Web Geliştirme|JavaScript|Scope ve closure kavramı
+Web Geliştirme|JavaScript|Prototyping ve inheritance
+Web Geliştirme|JavaScript|ES6+ özellikleri (spread, rest, destructuring, class)
+Web Geliştirme|Next.js|Next.js nedir tanımı
+Web Geliştirme|Next.js|Next.js kurulumu
+Web Geliştirme|Next.js|Sayfa yönlendirmesi (routing)
+Web Geliştirme|Next.js|Sayfa oluşturma (pages dizini)
+Web Geliştirme|Next.js|Dinamik route yapısı
+Web Geliştirme|Next.js|API route oluşturma
+Web Geliştirme|Next.js|getStaticProps kullanımı
+Web Geliştirme|Next.js|getServerSideProps kullanımı
+Web Geliştirme|Next.js|Layout bileşenleri
+Web Geliştirme|Next.js|Meta etiket yönetimi (next/head)
+Web Geliştirme|Next.js|Link bileşeni kullanımı
+Web Geliştirme|Next.js|Static site generation (SSG)
+Web Geliştirme|Next.js|Server-side rendering (SSR)
+Web Geliştirme|Next.js|Client-side rendering (CSR)
+Web Geliştirme|Next.js|API bağlantısı (fetch/Axios ile veri çekme)
+Web Geliştirme|Next.js|Form verisi işleme
+Web Geliştirme|Next.js|CSS modülleri ile stillendirme
+Web Geliştirme|Next.js|Tailwind CSS entegrasyonu
+Web Geliştirme|Next.js|Deployment (Vercel, Netlify)
+Web Geliştirme|Next.js|.env dosyası ile çevresel değişken kullanımı
+Web Geliştirme|Next.js|Middleware kullanımı
+Web Geliştirme|Next.js|App Router (v13+) ile yeni yapı kullanımı
+Web Geliştirme|Tailwind CSS|Tailwind kurulumu (CDN, PostCSS, vs)
+Web Geliştirme|Tailwind CSS|Temel yardımcı sınıflar (utility classes)
+Web Geliştirme|Tailwind CSS|Renk sınıfları kullanımı (bg-red-500, text-white)
+Web Geliştirme|Tailwind CSS|Margin ve padding yönetimi
+Web Geliştirme|Tailwind CSS|Yazı tipi ve boyutları ayarlama
+Web Geliştirme|Tailwind CSS|Flexbox sistemini uygulama (flex, justify, items)
+Web Geliştirme|Tailwind CSS|Grid yapısı oluşturma
+Web Geliştirme|Tailwind CSS|Border ve shadow özellikleri
+Web Geliştirme|Tailwind CSS|Transition ve animasyon sınıfları
+Web Geliştirme|Tailwind CSS|Responsive tasarım (sm:, md:, lg:)
+Web Geliştirme|Tailwind CSS|Tailwind config dosyası özelleştirme
+Web Geliştirme|Tailwind CSS|Karanlık tema desteği (dark mode)
+Web Geliştirme|Tailwind CSS|Hover, focus gibi state sınıfları
+Web Geliştirme|Tailwind CSS|Komponent tabanlı stillendirme
+Web Geliştirme|Tailwind CSS|Tailwind ile custom class tanımlama
+Web Geliştirme|Tailwind CSS|Tailwind + plugin kullanımı (forms, typography)
+Web Geliştirme|Tailwind CSS|Tailwind ile layout şablonları oluşturma
+Web Geliştirme|Tailwind CSS|Tailwind UI entegrasyonu
+Web Geliştirme|Tailwind CSS|Tailwind ile form stillendirme
+Web Geliştirme|Tailwind CSS|Tailwind ile grid-template-columns ayarları
+Yapay Zeka|AutoGen|AutoGen nedir ve avantajları
+Yapay Zeka|AutoGen|AutoGen ile çok ajanlı sistem kurulumu
+Yapay Zeka|AutoGen|assistant ve user agent tanımı
+Yapay Zeka|AutoGen|AutoGen ayarlarının yapılandırılması
+Yapay Zeka|AutoGen|Ajanlar arası iletişimin tanımlanması
+Yapay Zeka|AutoGen|Memory ayarları (conversation history)
+Yapay Zeka|AutoGen|Tool tanımı ve entegrasyonu
+Yapay Zeka|AutoGen|Özel fonksiyon yazımı ve bağlama
+Yapay Zeka|AutoGen|OpenAI API ile entegrasyon
+Yapay Zeka|AutoGen|LangChain ile kombine kullanım
+Yapay Zeka|AutoGen|Dış veri kaynaklarına erişim
+Yapay Zeka|AutoGen|AutoGen + agentframework örneği
+Yapay Zeka|AutoGen|RAG (retrieval-augmented generation) yapıları
+Yapay Zeka|AutoGen|Kod yazma görevlerinde kullanım
+Yapay Zeka|AutoGen|Problem çözme (math, query, yazılım)
+Yapay Zeka|AutoGen|Kodlama görevi paylaşımı (code role assign)
+Yapay Zeka|AutoGen|Kullanıcıdan onay mekanizması
+Yapay Zeka|AutoGen|Görev tamamlama akışı tanımı
+Yapay Zeka|AutoGen|Gelişmiş API konuşmaları
+Yapay Zeka|AutoGen|Hata çözümüne dayalı role switching
+Yapay Zeka|AutoGen|Agent ağı yönetimi (agent graph)
+Yapay Zeka|AutoGen|Role’lara göre veri filtreleme
+Yapay Zeka|AutoGen|Toplu prompt üretimi
+Yapay Zeka|AutoGen|AutoGen ile içerik üretimi
+Yapay Zeka|AutoGen|Çok ajanlı oyun/simulasyon geliştirme
+Yapay Zeka|AutoGen|Performans ölçüm ve hata loglama
+Yapay Zeka|AutoGen|AutoGen ile takım işbirliği simülasyonu
+Yapay Zeka|AutoGen|Tek ajanla çok görevin paralel işlenmesi
+Yapay Zeka|Computer Vision (İleri Seviye)|Computer Vision genel tanımı
+Yapay Zeka|Computer Vision (İleri Seviye)|Görüntü işleme vs görüntü anlama farkı
+Yapay Zeka|Computer Vision (İleri Seviye)|CNN yapısının detayları
+Yapay Zeka|Computer Vision (İleri Seviye)|Convolution, pooling, padding işlemleri
+Yapay Zeka|Computer Vision (İleri Seviye)|Image augmentation teknikleri
+Yapay Zeka|Computer Vision (İleri Seviye)|Batch normalization
+Yapay Zeka|Computer Vision (İleri Seviye)|Transfer learning nedir
+Yapay Zeka|Computer Vision (İleri Seviye)|Pre-trained modeller (ResNet, VGG, Inception)
+Yapay Zeka|Computer Vision (İleri Seviye)|Mask R-CNN kullanımı
+Yapay Zeka|Computer Vision (İleri Seviye)|YOLO (You Only Look Once) mimarisi
+Yapay Zeka|Computer Vision (İleri Seviye)|Faster R-CNN detayları
+Yapay Zeka|Computer Vision (İleri Seviye)|Semantic segmentation
+Yapay Zeka|Computer Vision (İleri Seviye)|Instance segmentation
+Yapay Zeka|Computer Vision (İleri Seviye)|Bounding box tespiti
+Yapay Zeka|Computer Vision (İleri Seviye)|Landmark detection
+Yapay Zeka|Computer Vision (İleri Seviye)|Pose estimation
+Yapay Zeka|Computer Vision (İleri Seviye)|Optik akış (optical flow)
+Yapay Zeka|Computer Vision (İleri Seviye)|Video işleme temelleri
+Yapay Zeka|Computer Vision (İleri Seviye)|Yol işareti veya yüz tanıma sistemleri
+Yapay Zeka|Computer Vision (İleri Seviye)|Görüntüden metin çıkarımı (OCR)
+Yapay Zeka|Computer Vision (İleri Seviye)|Tıbbi görüntü işleme
+Yapay Zeka|Computer Vision (İleri Seviye)|3D görüntü işlemleri
+Yapay Zeka|Computer Vision (İleri Seviye)|Self-supervised öğrenme
+Yapay Zeka|Computer Vision (İleri Seviye)|Vizualizasyon (Grad-CAM, feature map)
+Yapay Zeka|Computer Vision (İleri Seviye)|Görüntü benzerliği analizi
+Yapay Zeka|Computer Vision (İleri Seviye)|OpenCV ile ileri uygulamalar
+Yapay Zeka|Computer Vision (İleri Seviye)|TensorFlow + TF Records ile eğitim
+Yapay Zeka|Computer Vision (İleri Seviye)|PyTorch ile custom dataloader
+Yapay Zeka|Computer Vision (İleri Seviye)|Veri kümesi hazırlama (COCO, Pascal VOC)
+Yapay Zeka|Computer Vision (İleri Seviye)|Eğitim sırasında performans değerlendirme
+Yapay Zeka|Computer Vision (İleri Seviye)|mAP, IoU gibi metrikler
+Yapay Zeka|Computer Vision (İleri Seviye)|Model karşılaştırmaları
+Yapay Zeka|Computer Vision (İleri Seviye)|Hiperparametre ayarları
+Yapay Zeka|Computer Vision (İleri Seviye)|Real-time görüntü sınıflandırma
+Yapay Zeka|Computer Vision (İleri Seviye)|Object tracking
+Yapay Zeka|Computer Vision (İleri Seviye)|Görüntüde anomaly detection
+Yapay Zeka|Computer Vision (İleri Seviye)|Çok sınıflı segmentasyon
+Yapay Zeka|Computer Vision (İleri Seviye)|Ensemble yöntemleri ile görsel model birleştirme
+Yapay Zeka|LangChain|LangChain nedir ve neden kullanılır?
+Yapay Zeka|LangChain|LangChain ile zincir yapıları oluşturma
+Yapay Zeka|LangChain|LLMChain, SimpleSequentialChain kavramları
+Yapay Zeka|LangChain|PromptTemplate kullanımı
+Yapay Zeka|LangChain|OutputParser yazımı
+Yapay Zeka|LangChain|Vector store ile entegrasyon (FAISS, Pinecone)
+Yapay Zeka|LangChain|LangChain ile embedding alma
+Yapay Zeka|LangChain|Memory kullanımı (ConversationBufferMemory)
+Yapay Zeka|LangChain|Agent nedir, ne zaman kullanılır?
+Yapay Zeka|LangChain|Tool ve Agent tanımları
+Yapay Zeka|LangChain|LangChain ile API üzerinden veri çekme
+Yapay Zeka|LangChain|LangChain ile veritabanı sorgulama (SQLChain)
+Yapay Zeka|LangChain|LangChain Expression Language (LCEL)
+Yapay Zeka|LangChain|Retriever tanımı ve uygulama örnekleri
+Yapay Zeka|LangChain|Custom tool geliştirme
+Yapay Zeka|LangChain|LangChain ChatAgent oluşturma
+Yapay Zeka|LangChain|LangChain ile dosya okuma (PDF, CSV, TXT)
+Yapay Zeka|LangChain|Dosya içeriklerinin indekslenmesi
+Yapay Zeka|LangChain|LangChain ile chain’ler arası geçiş
+Yapay Zeka|LangChain|AgentExecutor kullanımı
+Yapay Zeka|LangChain|PromptLayer ile performans takibi
+Yapay Zeka|LangChain|LangSmith ile debugging
+Yapay Zeka|LangChain|LangChain ile çoklu model yönetimi
+Yapay Zeka|LangChain|ReAct template ile reasoning agent
+Yapay Zeka|LangChain|Chat history saklama
+Yapay Zeka|LangChain|Streaming ile canlı çıktılar alma
+Yapay Zeka|LangChain|Chain serialization
+Yapay Zeka|LangChain|LangChain ile JSON output üretimi
+Yapay Zeka|LangChain|LangChain ile hata yönetimi
+Yapay Zeka|LangChain|LangChain + Flask ile frontend entegrasyonu
+Yapay Zeka|LangChain|LangChain + Streamlit ile demo hazırlama
+Yapay Zeka|LangChain|LangChain ile arama motoru entegrasyonu
+Yapay Zeka|LangChain|LangChain Hub kullanımı
+Yapay Zeka|LangChain|LangChain ile çok adımlı karar yapıları
+Yapay Zeka|LangChain|LangChain ile task manager (agent + tool)
+Yapay Zeka|LangChain|LangChain ile veri ayıklama ve etiketleme
+Yapay Zeka|NLP|NLP nedir ve kullanım alanları
+Yapay Zeka|NLP|Tokenization (kelime, cümle, karakter)
+Yapay Zeka|NLP|Stopword kaldırma
+Yapay Zeka|NLP|Lemmatization
+Yapay Zeka|NLP|Stemming
+Yapay Zeka|NLP|POS tagging (kelime türü belirleme)
+Yapay Zeka|NLP|Named Entity Recognition (NER)
+Yapay Zeka|NLP|Dependency parsing
+Yapay Zeka|NLP|Text normalization
+Yapay Zeka|NLP|Vectorization (TF-IDF, Bag of Words)
+Yapay Zeka|NLP|Word Embeddings (Word2Vec, GloVe)
+Yapay Zeka|NLP|Transformer tabanlı modeller
+Yapay Zeka|NLP|BERT, RoBERTa, DistilBERT kullanımı
+Yapay Zeka|NLP|Sentiment analizi
+Yapay Zeka|NLP|Konu modelleme (LDA, NMF)
+Yapay Zeka|NLP|Cümle benzerliği ölçümü
+Yapay Zeka|NLP|Metin sınıflandırma
+Yapay Zeka|NLP|Metin özetleme (extractive, abstractive)
+Yapay Zeka|NLP|Soru-cevap sistemleri
+Yapay Zeka|NLP|Otomatik anahtar kelime çıkarımı
+Yapay Zeka|NLP|Dil modeli eğitimi
+Yapay Zeka|NLP|Çeviri sistemleri (neural translation)
+Yapay Zeka|NLP|Chatbot geliştirme
+Yapay Zeka|NLP|Spacy ile NLP uygulamaları
+Yapay Zeka|NLP|NLTK ile NLP uygulamaları
+Yapay Zeka|NLP|HuggingFace Transformers kullanımı
+Yapay Zeka|NLP|Metin temizleme (preprocessing)
+Yapay Zeka|NLP|Regex ile metin filtreleme
+Yapay Zeka|NLP|Dil tespiti
+Yapay Zeka|NLP|Karakter düzeyinde modelleme
+Yapay Zeka|NLP|Sıralı veriler için LSTM/RNN
+Yapay Zeka|NLP|Duygu analizi veri seti hazırlama
+Yapay Zeka|NLP|Wikipedia'dan veri çekme ve analiz
+Yapay Zeka|NLP|Yazım denetimi modelleri
+Yapay Zeka|NLP|Kullanıcıdan gelen metni anlamlandırma
+Yapay Zeka|NLP|Zaman etiketleme (temporal tagging)
+Yapay Zeka|NLP|Otomatik başlık üretimi
+Yapay Zeka|NLP|Web scraping + NLP entegrasyonu
+Yapay Zeka|Prompt Engineering|Prompt engineering nedir ve amacı
+Yapay Zeka|Prompt Engineering|Zero-shot prompt yapısı
+Yapay Zeka|Prompt Engineering|One-shot ve few-shot örnekleri
+Yapay Zeka|Prompt Engineering|Prompt formatı (input-output yapısı)
+Yapay Zeka|Prompt Engineering|Prompt içeriğini sadeleştirme
+Yapay Zeka|Prompt Engineering|Token sayısını azaltma teknikleri
+Yapay Zeka|Prompt Engineering|Instruction based prompt örnekleri
+Yapay Zeka|Prompt Engineering|Role-based prompt kullanımı
+Yapay Zeka|Prompt Engineering|Chain-of-thought (CoT) prompting
+Yapay Zeka|Prompt Engineering|Self-consistency stratejisi
+Yapay Zeka|Prompt Engineering|Step-by-step reasoning oluşturma
+Yapay Zeka|Prompt Engineering|Prompt debugging yöntemleri
+Yapay Zeka|Prompt Engineering|Output kontrolü için sistem mesajı tasarımı
+Yapay Zeka|Prompt Engineering|Prompt içinde json üretimi
+Yapay Zeka|Prompt Engineering|Tablo formatında çıktı alma teknikleri
+Yapay Zeka|Prompt Engineering|Sayısal işlem yeteneği için promptlama
+Yapay Zeka|Prompt Engineering|Kod yazımı için optimize edilmiş promptlar
+Yapay Zeka|Prompt Engineering|Prompt'ta yanlılık engelleme teknikleri
+Yapay Zeka|Prompt Engineering|Çok dilli destekli prompt yapısı
+Yapay Zeka|Prompt Engineering|Duygu analizi promptları
+Yapay Zeka|Prompt Engineering|Özet çıkarma promptları
+Yapay Zeka|Prompt Engineering|Sınıflandırma (kategori) promptları
+Yapay Zeka|Prompt Engineering|Extraction task için promptlar
+Yapay Zeka|Prompt Engineering|Chat context oluşturma
+Yapay Zeka|Prompt Engineering|Görsel açıklama için prompt hazırlama
+Yapay Zeka|Prompt Engineering|Görüntü üretimi için yönlendirme promptları
+Yapay Zeka|Prompt Engineering|Kod hatası bulma ve çözme için prompt
+Yapay Zeka|Prompt Engineering|Kullanıcı girdisine göre dinamik prompt oluşturma
+Yapay Zeka|Prompt Engineering|Karşılaştırmalı cevap üretme promptu
+Yapay Zeka|Prompt Engineering|Soru-cevap sistemleri için yapılandırılmış prompt
+Yapay Zeka|Prompt Engineering|Multimodal prompt oluşturma
+Yapay Zeka|Prompt Engineering|Agent için input-output yönetimi
+Yapay Zeka|Prompt Engineering|Bilgiye dayalı metin oluşturma promptları
+Yapay Zeka|Prompt Engineering|Parametre kontrolü (temperature, max tokens)
+Yapay Zeka|Prompt Engineering|Rol değişimi içeren kompleks promptlar
+Yapay Zeka|Prompt Engineering|Sesli asistanlar için prompt senaryosu
+Yapay Zeka|Prompt Engineering|Belge ve içerik özetleme için yönlendirme
+Yapay Zeka|Prompt Engineering|Bilgiyi güncelleyen veya sorgulayan promptlar
+Yapay Zeka|Reinforcement Learning|RL nedir ve temel kavramları
+Yapay Zeka|Reinforcement Learning|Ajan, çevre ve ödül sistemi tanımı
+Yapay Zeka|Reinforcement Learning|Markov Decision Process (MDP)
+Yapay Zeka|Reinforcement Learning|Durum (state) ve aksiyon (action) uzayı
+Yapay Zeka|Reinforcement Learning|Politika (policy) ve değer fonksiyonu
+Yapay Zeka|Reinforcement Learning|Ödül (reward) yapısı
+Yapay Zeka|Reinforcement Learning|Exploration vs exploitation kavramı
+Yapay Zeka|Reinforcement Learning|Q-öğrenme algoritması
+Yapay Zeka|Reinforcement Learning|SARSA algoritması
+Yapay Zeka|Reinforcement Learning|Temporal Difference (TD) öğrenme
+Yapay Zeka|Reinforcement Learning|Deep Q-Networks (DQN)
+Yapay Zeka|Reinforcement Learning|Policy Gradient yöntemleri
+Yapay Zeka|Reinforcement Learning|Actor-Critic modelleri
+Yapay Zeka|Reinforcement Learning|Proximal Policy Optimization (PPO)
+Yapay Zeka|Reinforcement Learning|Advantage Actor-Critic (A2C)
+Yapay Zeka|Reinforcement Learning|Model-free vs model-based yöntemler
+Yapay Zeka|Reinforcement Learning|Environment tanımı (OpenAI Gym)
+Yapay Zeka|Reinforcement Learning|Custom environment oluşturma
+Yapay Zeka|Reinforcement Learning|Simülasyon tabanlı öğrenme
+Yapay Zeka|Reinforcement Learning|Multi-agent reinforcement learning
+Yapay Zeka|Reinforcement Learning|Reward shaping
+Yapay Zeka|Reinforcement Learning|Continuous vs discrete action space
+Yapay Zeka|Reinforcement Learning|Episodic vs ongoing tasks
+Yapay Zeka|Reinforcement Learning|Learning rate ve gamma ayarları
+Yapay Zeka|Reinforcement Learning|RL projelerinde hiperparametre ayarlamaları
+Yapay Zeka|Reinforcement Learning|Eğitim sürecinin görselleştirilmesi (tensorboard)
+Yapay Zeka|Reinforcement Learning|RL algoritmalarının karşılaştırılması
+Yapay Zeka|Reinforcement Learning|Performans değerlendirme metrikleri
+Yapay Zeka|Reinforcement Learning|RL ile oyun oynama (CartPole, Atari)
+Yapay Zeka|Reinforcement Learning|Gelişmiş RL kütüphaneleri (Stable-Baselines3, RLlib)
+Yazılım|RESTful API|API nedir tanımı ve kullanımı
+Yazılım|RESTful API|HTTP metodları (GET, POST, PUT, DELETE)
+Yazılım|RESTful API|JSON veri formatını anlama
+Yazılım|RESTful API|API endpoint oluşturma
+Yazılım|RESTful API|URL parametreleri ve query string
+Yazılım|RESTful API|Flask ile basit API geliştirme
+Yazılım|RESTful API|FastAPI ile endpoint tanımlama
+Yazılım|RESTful API|API istemci araçları (Postman, Insomnia)
+Yazılım|RESTful API|Status kodları ve anlamları
+Yazılım|RESTful API|CRUD operasyonları implementasyonu
+Yazılım|RESTful API|Token tabanlı kimlik doğrulama
+Yazılım|RESTful API|API rate limiting
+Yazılım|RESTful API|Swagger ile API dokümantasyonu
+Yazılım|RESTful API|Hata yönetimi ve özel hata mesajları
+Yazılım|RESTful API|Middleware kullanımı
+Yazılım|RESTful API|CORS yapılandırması
+Yazılım|RESTful API|Otomatik test yazımı (pytest, unittest)
+Yazılım|RESTful API|REST ve GraphQL farkları
+Yazılım|RESTful API|API sürümleme (versioning)
+Yazılım|RESTful API|Production ortamı için API güvenliği

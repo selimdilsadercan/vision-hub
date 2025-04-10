@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { WebsiteCard } from "@/components/projects/WebsiteCard";
+import { WebsiteCard } from "@/components/dashboard/WebsiteCard";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";

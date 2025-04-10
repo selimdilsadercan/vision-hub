@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { FolderIcon, Users2Icon, SearchIcon, ClockIcon, CalendarIcon, WalletIcon } from "lucide-react";
+import { FolderIcon, Users2Icon, SearchIcon, ClockIcon, CalendarIcon, WalletIcon, Settings, Handshake, FileText } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -14,6 +14,11 @@ const routes = [
     label: "Overview",
     icon: FolderIcon,
     href: ""
+  },
+  {
+    label: "Project Details",
+    icon: FileText,
+    href: "/details"
   },
   {
     label: "Timeline",
@@ -39,6 +44,11 @@ const routes = [
     label: "Finance",
     icon: WalletIcon,
     href: "/finance"
+  },
+  {
+    label: "Partnerships",
+    icon: Handshake,
+    href: "/partnerships"
   }
 ];
 
@@ -56,7 +66,7 @@ export function ProjectSidebar({ projectId }: ProjectSidebarProps) {
         </Link>
       </div>
 
-      <div className="flex flex-1 flex-col gap-4 overflow-hidden">
+      <div className="flex flex-1 flex-col">
         {/* Main Navigation */}
         <div className="flex flex-col gap-1">
           {routes.map((route) => (
@@ -72,6 +82,21 @@ export function ProjectSidebar({ projectId }: ProjectSidebarProps) {
               </span>
             </Link>
           ))}
+        </div>
+
+        {/* Settings Button */}
+        <div className="mt-auto pt-4 border-t">
+          <Link href={`/projects/${projectId}/settings`}>
+            <span
+              className={cn(
+                "group flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+                pathname === `/projects/${projectId}/settings` ? "bg-accent text-accent-foreground" : "transparent"
+              )}
+            >
+              <Settings className="mr-2 h-4 w-4" />
+              Settings
+            </span>
+          </Link>
         </div>
       </div>
     </div>

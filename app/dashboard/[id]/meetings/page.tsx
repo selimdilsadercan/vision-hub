@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Plus, Video, Trash2 } from "lucide-react";
-import { AddMeetingDialog } from "@/components/projects/AddMeetingDialog";
+import { AddMeetingDialog } from "@/components/dashboard/AddMeetingDialog";
 import {
   AlertDialog,
   AlertDialogAction,

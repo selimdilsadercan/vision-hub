@@ -1,8 +1,8 @@
 "use client";
 
-import { ProjectNavbar } from "@/components/projects/ProjectNavbar";
-import { ProjectSidebar } from "@/components/projects/ProjectSidebar";
-import { ProjectHeader } from "@/components/projects/ProjectHeader";
+import { ProjectNavbar } from "@/components/dashboard/ProjectNavbar";
+import { ProjectSidebar } from "@/components/dashboard/ProjectSidebar";
+import { ProjectHeader } from "@/components/dashboard/ProjectHeader";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";

@@ -5,7 +5,6 @@ import { WorkspaceCard } from "@/components/WorkspaceCard";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
 import { useAuth } from "@/firebase/auth-context";
-import { RouteProtection } from "@/components/auth/RouteProtection";
 import { getUserData, type FirestoreUser } from "@/firebase/firestore";
 
 type Workspace = {
@@ -87,27 +86,25 @@ export default function Home() {
   }, [userData]);
 
   return (
-    <RouteProtection>
-      <div className="h-full p-4 space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold">HUB</h2>
-        </div>
-        {loading ? (
-          <div className="flex justify-center items-center h-40">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-          </div>
-        ) : workspaces.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {workspaces.map((workspace) => (
-              <WorkspaceCard key={workspace.project_id} workspace={workspace} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-10">
-            <p className="text-muted-foreground">No workspaces found</p>
-          </div>
-        )}
+    <div className="h-full p-4 space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold">HUB</h2>
       </div>
-    </RouteProtection>
+      {loading ? (
+        <div className="flex justify-center items-center h-40">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        </div>
+      ) : workspaces.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {workspaces.map((workspace) => (
+            <WorkspaceCard key={workspace.project_id} workspace={workspace} />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-10">
+          <p className="text-muted-foreground">No workspaces found</p>
+        </div>
+      )}
+    </div>
   );
 }

@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Diamond, Building2, Laptop2, CircleHelp } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Building2 } from "lucide-react";
 
 interface WorkspaceCardProps {
   workspace: {
@@ -16,20 +15,10 @@ interface WorkspaceCardProps {
   };
 }
 
-const projectIcons = {
-  "Vision Hub": { icon: Diamond, color: "text-orange-500" },
-  "Bireysel": { icon: Building2, color: "text-muted-foreground" },
-  "Remote Tech Work": { icon: Laptop2, color: "text-muted-foreground" },
-  "V-CAMP": { icon: Building2, color: "text-muted-foreground" },
-  "Ne Yapalım?": { icon: CircleHelp, color: "text-muted-foreground" }
-};
-
 export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
-  const { icon: Icon, color } = projectIcons[workspace.project_name as keyof typeof projectIcons] || { icon: Diamond, color: "text-muted-foreground" };
-
   const shouldShowExtraText = workspace.project_extra_text !== "-1";
 
-  const href = workspace.type === "project" ? `/projects/${workspace.project_id}` : `/workspace/${workspace.project_id}`;
+  const href = workspace.type === "project" ? `/dashboard/${workspace.project_id}` : `/workspace/${workspace.project_id}`;
 
   return (
     <Link href={href}>
@@ -39,7 +28,7 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
             {workspace.image_url ? (
               <Image src={workspace.image_url} alt={workspace.project_name} fill className="object-contain" />
             ) : (
-              <Icon className={cn("h-5 w-5", color)} />
+              <Building2 className="h-5 w-5" />
             )}
           </div>
           <div className="flex-1 min-w-0">
