@@ -20,6 +20,18 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "www.google.com",
         pathname: "/s2/favicons/**"
+      },
+      {
+        protocol: "https",
+        hostname: "i.ytimg.com",
+        port: "",
+        pathname: "/**"
+      },
+      {
+        protocol: "https",
+        hostname: "i.pravatar.cc",
+        port: "",
+        pathname: "/**"
       }
     ]
   }

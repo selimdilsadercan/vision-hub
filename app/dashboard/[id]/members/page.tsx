@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
-import { UserPlus, Info, Pencil, Trash2 } from "lucide-react";
+import { UserPlus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { AddMemberDialog } from "@/components/dashboard/AddMemberDialog";
 import { Database } from "@/lib/supabase-types";

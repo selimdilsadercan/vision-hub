@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,14 +26,11 @@ interface Transaction {
 }
 
 export default function FinancePage() {
-  const params = useParams();
-  const projectId = params.id as string;
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
   const [newTransaction, setNewTransaction] = useState({ title: "", amount: "" });
-  const [loading, setLoading] = useState(true);
 
   // Mock data for initial development
   const mockTransactions = [
@@ -46,7 +42,6 @@ export default function FinancePage() {
   useState(() => {
     // TODO: Replace with actual API call
     setTransactions(mockTransactions);
-    setLoading(false);
   });
 
   const totalBudget = 10000;

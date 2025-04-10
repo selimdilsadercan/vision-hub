@@ -70,11 +70,11 @@ export function ProjectSidebar({ projectId }: ProjectSidebarProps) {
         {/* Main Navigation */}
         <div className="flex flex-col gap-1">
           {routes.map((route) => (
-            <Link key={route.href} href={`/projects/${projectId}${route.href}`}>
+            <Link key={route.href} href={`/dashboard/${projectId}${route.href}`}>
               <span
                 className={cn(
                   "group flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                  pathname === `/projects/${projectId}${route.href}` ? "bg-accent text-accent-foreground" : "transparent"
+                  pathname === `/dashboard/${projectId}${route.href}` ? "bg-accent text-accent-foreground" : "transparent"
                 )}
               >
                 <route.icon className="mr-2 h-4 w-4" />
@@ -86,11 +86,11 @@ export function ProjectSidebar({ projectId }: ProjectSidebarProps) {
 
         {/* Settings Button */}
         <div className="mt-auto pt-4 border-t">
-          <Link href={`/projects/${projectId}/settings`}>
+          <Link href={`/dashboard/${projectId}/settings`}>
             <span
               className={cn(
                 "group flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                pathname === `/projects/${projectId}/settings` ? "bg-accent text-accent-foreground" : "transparent"
+                pathname === `/dashboard/${projectId}/settings` ? "bg-accent text-accent-foreground" : "transparent"
               )}
             >
               <Settings className="mr-2 h-4 w-4" />

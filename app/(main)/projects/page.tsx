@@ -11,6 +11,7 @@ import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { useAuth } from "@/firebase/auth-context";
 import { getUserData, type FirestoreUser } from "@/firebase/firestore";
+import Image from "next/image";
 
 interface Project {
   id: string;
@@ -147,7 +148,7 @@ export default function ProjectsPage() {
                 <CardContent>
                   <div className="h-32 rounded-md bg-muted flex items-center justify-center">
                     {project.image_url ? (
-                      <img src={project.image_url} alt={project.name} className="h-full w-full object-cover rounded-md" />
+                      <Image width={128} height={128} src={project.image_url} alt={project.name} className="h-full w-full object-cover rounded-md" />
                     ) : (
                       <FolderIcon className="h-12 w-12 text-muted-foreground" />
                     )}

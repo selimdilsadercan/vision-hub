@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Users2, FolderIcon, CheckCircle2, Circle, Clock } from "lucide-react";
+import { Users2, FolderIcon, CheckCircle2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";

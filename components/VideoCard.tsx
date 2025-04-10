@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface VideoCardProps {
   title: string;
   channel_title: string;
@@ -15,7 +17,7 @@ export function VideoCard({ title, channel_title, thumbnail_url, owner_name, own
         {/* User info */}
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
-            {owner_image_url && <img src={owner_image_url} alt={owner_name} className="w-full h-full object-cover" />}
+            {owner_image_url && <Image width={24} height={24} src={owner_image_url} alt={owner_name} className="w-full h-full object-cover" />}
           </div>
           <span className="text-sm text-muted-foreground">{owner_name}</span>
         </div>
@@ -23,7 +25,7 @@ export function VideoCard({ title, channel_title, thumbnail_url, owner_name, own
         <div className="flex gap-4">
           {/* Thumbnail */}
           <div className="w-24 h-16 rounded-md overflow-hidden flex-shrink-0">
-            <img src={thumbnail_url} alt={title} className="w-full h-full object-cover" />
+            <Image width={96} height={54} src={thumbnail_url} alt={title} className="w-full h-full object-cover" unoptimized />
           </div>
 
           {/* Content */}
@@ -39,7 +41,7 @@ export function VideoCard({ title, channel_title, thumbnail_url, owner_name, own
   return (
     <div className="bg-white rounded-lg border overflow-hidden">
       <div className="aspect-video relative">
-        <img src={thumbnail_url} alt={title} className="w-full h-full object-cover" />
+        <Image width={96} height={54} src={thumbnail_url} alt={title} className="w-full h-full object-cover" />
       </div>
       <div className="p-4 space-y-4">
         <div className="space-y-1">
@@ -50,7 +52,7 @@ export function VideoCard({ title, channel_title, thumbnail_url, owner_name, own
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-100">
-              {owner_image_url && <img src={owner_image_url} alt={owner_name} className="w-full h-full object-cover" />}
+              {owner_image_url && <Image width={24} height={24} src={owner_image_url} alt={owner_name} className="w-full h-full object-cover" />}
             </div>
             <span className="text-muted-foreground">{owner_name}</span>
           </div>

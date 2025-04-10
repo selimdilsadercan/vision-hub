@@ -23,7 +23,6 @@ import { toast } from "react-hot-toast";
 
 export default function ProjectSettingsPage() {
   const params = useParams();
-  const projectId = params.id as string;
 
   const [projectName, setProjectName] = useState("Vision Hub");
   const [projectDescription, setProjectDescription] = useState("A collaborative project management platform");

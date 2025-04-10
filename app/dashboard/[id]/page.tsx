@@ -6,6 +6,7 @@ import { Calendar, Clock, DollarSign, ListTodo, Users, Video, CheckCircle2, Circ
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import Image from "next/image";
 
 export default function ProjectPage() {
   const params = useParams();
@@ -323,7 +324,7 @@ export default function ProjectPage() {
                 {teamMembers.map((member) => (
                   <div key={member.id} className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-50">
                     <div className="w-8 h-8 rounded-full overflow-hidden">
-                      <img src={member.avatar} alt={member.name} className="w-full h-full object-cover" />
+                      <Image width={32} height={32} src={member.avatar} alt={member.name} className="w-full h-full object-cover" />
                     </div>
                     <div>
                       <div className="text-sm font-medium">{member.name}</div>

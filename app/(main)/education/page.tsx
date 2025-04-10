@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Clock, BookOpen, GraduationCap, ArrowRight } from "lucide-react";
+import { Clock, BookOpen, ArrowRight } from "lucide-react";
 import { type Education } from "@/lib/educations";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export default function EducationPage() {
   const [educations, setEducations] = useState<Education[]>([]);
@@ -102,13 +103,13 @@ export default function EducationPage() {
                     </div>
                   </div>
                   <div className="pt-4 mt-auto">
-                    <button
+                    <Link
+                      href={`/education/${encodeURIComponent(education.title)}`}
                       className="flex items-center text-sm font-medium text-primary hover:text-primary/80"
-                      onClick={() => console.log("Enroll:", education.title)}
                     >
                       Learn More
                       <ArrowRight className="ml-1 h-4 w-4" />
-                    </button>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>

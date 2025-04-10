@@ -19,6 +19,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle
 } from "@/components/ui/alert-dialog";
+import Image from "next/image";
 
 interface StoryDetailDialogProps {
   storyId: string | null;
@@ -154,19 +155,6 @@ export function StoryDetailDialog({ storyId, open, onOpenChange, onStoryUpdate }
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "DONE":
-        return "bg-green-500/10 text-green-500 hover:bg-green-500/20";
-      case "IN_PROGRESS":
-        return "bg-blue-500/10 text-blue-500 hover:bg-blue-500/20";
-      case "TODO":
-        return "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20";
-      default:
-        return "bg-gray-500/10 text-gray-500 hover:bg-gray-500/20";
-    }
-  };
-
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
@@ -251,7 +239,7 @@ export function StoryDetailDialog({ storyId, open, onOpenChange, onStoryUpdate }
                     {story.story_users.map((user) => (
                       <div key={user.id} className="flex items-center gap-2 p-2 rounded-md bg-secondary/30">
                         {user.image_url ? (
-                          <img src={user.image_url} alt={user.name} className="h-6 w-6 rounded-full object-cover" />
+                          <Image width={24} height={24} src={user.image_url} alt={user.name} className="h-6 w-6 rounded-full object-cover" />
                         ) : (
                           <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center">
                             <User className="h-3 w-3 text-primary" />

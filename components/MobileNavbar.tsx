@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Home, Search, Layout, Briefcase, UserCircle, Earth, Compass } from "lucide-react";
+import { Home, Briefcase, UserCircle, Earth, Compass } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function MobileNavbar() {

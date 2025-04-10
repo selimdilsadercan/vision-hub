@@ -172,6 +172,13 @@ export default function ProfilePage() {
     }
   };
 
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-full">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+    </div>
+    
+  }
+
   return (
     <div className="h-full p-4 space-y-8">
       <div className="flex items-center justify-between">

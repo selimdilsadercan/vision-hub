@@ -1,4 +1,5 @@
 import { Trophy } from "lucide-react";
+import Image from "next/image";
 
 interface CompetitionCardProps {
   id: string;
@@ -13,7 +14,7 @@ interface CompetitionCardProps {
   link: string | null;
 }
 
-export function CompetitionCard({ id, name, organizator, location, start_date, end_date, description, image_url, apply_date, link }: CompetitionCardProps) {
+export function CompetitionCard({ name, organizator, location, start_date, end_date, description, image_url, apply_date }: CompetitionCardProps) {
   const formatDate = (date: string | null) => {
     if (!date) return "";
     const d = new Date(date);
@@ -28,7 +29,7 @@ export function CompetitionCard({ id, name, organizator, location, start_date, e
       <div className="flex gap-4 p-4">
         <div className="w-24 h-24 flex-shrink-0 rounded-md overflow-hidden">
           {image_url ? (
-            <img src={image_url} alt={name} className="w-full h-full object-cover" />
+            <Image width={96} height={96} src={image_url} alt={name} className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full bg-muted flex items-center justify-center">
               <Trophy className="w-8 h-8 text-muted-foreground" />

@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface EventCardProps {
   name: string;
   organizator: string;
@@ -34,7 +36,7 @@ export function EventCard({
       <div className="bg-white rounded-lg border p-4 space-y-4">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-100">
-            {owner_image_url && <img src={owner_image_url} alt={owner_name} className="w-full h-full object-cover" />}
+            {owner_image_url && <Image width={32} height={32} src={owner_image_url} alt={owner_name} className="w-full h-full object-cover" />}
           </div>
           <div>
             <h3 className="font-medium text-blue-600">{organizator}</h3>

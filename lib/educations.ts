@@ -1,6 +1,41 @@
 import fs from "fs";
 import path from "path";
 
+export interface EducationNode {
+  title: string;
+  resource: string;
+  description: string;
+  skill: string;
+  microSkills: string[];
+  instruction: string;
+  upvotes?: number;
+  comments?: string[];
+}
+
+export interface EducationHandout {
+  purpose: string;
+  projectDefinition: string[];
+  submissionFormat: string;
+  evaluationCriteria: string[];
+  allSkills?: string[];
+  instruction?: string;
+}
+
+export interface EducationPlan {
+  title: string;
+  mentor: string;
+  handout: string;
+  nodes: EducationNode[];
+  handoutDetails: EducationHandout;
+  problemDefinition?: string;
+  purpose?: string;
+  generalStructure?: string;
+  targetAudience?: string[];
+  exampleUsage?: string;
+  developmentRoadmap?: string[];
+  longTermVision?: string[];
+}
+
 export interface Education {
   title: string;
   category: string;
@@ -8,6 +43,7 @@ export interface Education {
   level: "Beginner" | "Intermediate" | "Advanced";
   description: string;
   topics: string[];
+  plan?: EducationPlan;
 }
 
 export function readEducationData(): Education[] {

@@ -57,7 +57,7 @@ export default function JobsPage() {
     fetchJobs();
   }, []);
 
-  const handleApply = async (jobId: string) => {
+  const handleApply = async () => {
     // TODO: Implement job application logic
     toast.success("Başvuru alındı!");
   };

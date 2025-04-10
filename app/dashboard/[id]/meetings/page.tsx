@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Image from "next/image";
 
 interface Meeting {
   id: string;
@@ -183,7 +184,7 @@ export default function MeetingsPage() {
                           {meeting.participants.map((participant) => (
                             <div key={participant.id} className="h-8 w-8 rounded-full border-2 border-background overflow-hidden bg-gray-100">
                               {participant.image_url ? (
-                                <img src={participant.image_url} alt={participant.name} className="h-full w-full object-cover" />
+                                <Image src={participant.image_url} alt={participant.name} className="h-full w-full object-cover" />
                               ) : (
                                 <div className="h-full w-full flex items-center justify-center text-xs font-medium">{participant.name[0]}</div>
                               )}
@@ -237,7 +238,7 @@ export default function MeetingsPage() {
                           {meeting.participants.map((participant) => (
                             <div key={participant.id} className="h-8 w-8 rounded-full border-2 border-background overflow-hidden bg-gray-100">
                               {participant.image_url ? (
-                                <img src={participant.image_url} alt={participant.name} className="h-full w-full object-cover" />
+                                <Image width={32} height={32} src={participant.image_url} alt={participant.name} className="h-full w-full object-cover" />
                               ) : (
                                 <div className="h-full w-full flex items-center justify-center text-xs font-medium">{participant.name[0]}</div>
                               )}

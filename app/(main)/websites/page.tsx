@@ -9,6 +9,7 @@ import { Plus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Image from "next/image";
 
 type Website = {
   id: string;
@@ -193,7 +194,7 @@ export default function WebsitesPage() {
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0 w-6 h-6 relative">
                     {websiteDetails?.faviconUrl && (
-                      <img src={websiteDetails.faviconUrl} alt={websiteDetails?.title || "Website"} className="w-full h-full object-contain" />
+                      <Image src={websiteDetails.faviconUrl} alt={websiteDetails?.title || "Website"} className="w-full h-full object-contain" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">

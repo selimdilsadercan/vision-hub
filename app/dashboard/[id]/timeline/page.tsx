@@ -14,22 +14,19 @@ import {
   endOfMonth,
   subYears,
   addYears,
-  isSameMonth,
   isToday,
   parseISO,
   addWeeks,
   subMonths,
   addMonths,
-  differenceInDays,
   addDays
 } from "date-fns";
-import { ChevronDown, ChevronRight, CheckSquare, Square, Zap, Plus } from "lucide-react";
+import { ChevronDown, ChevronRight, CheckSquare, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { StoryDetailDialog } from "@/components/StoryDetailDialog";
 
@@ -50,16 +47,6 @@ interface Story {
   end_date?: Date;
   isResizing?: boolean;
   resizeEdge?: "start" | "end" | null;
-}
-
-interface Task {
-  id: string;
-  title: string;
-  status: "DONE" | "IN_PROGRESS" | "TODO";
-  assignee: {
-    initials: string;
-    color: string;
-  };
 }
 
 type TimelineView = "Weeks" | "Months";
@@ -259,30 +246,6 @@ export default function TimelinePage() {
 
   const getExpandedHeight = (itemCount: number) => {
     return 56 + itemCount * 40; // 56px for story row + 40px per task
-  };
-
-  const updateStoryDates = async (storyId: string, startDate: Date, endDate: Date) => {
-    try {
-      const { error } = await supabase.rpc("update_story", {
-        input_story_id: storyId,
-        input_start_date: startDate.toISOString(),
-        input_end_date: endDate.toISOString()
-      });
-
-      if (error) {
-        console.error("Error updating story:", error);
-        toast.error("Failed to update story dates");
-        return;
-      }
-
-      // Update local state
-      setStories(stories.map((story) => (story.id === storyId ? { ...story, start_date: startDate, end_date: endDate } : story)));
-
-      toast.success("Story dates updated successfully");
-    } catch (error) {
-      console.error("Unexpected error:", error);
-      toast.error("An unexpected error occurred");
-    }
   };
 
   const handleResizeStart = (storyId: string, edge: "start" | "end") => {
