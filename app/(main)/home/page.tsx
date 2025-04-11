@@ -13,7 +13,6 @@ type Workspace = {
   project_tasks: string[];
   project_extra_text: string;
   image_url: string;
-  type: "project" | "workspace";
 };
 
 export default function Home() {
@@ -54,7 +53,7 @@ export default function Home() {
         }
 
         // Then get all projects to check which workspaces are projects
-        const { data: projectsData, error: projectsError } = await supabase.rpc("list_projects", {
+        const { error: projectsError } = await supabase.rpc("list_projects", {
           input_profile_id: profileId
         });
 
@@ -63,17 +62,7 @@ export default function Home() {
           toast.error("Failed to fetch projects");
           return;
         }
-
-        // Create a set of project IDs for faster lookup
-        const projectIds = new Set(projectsData?.map((project) => project.id) || []);
-
-        // Transform workspaces data to include type with proper type assertion
-        const workspacesWithType: Workspace[] = workspacesData.map((workspace) => ({
-          ...workspace,
-          type: projectIds.has(workspace.project_id) ? "project" : "workspace"
-        })) as Workspace[];
-
-        setWorkspaces(workspacesWithType);
+        setWorkspaces(workspacesData);
       } catch (error) {
         console.error("Unexpected error:", error);
         toast.error("An unexpected error occurred");

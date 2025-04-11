@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
@@ -30,6 +30,14 @@ type Member = {
   status?: "Pending" | "Active";
 };
 
+type ProjectMemberResponse = {
+  id: string;
+  name: string;
+  role: string;
+  image_url?: string;
+  status?: "Pending" | "Active";
+};
+
 export default function MembersPage() {
   const params = useParams();
   const [members, setMembers] = useState<Member[]>([]);
@@ -37,11 +45,7 @@ export default function MembersPage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [memberToDelete, setMemberToDelete] = useState<Member | null>(null);
 
-  useEffect(() => {
-    fetchMembers();
-  }, [params.id]);
-
-  const fetchMembers = async () => {
+  const fetchMembers = useCallback(async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase.rpc("list_project_members", {
@@ -53,7 +57,7 @@ export default function MembersPage() {
         toast.error("Failed to fetch members");
       } else {
         setMembers(
-          data.map((member: any) => ({
+          (data as ProjectMemberResponse[]).map((member) => ({
             ...member,
             role: member.role as ProjectRole
           }))
@@ -65,7 +69,11 @@ export default function MembersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id]);
+
+  useEffect(() => {
+    fetchMembers();
+  }, [fetchMembers]);
 
   const handleRemoveMember = async () => {
     if (!memberToDelete) return;

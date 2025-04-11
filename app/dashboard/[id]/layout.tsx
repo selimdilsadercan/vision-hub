@@ -8,8 +8,6 @@ import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
 import { useParams } from "next/navigation";
 
-const MOCK_USER_ID = "d8323ace-4e10-4422-8c99-7380286ec0e5";
-
 interface Project {
   id: string;
   name: string;
@@ -27,8 +25,7 @@ export default function ProjectLayout({ children }: { children: React.ReactNode 
     const fetchProject = async () => {
       try {
         const { data: projectData, error } = await supabase.rpc("get_project", {
-          input_project_id: projectId,
-          input_profile_id: MOCK_USER_ID
+          input_project_id: projectId
         });
 
         if (error) {

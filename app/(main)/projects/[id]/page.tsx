@@ -51,8 +51,7 @@ export default function ProjectDetailPage() {
       try {
         setLoading(true);
         const { data, error } = await supabase.rpc("get_project", {
-          input_project_id: projectId,
-          input_profile_id: userData.profile_id
+          input_project_id: projectId
         });
 
         if (error) {

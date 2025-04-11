@@ -11,14 +11,13 @@ interface WorkspaceCardProps {
     project_tasks: string[];
     project_extra_text: string;
     image_url: string;
-    type?: "project" | "workspace";
   };
 }
 
 export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
   const shouldShowExtraText = workspace.project_extra_text !== "-1";
 
-  const href = workspace.type === "project" ? `/dashboard/${workspace.project_id}` : `/workspace/${workspace.project_id}`;
+  const href = `/dashboard/${workspace.project_id}`;
 
   return (
     <Link href={href}>

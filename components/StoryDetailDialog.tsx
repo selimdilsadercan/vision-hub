@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { format } from "date-fns";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
@@ -53,28 +53,7 @@ export function StoryDetailDialog({ storyId, open, onOpenChange, onStoryUpdate }
   const [editedEndDate, setEditedEndDate] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  useEffect(() => {
-    if (storyId && open) {
-      fetchStoryDetails();
-    } else {
-      // Reset state when dialog closes
-      setStory(null);
-      setIsEditing(false);
-      setEditedTitle("");
-      setEditedStartDate("");
-      setEditedEndDate("");
-    }
-  }, [storyId, open]);
-
-  useEffect(() => {
-    if (story) {
-      setEditedTitle(story.title);
-      setEditedStartDate(story.start_date ? new Date(story.start_date).toISOString().split("T")[0] : "");
-      setEditedEndDate(story.end_date ? new Date(story.end_date).toISOString().split("T")[0] : "");
-    }
-  }, [story]);
-
-  const fetchStoryDetails = async () => {
+  const fetchStoryDetails = useCallback(async () => {
     if (!storyId) return;
 
     try {
@@ -98,7 +77,28 @@ export function StoryDetailDialog({ storyId, open, onOpenChange, onStoryUpdate }
     } finally {
       setLoading(false);
     }
-  };
+  }, [storyId]);
+
+  useEffect(() => {
+    if (storyId && open) {
+      fetchStoryDetails();
+    } else {
+      // Reset state when dialog closes
+      setStory(null);
+      setIsEditing(false);
+      setEditedTitle("");
+      setEditedStartDate("");
+      setEditedEndDate("");
+    }
+  }, [storyId, open, fetchStoryDetails]);
+
+  useEffect(() => {
+    if (story) {
+      setEditedTitle(story.title);
+      setEditedStartDate(story.start_date ? new Date(story.start_date).toISOString().split("T")[0] : "");
+      setEditedEndDate(story.end_date ? new Date(story.end_date).toISOString().split("T")[0] : "");
+    }
+  }, [story]);
 
   const handleSave = async () => {
     if (!story) return;

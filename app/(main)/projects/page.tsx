@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Plus, Search, FolderIcon } from "lucide-react";
+import { Plus, Search, FolderIcon, Pencil } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
@@ -18,6 +18,7 @@ interface Project {
   name: string;
   image_url: string;
   is_admin: boolean;
+  description: string;
 }
 
 export default function ProjectsPage() {
@@ -26,7 +27,9 @@ export default function ProjectsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [newProjectName, setNewProjectName] = useState("");
+  const [newProjectDescription, setNewProjectDescription] = useState("");
   const [userData, setUserData] = useState<FirestoreUser | null>(null);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -75,22 +78,41 @@ export default function ProjectsPage() {
     }
 
     try {
-      const { error } = await supabase.rpc("create_project", {
-        input_project_name: newProjectName.trim(),
-        input_profile_id: userData.profile_id
-      });
+      if (editingProject) {
+        // Update existing project
+        const { error } = await supabase.rpc("update_project", {
+          input_project_id: editingProject.id,
+          input_project_name: newProjectName.trim(),
+          input_description: newProjectDescription.trim()
+        });
 
-      if (error) {
-        throw error;
+        if (error) {
+          throw error;
+        }
+
+        toast.success("Project updated successfully");
+      } else {
+        // Create new project
+        const { error } = await supabase.rpc("create_project", {
+          input_project_name: newProjectName.trim(),
+          input_description: newProjectDescription.trim(),
+          input_profile_id: userData.profile_id
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        toast.success("Project created successfully");
       }
 
-      toast.success("Project created successfully");
       setIsCreateDialogOpen(false);
       setNewProjectName("");
+      setNewProjectDescription("");
+      setEditingProject(null);
+
       // Refetch projects
-      const { data, error: fetchError } = await supabase.rpc("list_projects", {
-        input_profile_id: userData.profile_id
-      });
+      const { data, error: fetchError } = await supabase.rpc("list_projects");
 
       if (fetchError) {
         throw fetchError;
@@ -98,9 +120,25 @@ export default function ProjectsPage() {
 
       setProjects(data);
     } catch (error) {
-      console.error("Error creating project:", error);
-      toast.error("Failed to create project");
+      console.error("Error creating/updating project:", error);
+      toast.error(editingProject ? "Failed to update project" : "Failed to create project");
     }
+  };
+
+  const handleEditProject = (project: Project, e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent navigation to project page
+    e.stopPropagation(); // Prevent event bubbling
+    setEditingProject(project);
+    setNewProjectName(project.name);
+    setNewProjectDescription(project.description || "");
+    setIsCreateDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsCreateDialogOpen(false);
+    setEditingProject(null);
+    setNewProjectName("");
+    setNewProjectDescription("");
   };
 
   const filteredProjects = projects.filter((project) => project.name.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -109,9 +147,11 @@ export default function ProjectsPage() {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Projects</h1>
-        <Button onClick={() => setIsCreateDialogOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" /> Create Project
-        </Button>
+        {userData?.is_admin && (
+          <Button onClick={() => setIsCreateDialogOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" /> Create Project
+          </Button>
+        )}
       </div>
 
       <div className="relative">
@@ -137,43 +177,73 @@ export default function ProjectsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProjects.map((project) => (
             <Link key={project.id} href={`/projects/${project.id}`}>
-              <Card className="hover:bg-accent/50 transition-colors cursor-pointer">
+              <Card className="hover:bg-accent/50 transition-colors cursor-pointer relative group overflow-hidden">
+                <div className="h-32 w-full bg-muted flex items-center justify-center">
+                  <FolderIcon className="h-8 w-8 text-muted-foreground" />
+                </div>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <FolderIcon className="h-5 w-5" />
+                    {project.image_url ? (
+                      <div className="w-8 h-8 rounded-full overflow-hidden bg-muted">
+                        <Image width={32} height={32} src={project.image_url} alt={`${project.name} logo`} className="w-full h-full object-cover" />
+                      </div>
+                    ) : (
+                      <div className="w-8 h-8 flex items-center justify-center">
+                        <FolderIcon className="h-5 w-5" />
+                      </div>
+                    )}
                     {project.name}
                   </CardTitle>
-                  <CardDescription>{project.is_admin ? "Admin" : "Member"}</CardDescription>
+                  <CardDescription>
+                    {project.description ? <span className="line-clamp-2">{project.description}</span> : <span>{project.is_admin ? "Admin" : "Member"}</span>}
+                  </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className="h-32 rounded-md bg-muted flex items-center justify-center">
-                    {project.image_url ? (
-                      <Image width={128} height={128} src={project.image_url} alt={project.name} className="h-full w-full object-cover rounded-md" />
-                    ) : (
-                      <FolderIcon className="h-12 w-12 text-muted-foreground" />
-                    )}
-                  </div>
-                </CardContent>
+                {userData?.is_admin && project.is_admin && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={(e) => handleEditProject(project, e)}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                )}
               </Card>
             </Link>
           ))}
         </div>
       )}
 
-      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+      <Dialog open={isCreateDialogOpen} onOpenChange={handleCloseDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Create New Project</DialogTitle>
-            <DialogDescription>Enter a name for your new project</DialogDescription>
+            <DialogTitle>{editingProject ? "Edit Project" : "Create New Project"}</DialogTitle>
+            <DialogDescription>{editingProject ? "Update your project details" : "Enter a name for your new project"}</DialogDescription>
           </DialogHeader>
-          <div className="py-4">
-            <Input placeholder="Project name" value={newProjectName} onChange={(e) => setNewProjectName(e.target.value)} />
+          <div className="py-4 space-y-4">
+            <div className="space-y-2">
+              <label htmlFor="project-name" className="text-sm font-medium">
+                Project Name
+              </label>
+              <Input id="project-name" placeholder="Project name" value={newProjectName} onChange={(e) => setNewProjectName(e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="project-description" className="text-sm font-medium">
+                Project Description
+              </label>
+              <Input
+                id="project-description"
+                placeholder="Brief description of your project"
+                value={newProjectDescription}
+                onChange={(e) => setNewProjectDescription(e.target.value)}
+              />
+            </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+            <Button variant="outline" onClick={handleCloseDialog}>
               Cancel
             </Button>
-            <Button onClick={handleCreateProject}>Create Project</Button>
+            <Button onClick={handleCreateProject}>{editingProject ? "Update Project" : "Create Project"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

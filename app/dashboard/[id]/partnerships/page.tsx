@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,8 +52,6 @@ const statusLabels = {
 };
 
 export default function PartnershipsPage() {
-  const params = useParams();
-
   const [partnerships, setPartnerships] = useState<Partnership[]>([
     {
       id: "1",

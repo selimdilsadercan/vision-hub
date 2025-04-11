@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -32,11 +32,7 @@ export function AddMeetingDialog({ projectId, isOpen, onClose, onSuccess }: AddM
   const [members, setMembers] = useState<{ id: string; name: string }[]>([]);
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
 
-  useEffect(() => {
-    fetchProjectMembers();
-  }, [projectId]);
-
-  const fetchProjectMembers = async () => {
+  const fetchProjectMembers = useCallback(async () => {
     try {
       const { data, error } = await supabase.rpc("list_project_members", {
         input_project_id: projectId
@@ -51,7 +47,11 @@ export function AddMeetingDialog({ projectId, isOpen, onClose, onSuccess }: AddM
     } catch (error) {
       console.error("Unexpected error:", error);
     }
-  };
+  }, [projectId]);
+
+  useEffect(() => {
+    fetchProjectMembers();
+  }, [fetchProjectMembers]);
 
   const handleSubmit = async () => {
     if (!name || !date || !startTime || !endTime) {

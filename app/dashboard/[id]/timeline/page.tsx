@@ -49,6 +49,23 @@ interface Story {
   resizeEdge?: "start" | "end" | null;
 }
 
+interface StoryResponse {
+  id: string;
+  created_at: string;
+  title: string;
+  items: string[];
+  item_images: string[];
+  story_users: {
+    id: string;
+    name: string;
+    image_url?: string;
+  }[];
+  status: "Todo" | "InProgress" | "Done";
+  start_date: string | null;
+  end_date: string | null;
+  index: number;
+}
+
 type TimelineView = "Weeks" | "Months";
 
 export default function TimelinePage() {
@@ -70,6 +87,12 @@ export default function TimelinePage() {
 
   const timelineRef = useRef<HTMLDivElement>(null);
 
+  const calculateTodayPosition = useCallback(() => {
+    const totalDuration = timelineRange.end.getTime() - timelineRange.start.getTime();
+    const todayOffset = new Date().getTime() - timelineRange.start.getTime();
+    return (todayOffset / totalDuration) * 100;
+  }, [timelineRange.end, timelineRange.start]);
+
   // Function to center the timeline
   const centerTimeline = useCallback(() => {
     if (timelineRef.current) {
@@ -79,14 +102,14 @@ export default function TimelinePage() {
       const scrollPosition = Math.max(0, todayPosition - viewportWidth / 2);
       timelineRef.current.scrollLeft = scrollPosition;
     }
-  }, []);
+  }, [calculateTodayPosition]);
 
   // Center timeline when component mounts or stories load
   useEffect(() => {
     if (!loading && stories.length > 0 && !stories.some((story) => story.expanded)) {
       centerTimeline();
     }
-  }, [loading, stories.length, centerTimeline]);
+  }, [loading, stories, centerTimeline]);
 
   // Get all days in the range for weeks view
   const days = eachDayOfInterval({ start: timelineRange.start, end: timelineRange.end });
@@ -97,24 +120,7 @@ export default function TimelinePage() {
   // Get unique months
   const months = Array.from(new Set(days.map((date) => format(date, "MMM yyyy"))));
 
-  useEffect(() => {
-    fetchStories();
-  }, [params.id]);
-
-  // Fetch user's profile ID from Firebase
-  useEffect(() => {
-    const fetchProfileId = async () => {
-      if (!user) return;
-      const userData = await getUserData(user.uid);
-      if (userData?.profile_id) {
-        setProfileId(userData.profile_id);
-      }
-    };
-
-    fetchProfileId();
-  }, [user]);
-
-  const fetchStories = async () => {
+  const fetchStories = useCallback(async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase.rpc("list_project_stories", {
@@ -128,14 +134,22 @@ export default function TimelinePage() {
       }
 
       // Transform and sort stories with actual dates
-      const sortedStories = (data as any[]).map((story) => {
+      const sortedStories = (data as unknown as StoryResponse[]).map((story): Story => {
         const start_date = parseISO(story.start_date || story.created_at);
         const end_date = story.end_date ? parseISO(story.end_date) : addWeeks(start_date, 2);
 
         return {
-          ...story,
-          story_users: story.story_users as Story["story_users"],
-          status: story.status || "TODO",
+          id: story.id,
+          created_at: story.created_at,
+          title: story.title,
+          items: story.items,
+          item_images: story.item_images,
+          story_users: story.story_users.map((user) => ({
+            id: user.id,
+            name: user.name,
+            image_url: user.image_url
+          })),
+          status: story.status === "Todo" ? "TODO" : story.status === "InProgress" ? "IN_PROGRESS" : "DONE",
           expanded: false,
           start_date,
           end_date
@@ -144,8 +158,8 @@ export default function TimelinePage() {
 
       // Adjust timeline range based on story dates
       if (sortedStories.length > 0) {
-        const earliestDate = new Date(Math.min(...sortedStories.map((s) => s.start_date.getTime())));
-        const latestDate = new Date(Math.max(...sortedStories.map((s) => s.end_date.getTime())));
+        const earliestDate = new Date(Math.min(...sortedStories.map((s) => s.start_date!.getTime())));
+        const latestDate = new Date(Math.max(...sortedStories.map((s) => s.end_date!.getTime())));
 
         // Add padding of 1 month before and after
         setTimelineRange({
@@ -161,11 +175,29 @@ export default function TimelinePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id]);
 
-  const toggleStoryExpansion = (storyId: string) => {
-    setStories(stories.map((story) => (story.id === storyId ? { ...story, expanded: !story.expanded } : story)));
-  };
+  // Fetch stories when component mounts or project ID changes
+  useEffect(() => {
+    fetchStories();
+  }, [fetchStories]);
+
+  // Fetch user's profile ID from Firebase
+  useEffect(() => {
+    const fetchProfileId = async () => {
+      if (!user) return;
+      const userData = await getUserData(user.uid);
+      if (userData?.profile_id) {
+        setProfileId(userData.profile_id);
+      }
+    };
+
+    fetchProfileId();
+  }, [user]);
+
+  const toggleStoryExpansion = useCallback((storyId: string) => {
+    setStories((prevStories) => prevStories.map((story) => (story.id === storyId ? { ...story, expanded: !story.expanded } : story)));
+  }, []);
 
   const renderTimelineHeader = () => {
     if (timelineView === "Weeks") {
@@ -238,12 +270,6 @@ export default function TimelinePage() {
     );
   };
 
-  const calculateTodayPosition = () => {
-    const totalDuration = timelineRange.end.getTime() - timelineRange.start.getTime();
-    const todayOffset = new Date().getTime() - timelineRange.start.getTime();
-    return (todayOffset / totalDuration) * 100;
-  };
-
   const getExpandedHeight = (itemCount: number) => {
     return 56 + itemCount * 40; // 56px for story row + 40px per task
   };
@@ -253,109 +279,125 @@ export default function TimelinePage() {
     setStories(stories.map((story) => (story.id === storyId ? { ...story, isResizing: true, resizeEdge: edge } : story)));
   };
 
-  const handleResize = (storyId: string, clientX: number) => {
-    const story = stories.find((s) => s.id === storyId);
-    if (!story?.isResizing || !timelineRef.current) return;
+  const handleResize = useCallback(
+    (storyId: string, clientX: number) => {
+      const story = stories.find((s) => s.id === storyId);
+      if (!story?.isResizing || !timelineRef.current) return;
 
-    const timelineRect = timelineRef.current.getBoundingClientRect();
-    const timelineWidth = timelineRef.current.scrollWidth;
-    const position = (clientX - timelineRect.left + timelineRef.current.scrollLeft) / timelineWidth;
-    const timestamp = timelineRange.start.getTime() + (timelineRange.end.getTime() - timelineRange.start.getTime()) * position;
+      const timelineRect = timelineRef.current.getBoundingClientRect();
+      const timelineWidth = timelineRef.current.scrollWidth;
+      const position = (clientX - timelineRect.left + timelineRef.current.scrollLeft) / timelineWidth;
+      const timestamp = timelineRange.start.getTime() + (timelineRange.end.getTime() - timelineRange.start.getTime()) * position;
 
-    // Create date and set to noon UTC to avoid timezone issues
-    const newDate = new Date(timestamp);
-    newDate.setUTCHours(12, 0, 0, 0);
+      // Create date and set to noon UTC to avoid timezone issues
+      const newDate = new Date(timestamp);
+      newDate.setUTCHours(12, 0, 0, 0);
 
-    setStories(
-      stories.map((s) => {
-        if (s.id === storyId && s.start_date && s.end_date) {
-          if (story.resizeEdge === "start") {
-            // When resizing start, keep the end date as is
-            const currentEndDate = new Date(s.end_date);
-            currentEndDate.setUTCHours(12, 0, 0, 0);
-            // Ensure start date doesn't go beyond end date
-            const proposedDate = newDate < currentEndDate ? newDate : new Date(currentEndDate.getTime() - 86400000);
-            return {
-              ...s,
-              start_date: proposedDate
-              // Don't update end_date here
-            };
-          } else if (story.resizeEdge === "end") {
-            // When resizing end, keep the start date as is
-            const currentStartDate = new Date(s.start_date);
-            currentStartDate.setUTCHours(12, 0, 0, 0);
-            // Ensure end date doesn't go before start date
-            const proposedDate = newDate > currentStartDate ? newDate : new Date(currentStartDate.getTime() + 86400000);
-            return {
-              ...s,
-              end_date: proposedDate
-              // Don't update start_date here
-            };
+      setStories(
+        stories.map((s) => {
+          if (s.id === storyId && s.start_date && s.end_date) {
+            if (story.resizeEdge === "start") {
+              // When resizing start, keep the end date as is
+              const currentEndDate = new Date(s.end_date);
+              currentEndDate.setUTCHours(12, 0, 0, 0);
+              // Ensure start date doesn't go beyond end date
+              const proposedDate = newDate < currentEndDate ? newDate : new Date(currentEndDate.getTime() - 86400000);
+              return {
+                ...s,
+                start_date: proposedDate
+                // Don't update end_date here
+              };
+            } else if (story.resizeEdge === "end") {
+              // When resizing end, keep the start date as is
+              const currentStartDate = new Date(s.start_date);
+              currentStartDate.setUTCHours(12, 0, 0, 0);
+              // Ensure end date doesn't go before start date
+              const proposedDate = newDate > currentStartDate ? newDate : new Date(currentStartDate.getTime() + 86400000);
+              return {
+                ...s,
+                end_date: proposedDate
+                // Don't update start_date here
+              };
+            }
           }
+          return s;
+        })
+      );
+    },
+    [timelineRef, timelineRange.start, timelineRange.end, stories]
+  );
+
+  const handleResizeEnd = useCallback(
+    async (storyId: string) => {
+      // Use a functional update to avoid the stories dependency
+      setStories((prevStories) => {
+        const story = prevStories.find((s) => s.id === storyId);
+        if (!story?.isResizing) return prevStories;
+
+        // Immediately mark as not resizing to stop the visual update
+        const updatedStories = prevStories.map((s) => (s.id === storyId ? { ...s, isResizing: false, resizeEdge: null } : s));
+
+        // Set a small delay before allowing clicks again to prevent accidental dialog opening
+        setTimeout(() => {
+          setIsResizing(false);
+        }, 300);
+
+        // Perform the async operation after the state update
+        if (story.start_date && story.end_date) {
+          const startDate = story.start_date;
+          const endDate = story.end_date;
+
+          (async () => {
+            try {
+              // Both dates should already be normalized to noon UTC from handleResize
+              const { error } = await supabase.rpc("update_story", {
+                input_story_id: storyId,
+                input_start_date: startDate.toISOString(),
+                input_end_date: endDate.toISOString()
+              });
+
+              if (error) {
+                console.error("Error updating story:", error);
+                toast.error("Failed to update story dates");
+                return;
+              }
+
+              toast.success("Story dates updated successfully");
+            } catch (error) {
+              console.error("Unexpected error:", error);
+              toast.error("An unexpected error occurred");
+            }
+          })();
         }
-        return s;
-      })
-    );
-  };
 
-  const handleResizeEnd = async (storyId: string) => {
-    const story = stories.find((s) => s.id === storyId);
-    if (!story?.isResizing) return;
+        return updatedStories;
+      });
+    },
+    [] // No dependencies needed since we're using functional updates
+  );
 
-    // Immediately mark as not resizing to stop the visual update
-    setStories(stories.map((s) => (s.id === storyId ? { ...s, isResizing: false, resizeEdge: null } : s)));
+  useEffect(() => {
+    if (isResizing) {
+      const resizingStory = stories.find((s) => s.isResizing);
+      if (resizingStory) {
+        const handleMouseMove = (e: MouseEvent) => {
+          handleResize(resizingStory.id, e.clientX);
+        };
 
-    // Set a small delay before allowing clicks again to prevent accidental dialog opening
-    setTimeout(() => {
-      setIsResizing(false);
-    }, 300);
+        const handleMouseUp = () => {
+          handleResizeEnd(resizingStory.id);
+        };
 
-    if (story && story.start_date && story.end_date) {
-      try {
-        // Both dates should already be normalized to noon UTC from handleResize
-        const { error } = await supabase.rpc("update_story", {
-          input_story_id: storyId,
-          input_start_date: story.start_date.toISOString(),
-          input_end_date: story.end_date.toISOString()
-        });
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mouseup", handleMouseUp);
 
-        if (error) {
-          console.error("Error updating story:", error);
-          toast.error("Failed to update story dates");
-          return;
-        }
-
-        toast.success("Story dates updated successfully");
-      } catch (error) {
-        console.error("Unexpected error:", error);
-        toast.error("An unexpected error occurred");
+        return () => {
+          window.removeEventListener("mousemove", handleMouseMove);
+          window.removeEventListener("mouseup", handleMouseUp);
+        };
       }
     }
-  };
-
-  // Add mouse move and mouse up event listeners
-  useEffect(() => {
-    const resizingStory = stories.find((s) => s.isResizing);
-    if (!resizingStory) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      handleResize(resizingStory.id, e.clientX);
-    };
-
-    const handleMouseUp = () => {
-      handleResizeEnd(resizingStory.id);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
-    window.addEventListener("mouseleave", handleMouseUp);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-      window.removeEventListener("mouseleave", handleMouseUp);
-    };
-  }, [stories]);
+  }, [isResizing, handleResize, handleResizeEnd, stories]);
 
   const handleStoryClick = (storyId: string) => {
     // Don't open dialog if we're resizing
@@ -365,19 +407,18 @@ export default function TimelinePage() {
     setIsStoryDialogOpen(true);
   };
 
-  const handleCreateStory = async () => {
-    if (!newStoryTitle.trim() || !profileId) return;
+  const handleCreateStory = useCallback(async () => {
+    if (!newStoryTitle.trim()) {
+      toast.error("Please enter a story title");
+      return;
+    }
 
     try {
-      const startDate = addDays(new Date(), 1); // Tomorrow
-      const endDate = addWeeks(startDate, 2); // 2 weeks from tomorrow
-
-      const { error } = await supabase.rpc("create_story", {
+      setLoading(true);
+      const { data, error } = await supabase.rpc("create_story", {
         input_project_id: params.id as string,
-        input_story_name: newStoryTitle.trim(),
-        input_profile_id: profileId,
-        input_start_date: startDate.toISOString(),
-        input_end_date: endDate.toISOString()
+        input_story_name: newStoryTitle,
+        input_profile_id: profileId || ""
       });
 
       if (error) {
@@ -386,15 +427,36 @@ export default function TimelinePage() {
         return;
       }
 
-      toast.success("Story created successfully");
+      if (data) {
+        const newStory = data as unknown as StoryResponse;
+        // Add the new story to the list
+        setStories((prevStories) => [
+          ...prevStories,
+          {
+            id: newStory.id,
+            created_at: newStory.created_at,
+            title: newStory.title,
+            items: newStory.items || [],
+            item_images: newStory.item_images || [],
+            story_users: newStory.story_users || [],
+            status: "TODO",
+            expanded: true,
+            start_date: new Date(),
+            end_date: addWeeks(new Date(), 2)
+          }
+        ]);
+      }
+
       setNewStoryTitle("");
       setIsCreatingStory(false);
-      fetchStories();
+      toast.success("Story created successfully");
     } catch (error) {
       console.error("Unexpected error:", error);
       toast.error("An unexpected error occurred");
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [newStoryTitle, profileId, params.id]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {

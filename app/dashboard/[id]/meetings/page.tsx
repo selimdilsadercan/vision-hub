@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
@@ -53,11 +53,7 @@ export default function MeetingsPage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [meetingToDelete, setMeetingToDelete] = useState<Meeting | null>(null);
 
-  useEffect(() => {
-    fetchMeetings();
-  }, [params.id]);
-
-  const fetchMeetings = async () => {
+  const fetchMeetings = useCallback(async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase.rpc("list_project_meetings", {
@@ -86,7 +82,11 @@ export default function MeetingsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id]);
+
+  useEffect(() => {
+    fetchMeetings();
+  }, [fetchMeetings]);
 
   const handleDeleteMeeting = async () => {
     if (!meetingToDelete) return;

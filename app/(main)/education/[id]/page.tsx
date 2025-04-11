@@ -133,7 +133,7 @@ export default function EducationPlanPage() {
                 {/* Timeline line */}
                 <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-muted hidden md:block"></div>
 
-                {educationPlan.nodes.map((node, index) => (
+                {educationPlan.nodes.map((node) => (
                   <div key={node.id} className="relative pl-0 md:pl-10 mb-6">
                     {/* Timeline dot */}
                     <div className="absolute left-4 top-4 w-3 h-3 rounded-full bg-primary hidden md:block"></div>

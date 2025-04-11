@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { WebsiteCard } from "@/components/dashboard/WebsiteCard";
 import { supabase } from "@/lib/supabase";
@@ -43,11 +43,7 @@ export default function ResearchPage() {
   const [websiteDetails, setWebsiteDetails] = useState<WebsiteDetails | null>(null);
   const [isFetching, setIsFetching] = useState(false);
 
-  useEffect(() => {
-    fetchWebsites();
-  }, [params.id]);
-
-  const fetchWebsites = async () => {
+  const fetchWebsites = useCallback(async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase.rpc("list_user_websites", {
@@ -66,7 +62,11 @@ export default function ResearchPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id]);
+
+  useEffect(() => {
+    fetchWebsites();
+  }, [fetchWebsites]);
 
   const fetchWebsiteDetails = async () => {
     if (!websiteUrl.trim()) {

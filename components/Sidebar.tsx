@@ -3,8 +3,12 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Home, Rocket, GraduationCap, Trophy, CalendarCheck, Globe2, UserCircle, Briefcase, Laptop, GitFork } from "lucide-react";
+import { Home, Rocket, GraduationCap, Trophy, CalendarCheck, Globe2, UserCircle, Briefcase, Laptop, GitFork, ShieldCheck } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/firebase/auth-context";
+import { getUserData, type FirestoreUser } from "@/firebase/firestore";
+import { useEffect, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 
 const navigationItems = [
   {
@@ -56,6 +60,18 @@ const navigationItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { user } = useAuth();
+  const [userData, setUserData] = useState<FirestoreUser | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!user) return;
+      const firestoreUser = await getUserData(user.uid);
+      setUserData(firestoreUser);
+    };
+
+    fetchUserData();
+  }, [user]);
 
   return (
     <div className="relative flex h-full w-[260px] flex-col border-r px-3 py-4">
@@ -97,7 +113,15 @@ export function Sidebar() {
               )}
             >
               <UserCircle className="mr-2 h-4 w-4" />
-              Profile
+              <div className="flex items-center gap-2 w-full">
+                <span>Profile</span>
+                {userData?.is_admin && (
+                  <Badge variant="secondary" className="ml-auto flex items-center gap-1">
+                    <ShieldCheck className="h-3 w-3" />
+                    Admin
+                  </Badge>
+                )}
+              </div>
             </span>
           </Link>
         </div>

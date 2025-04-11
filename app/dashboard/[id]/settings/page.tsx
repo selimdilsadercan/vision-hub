@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,8 +21,6 @@ import {
 import { toast } from "react-hot-toast";
 
 export default function ProjectSettingsPage() {
-  const params = useParams();
-
   const [projectName, setProjectName] = useState("Vision Hub");
   const [projectDescription, setProjectDescription] = useState("A collaborative project management platform");
   const [notifications, setNotifications] = useState({
