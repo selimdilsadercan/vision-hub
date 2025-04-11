@@ -51,10 +51,10 @@ export function ProjectNavbar({ projectId }: ProjectNavbarProps) {
         {routes.map((route) => (
           <Link
             key={route.href}
-            href={`/projects/${projectId}${route.href}`}
+            href={`/dashboard/${projectId}${route.href}`}
             className={cn(
               "flex flex-col items-center gap-y-1",
-              pathname === `/projects/${projectId}${route.href}` ? "text-accent-foreground" : "text-muted-foreground"
+              pathname === `/dashboard/${projectId}${route.href}` ? "text-accent-foreground" : "text-muted-foreground"
             )}
           >
             <route.icon className="h-5 w-5" />
