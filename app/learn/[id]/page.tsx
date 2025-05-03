@@ -54,7 +54,7 @@ interface EducationNode {
   completed: boolean;
 }
 
-export default function EducationPlanPage() {
+export default function LearnPlanPage() {
   const params = useParams<any>();
   const [plan, setPlan] = useState<EducationPlan | null>(null);
   const [nodes, setNodes] = useState<EducationNode[]>([]);
@@ -62,6 +62,24 @@ export default function EducationPlanPage() {
   const [enrollLoading, setEnrollLoading] = useState(false);
   const supabase = createClientComponentClient<Database>();
   const { user } = useAuth();
+
+  // Fetch user's completed node ids for this plan
+  const fetchUserCompletedNodeIds = useCallback(
+    async (profileId: string, planId: string) => {
+      // Use the correct RPC for user node progress
+      const { data, error } = await supabase.rpc("get_user_education_plan_progress", {
+        input_education_plan_id: planId,
+        input_profile_id: profileId
+      });
+      if (error) {
+        toast.error("Failed to fetch user progress");
+        return [];
+      }
+      // Assume data is an array of node ids
+      return data as string[];
+    },
+    [supabase]
+  );
 
   const fetchPlanAndNodes = useCallback(async () => {
     try {
@@ -82,8 +100,20 @@ export default function EducationPlanPage() {
       });
 
       if (nodesError) throw nodesError;
+      let completedNodeIds: string[] = [];
+      if (user) {
+        const firestoreUser = await getUserData(user.uid);
+        if (firestoreUser?.profile_id) {
+          completedNodeIds = await fetchUserCompletedNodeIds(firestoreUser.profile_id, params.id as string);
+        }
+      }
       if (nodesData) {
-        setNodes(nodesData.map((node) => ({ ...node, completed: false })) as unknown as EducationNode[]);
+        setNodes(
+          nodesData.map((node: any) => ({
+            ...node,
+            completed: completedNodeIds.includes(node.id)
+          })) as EducationNode[]
+        );
       }
     } catch (error) {
       console.error("Error fetching plan details:", error);
@@ -91,7 +121,7 @@ export default function EducationPlanPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [params.id, supabase]);
+  }, [params.id, supabase, user, fetchUserCompletedNodeIds]);
 
   useEffect(() => {
     if (params.id) {
@@ -271,23 +301,16 @@ export default function EducationPlanPage() {
                 <CardContent className="space-y-6">
                   <div className="space-y-2">
                     <h3 className="font-semibold">Problem Definition</h3>
-                    <p className="text-muted-foreground">
-                      This project aims to address the challenges faced by entrepreneurs in managing finances and project workflows effectively.
-                    </p>
+                    <p className="text-muted-foreground">{plan.problem_definition || "No problem definition provided."}</p>
                   </div>
                   <div className="space-y-2">
                     <h3 className="font-semibold">Purpose</h3>
-                    <p className="text-muted-foreground">
-                      To provide comprehensive training in financial management and project execution strategies for startup founders and business owners.
-                    </p>
+                    <p className="text-muted-foreground">{plan.purpose || "No purpose provided."}</p>
                   </div>
                   <div className="space-y-2">
                     <h3 className="font-semibold">Target Audience</h3>
                     <ul className="list-disc list-inside text-muted-foreground">
-                      <li>Startup Founders</li>
-                      <li>Small Business Owners</li>
-                      <li>Project Managers</li>
-                      <li>Business Students</li>
+                      {plan.target_audience?.length ? plan.target_audience.map((aud, i) => <li key={i}>{aud}</li>) : <li>No audience specified.</li>}
                     </ul>
                   </div>
                 </CardContent>
@@ -337,28 +360,28 @@ export default function EducationPlanPage() {
                 <Users className="w-5 h-5 text-muted-foreground" />
                 <div>
                   <p className="font-medium">Enrolled Students</p>
-                  <p className="text-2xl font-bold">247</p>
+                  <p className="text-2xl font-bold">{plan.enrolled_students ?? 0}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <Clock className="w-5 h-5 text-muted-foreground" />
                 <div>
                   <p className="font-medium">Duration</p>
-                  <p className="text-2xl font-bold">12 Weeks</p>
+                  <p className="text-2xl font-bold">{plan.duration ?? "-"}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <Award className="w-5 h-5 text-muted-foreground" />
                 <div>
                   <p className="font-medium">Level</p>
-                  <p className="text-2xl font-bold">Intermediate</p>
+                  <p className="text-2xl font-bold">{plan.level ?? "-"}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <Calendar className="w-5 h-5 text-muted-foreground" />
                 <div>
                   <p className="font-medium">Last Updated</p>
-                  <p className="text-muted-foreground">March 15, 2024</p>
+                  <p className="text-muted-foreground">{plan.updated_at ? new Date(plan.updated_at).toLocaleDateString() : "-"}</p>
                 </div>
               </div>
             </CardContent>

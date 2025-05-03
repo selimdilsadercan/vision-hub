@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
 import { useAuth } from "@/firebase/auth-context";
 import { getUserData, type FirestoreUser } from "@/firebase/firestore";
+import { EducationPlanCard } from "@/components/EducationPlanCard";
 
 type Workspace = {
   project_id: string;
@@ -13,6 +14,11 @@ type Workspace = {
   project_tasks: string[];
   project_extra_text: string;
   image_url: string;
+  is_education_plan: boolean;
+  education_plan_id?: string;
+  education_plan_name?: string;
+  education_plan_mentor_name?: string;
+  education_plan_mentor_image_url?: string | null;
 };
 
 export default function Home() {
@@ -26,6 +32,7 @@ export default function Home() {
       if (!user) return;
       const firestoreUser = await getUserData(user.uid);
       setUserData(firestoreUser);
+      console.log("[DEBUG] userData set:", firestoreUser);
     };
 
     fetchUserData();
@@ -34,7 +41,7 @@ export default function Home() {
   useEffect(() => {
     const fetchWorkspaces = async () => {
       if (!userData) return;
-
+      console.log("[DEBUG] Fetching workspaces/educations for profile_id:", userData.profile_id);
       try {
         setLoading(true);
 
@@ -45,6 +52,7 @@ export default function Home() {
         const { data: workspacesData, error: workspacesError } = await supabase.rpc("list_user_workspaces", {
           input_profile_id: profileId
         });
+        console.log("[DEBUG] list_user_workspaces data:", workspacesData);
 
         if (workspacesError) {
           console.error("Error fetching workspaces:", workspacesError);
@@ -62,7 +70,13 @@ export default function Home() {
           toast.error("Failed to fetch projects");
           return;
         }
-        setWorkspaces(workspacesData);
+
+        setWorkspaces(
+          workspacesData.map((w: any) => ({
+            ...w,
+            is_education_plan: !!w.is_education_plan
+          }))
+        );
       } catch (error) {
         console.error("Unexpected error:", error);
         toast.error("An unexpected error occurred");
@@ -83,15 +97,15 @@ export default function Home() {
         <div className="flex justify-center items-center h-40">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
         </div>
-      ) : workspaces.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {workspaces.map((workspace) => (
-            <WorkspaceCard key={workspace.project_id} workspace={workspace} />
-          ))}
-        </div>
       ) : (
-        <div className="text-center py-10">
-          <p className="text-muted-foreground">No workspaces found</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {workspaces.length > 0 ? (
+            workspaces.map((workspace) => <WorkspaceCard key={workspace.project_id} workspace={workspace} />)
+          ) : (
+            <div className="text-center py-10 col-span-full">
+              <p className="text-muted-foreground">No workspaces or education plans found</p>
+            </div>
+          )}
         </div>
       )}
     </div>
