@@ -355,7 +355,7 @@ export default function EducationPlanDetail() {
               }}
               onDragStart={(event) => setActiveNodeId(event.active.id as string)}
             >
-              {/* @ts-expect-error */}
+              {/* @ts-expect-error dnd-kit v10+ JSX workaround */}
               <SortableContext items={nodes.map((n) => n.id)} strategy={verticalListSortingStrategy}>
                 {nodes.length > 0 ? (
                   nodes.map((node, index) => (
@@ -378,7 +378,7 @@ export default function EducationPlanDetail() {
                   </div>
                 )}
               </SortableContext>
-              {/* @ts-expect-error */}
+              {/* @ts-expect-error dnd-kit v10+ JSX workaround */}
               <DragOverlay>
                 {activeNode ? (
                   <DraggableNode
