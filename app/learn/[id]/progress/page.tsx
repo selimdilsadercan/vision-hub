@@ -3,96 +3,136 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "react-hot-toast";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle2, Circle, Link2 } from "lucide-react";
 import { Database } from "@/lib/supabase-types";
 import { getUserData } from "@/firebase/firestore";
 import { useAuth } from "@/firebase/auth-context";
+import { NodeCard } from "@/components/NodeCard";
 
 interface EducationNode {
   id: string;
   name: string;
-  description: string | null;
-  duration_minutes: number | null;
+  description: string;
+  duration: string;
   education_plan_id: string;
   index: number;
-  instructions: string | null;
+  instructions: string;
   is_active: boolean;
-  micro_skills: string[] | null;
-  skills: string[] | null;
-  source: string | null;
-  completed: boolean;
+  sources: string[];
+  status: "not_started" | "in_progress" | "completed";
 }
 
 export default function LearnProgressPage() {
-  const params = useParams<any>();
+  const params = useParams<{ id: string }>();
   const [nodes, setNodes] = useState<EducationNode[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const supabase = createClientComponentClient<Database>();
-  const { user } = useAuth();
-
-  const fetchUserCompletedNodeIds = useCallback(
-    async (profileId: string, planId: string) => {
-      const { data, error } = await supabase.rpc("get_user_education_plan_progress", {
-        input_education_plan_id: planId,
-        input_profile_id: profileId
-      });
-      if (error) {
-        toast.error("Failed to fetch user progress");
-        return [];
-      }
-      return data as string[];
-    },
-    [supabase]
-  );
+  const { user, loading } = useAuth();
 
   const fetchNodes = useCallback(async () => {
+    if (!params.id) {
+      setError("No education plan ID provided");
+      return;
+    }
+
+    if (!user) {
+      setError("User not authenticated");
+      return;
+    }
+
     try {
       setIsLoading(true);
-      const { data: nodesData, error: nodesError } = await supabase.rpc("list_education_nodes", {
-        input_education_plan_id: params.id as string
+      setError(null);
+
+      const firestoreUser = await getUserData(user.uid);
+      if (!firestoreUser?.profile_id) {
+        setError("User profile not found");
+        return;
+      }
+
+      const { data: nodesData, error: nodesError } = await supabase.rpc("list_education_nodes_with_progress", {
+        input_education_plan_id: params.id,
+        input_profile_id: firestoreUser.profile_id
       });
-      if (nodesError) throw nodesError;
-      let completedNodeIds: string[] = [];
-      if (user) {
-        const firestoreUser = await getUserData(user.uid);
-        if (firestoreUser?.profile_id) {
-          completedNodeIds = await fetchUserCompletedNodeIds(firestoreUser.profile_id, params.id as string);
-        }
+
+      if (nodesError) {
+        throw new Error(`Failed to fetch nodes: ${nodesError.message}`);
       }
-      if (nodesData) {
-        setNodes(
-          nodesData.map((node: any) => ({
-            ...node,
-            completed: completedNodeIds.includes(node.id)
-          })) as EducationNode[]
-        );
+
+      if (!nodesData) {
+        throw new Error("No nodes data received");
       }
+
+      setNodes(nodesData as EducationNode[]);
     } catch (error) {
-      toast.error("Failed to load nodes");
+      const errorMessage = error instanceof Error ? error.message : "Failed to load nodes";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
-  }, [params.id, supabase, user, fetchUserCompletedNodeIds]);
+  }, [params.id, supabase, user]);
 
   useEffect(() => {
-    if (params.id) fetchNodes();
-  }, [params.id, fetchNodes]);
+    if (loading) return; // Wait for auth to finish loading
+    fetchNodes();
+  }, [loading, fetchNodes]);
 
-  const completedNodes = nodes.filter((node) => node.completed).length;
+  const completedNodes = nodes.filter((node) => node.status === "completed").length;
   const progress = nodes.length > 0 ? (completedNodes / nodes.length) * 100 : 0;
 
-  if (isLoading)
+  const handleUpdateProgress = async (nodeId: string, currentStatus: string) => {
+    if (!user) {
+      setError("User not authenticated");
+      return;
+    }
+    try {
+      setIsLoading(true);
+      setError(null);
+      const firestoreUser = await getUserData(user.uid);
+      if (!firestoreUser?.profile_id) {
+        setError("User profile not found");
+        return;
+      }
+      const newStatus = currentStatus === "completed" ? "not_started" : "completed";
+      const { error: updateError } = await supabase.rpc("update_education_node_progress", {
+        input_education_node_id: nodeId,
+        input_profile_id: firestoreUser.profile_id,
+        input_status: newStatus
+      });
+      if (updateError) {
+        throw new Error(updateError.message);
+      }
+      await fetchNodes();
+      toast.success(`Node marked as ${newStatus.replace("_", " ")}`);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to update progress";
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-destructive">{error}</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
       <div className="flex items-center gap-4 p-2">
         <Progress value={progress} className="w-[200px]" />
         <span className="text-sm text-muted-foreground">
@@ -100,58 +140,22 @@ export default function LearnProgressPage() {
         </span>
       </div>
       <div className="relative">
-        <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-muted hidden md:block"></div>
-        {nodes.map((node) => (
-          <div key={node.id} className="relative pl-0 md:pl-10 mb-6">
-            <div className="absolute left-4 top-4 w-3 h-3 rounded-full bg-primary hidden md:block"></div>
-            <Card className="overflow-hidden">
-              <CardHeader className="pb-2">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    {node.completed ? <CheckCircle2 className="w-5 h-5 text-green-500" /> : <Circle className="w-5 h-5 text-muted-foreground" />}
-                    {node.name}
-                  </CardTitle>
-                  {node.skills && node.skills.length > 0 && (
-                    <Badge variant="secondary" className="w-fit">
-                      {node.skills[0]}
-                    </Badge>
-                  )}
-                </div>
-                {node.source && (
-                  <CardDescription className="flex items-center gap-2 mt-1">
-                    <Link2 className="w-4 h-4" />
-                    {node.source}
-                  </CardDescription>
-                )}
-              </CardHeader>
-              <CardContent className="space-y-4 pb-4">
-                {node.description && (
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-sm">Description</h4>
-                    <p className="text-muted-foreground text-sm">{node.description}</p>
-                  </div>
-                )}
-                {node.micro_skills && node.micro_skills.length > 0 && (
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-sm">Micro Skills</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {node.micro_skills.map((skill) => (
-                        <Badge key={skill} variant="outline" className="text-xs">
-                          {skill}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {node.instructions && (
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-sm">Instructions</h4>
-                    <p className="text-muted-foreground text-sm">{node.instructions}</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+        <div className="absolute left-[7px] top-0 bottom-0 w-0.5 bg-muted hidden md:block"></div>
+        {nodes.map((node, idx) => (
+          <NodeCard
+            key={node.id}
+            id={node.id}
+            index={idx}
+            name={node.name}
+            description={node.description}
+            instructions={node.instructions}
+            duration={node.duration}
+            sources={node.sources}
+            is_active={node.is_active}
+            show_progress={true}
+            status={node.status}
+            onUpdateProgress={() => handleUpdateProgress(node.id, node.status)}
+          />
         ))}
       </div>
     </div>

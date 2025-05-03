@@ -350,7 +350,7 @@ export default function EducationPlanDetail() {
             <DndContext
               sensors={sensors}
               onDragEnd={async (event) => {
-                setActiveNodeId(null);  
+                setActiveNodeId(null);
                 await handleDragEnd(event);
               }}
               onDragStart={(event) => setActiveNodeId(event.active.id as string)}
@@ -401,7 +401,7 @@ export default function EducationPlanDetail() {
       </div>
 
       <Dialog open={isEditingPlan} onOpenChange={setIsEditingPlan}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Education Plan</DialogTitle>
             <DialogDescription>Update the basic information of your education plan.</DialogDescription>
@@ -438,7 +438,7 @@ export default function EducationPlanDetail() {
       </Dialog>
 
       <Dialog open={isAddingNode} onOpenChange={setIsAddingNode}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Add Education Node</DialogTitle>
             <DialogDescription>
@@ -501,7 +501,7 @@ export default function EducationPlanDetail() {
               <div className="flex flex-wrap gap-2 mt-2">
                 {nodeForm.sources.map((src, idx) => (
                   <div key={idx} className="flex items-center bg-muted px-2 py-1 rounded">
-                    <span className="mr-2">{src}</span>
+                    <span className="mr-2 max-w-[200px] truncate">{src}</span>
                     <Button
                       type="button"
                       size="icon"
@@ -534,7 +534,7 @@ export default function EducationPlanDetail() {
       </Dialog>
 
       <Dialog open={isEditingNode} onOpenChange={setIsEditingNode}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Node</DialogTitle>
             <DialogDescription>Update the details of this education node.</DialogDescription>
@@ -601,7 +601,7 @@ export default function EducationPlanDetail() {
               <div className="flex flex-wrap gap-2 mt-2">
                 {editNodeForm.sources.map((src, idx) => (
                   <div key={idx} className="flex items-center bg-muted px-2 py-1 rounded">
-                    <span className="mr-2">{src}</span>
+                    <span className="mr-2 max-w-[200px] truncate">{src}</span>
                     <Button
                       type="button"
                       size="icon"

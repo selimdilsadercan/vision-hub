@@ -12,6 +12,7 @@ import { Database } from "@/lib/supabase-types";
 import { getUserData } from "@/firebase/firestore";
 import { useAuth } from "@/firebase/auth-context";
 import { NodeCard } from "@/components/NodeCard";
+import { LeaderboardUserCard } from "@/components/LeaderboardUserCard";
 
 interface EducationPlan {
   id: string;
@@ -64,6 +65,9 @@ export default function EducationPlanPage() {
   const supabase = createClientComponentClient<Database>();
   const { user } = useAuth();
   const router = useRouter();
+  // Leaderboard state
+  const [leaderboardUsers, setLeaderboardUsers] = useState<any[]>([]);
+  const [leaderboardLoading, setLeaderboardLoading] = useState(false);
 
   const fetchPlanAndNodes = useCallback(async () => {
     try {
@@ -101,11 +105,27 @@ export default function EducationPlanPage() {
     }
   }, [params.id, supabase, user]);
 
+  const fetchLeaderboardUsers = useCallback(async () => {
+    setLeaderboardLoading(true);
+    try {
+      const { data, error } = await supabase.rpc("list_education_plan_enrolled_users_with_progress", {
+        input_education_plan_id: params.id as string
+      });
+      if (error) throw error;
+      setLeaderboardUsers(data || []);
+    } catch (error) {
+      toast.error("Failed to load leaderboard");
+    } finally {
+      setLeaderboardLoading(false);
+    }
+  }, [params.id, supabase]);
+
   useEffect(() => {
     if (params.id) {
       fetchPlanAndNodes();
+      fetchLeaderboardUsers();
     }
-  }, [params.id, fetchPlanAndNodes]);
+  }, [params.id, fetchPlanAndNodes, fetchLeaderboardUsers]);
 
   const handleEnroll = async () => {
     setEnrollLoading(true);
@@ -134,6 +154,8 @@ export default function EducationPlanPage() {
         toast.error("Enrollment failed");
       } else {
         toast.success("Enrolled successfully!");
+        // Refetch the plan data to update the UI
+        await fetchPlanAndNodes();
       }
     } catch (err) {
       toast.error("Enrollment failed");
@@ -190,7 +212,7 @@ export default function EducationPlanPage() {
                 Plan
               </TabsTrigger>
               <TabsTrigger value="students" className="px-6 py-2">
-                Enrolled Users
+                Leaderboard
               </TabsTrigger>
               <TabsTrigger value="mentor" className="px-6 py-2">
                 Mentor
@@ -222,20 +244,23 @@ export default function EducationPlanPage() {
             <TabsContent value="students" className="space-y-6 pt-4">
               <Card>
                 <CardHeader>
-                  <CardTitle>Enrolled Users</CardTitle>
+                  <CardTitle>Leaderboard</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {plan.enrolled_users && plan.enrolled_users.length > 0 ? (
-                    <div className="flex flex-wrap gap-4">
-                      {plan.enrolled_users.map((user) => (
-                        <div key={user.id} className="flex items-center gap-2 p-2 border rounded-md">
-                          {user.image_url ? (
-                            <img src={user.image_url} alt={user.name} className="w-8 h-8 rounded-full object-cover" />
-                          ) : (
-                            <User className="w-8 h-8 text-muted-foreground" />
-                          )}
-                          <span className="text-base text-muted-foreground">{user.name}</span>
-                        </div>
+                  {leaderboardLoading ? (
+                    <div className="flex items-center justify-center py-8">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                    </div>
+                  ) : leaderboardUsers.length > 0 ? (
+                    <div className="flex flex-col gap-3">
+                      {leaderboardUsers.map((user, idx) => (
+                        <LeaderboardUserCard
+                          key={user.profile_id}
+                          name={user.name}
+                          imageUrl={user.image_url}
+                          progress={user.progress_percentage ?? 0}
+                          rank={idx + 1}
+                        />
                       ))}
                     </div>
                   ) : (
