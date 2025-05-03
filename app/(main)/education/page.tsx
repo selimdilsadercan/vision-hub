@@ -10,9 +10,9 @@ import { cn } from "@/lib/utils";
 import { toast } from "react-hot-toast";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/lib/supabase-types";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 type EducationPlan = Database["public"]["Functions"]["list_education_plans"]["Returns"][number];
-
 
 export default function EducationsPage() {
   const [educationPlans, setEducationPlans] = useState<EducationPlan[]>([]);
@@ -78,39 +78,32 @@ export default function EducationsPage() {
         <TabsContent value={selectedCategory} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredEducationPlans.map((plan) => (
-              <Card key={plan.id} className="flex flex-col">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <Badge variant="outline" className={cn(getStatusColor(plan.is_active))}>
-                      {plan.is_active ? "Active" : "Inactive"}
-                    </Badge>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Clock className="mr-1 h-4 w-4" />
-                      {`${plan.duration}`}
+              <Link key={plan.id} href={`/education/${plan.id}`} className="group">
+                <Card className="flex flex-col transition-shadow hover:shadow-lg cursor-pointer">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <Badge variant="outline" className={cn(getStatusColor(plan.is_active))}>
+                        {plan.is_active ? "Active" : "Inactive"}
+                      </Badge>
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <Clock className="mr-1 h-4 w-4" />
+                        {`${plan.duration}`}
+                      </div>
                     </div>
-                  </div>
-                  <CardTitle className="mt-4">{plan.name}</CardTitle>
-                  <CardDescription>{plan.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="flex-1 space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Users className="h-4 w-4" />
-                      <span className="text-sm text-muted-foreground">Category: {plan.description || "General"}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <BookOpen className="h-4 w-4" />
-                      <span className="text-sm text-muted-foreground">Program Details</span>
-                    </div>
-                  </div>
-                  <div className="pt-4 mt-auto">
-                    <Link href={`/education/${plan.id}`} className="flex items-center text-sm font-medium text-primary hover:text-primary/80">
-                      View Program
-                      <ArrowRight className="ml-1 h-4 w-4" />
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
+                    <CardTitle className="mt-4">{plan.name}</CardTitle>
+                    <CardDescription>{plan.description}</CardDescription>
+                    {plan.mentor_name && (
+                      <div className="flex items-center gap-2 mt-4">
+                        <Avatar>
+                          <AvatarImage src={plan.mentor_image_url || undefined} alt={plan.mentor_name} />
+                          <AvatarFallback>{plan.mentor_name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{plan.mentor_name}</span>
+                      </div>
+                    )}
+                  </CardHeader>
+                </Card>
+              </Link>
             ))}
           </div>
         </TabsContent>

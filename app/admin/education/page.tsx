@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Clock } from "lucide-react";
+import { Plus, Clock, User } from "lucide-react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "react-hot-toast";
 import { Database } from "@/lib/supabase-types";
@@ -142,10 +142,22 @@ export default function AdminEducationPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground text-sm mb-4">{plan.description}</p>
-                <div className="flex items-center text-sm text-muted-foreground">
+                <div className="flex items-center text-sm text-muted-foreground mb-2">
                   <Clock className="w-4 h-4 mr-2" />
                   {plan.duration}
                 </div>
+                {plan.mentor_name && (
+                  <div className="flex items-center gap-2 mt-2">
+                    {plan.mentor_image_url ? (
+                      <img src={plan.mentor_image_url} alt={plan.mentor_name} className="w-6 h-6 rounded-full object-cover" />
+                    ) : (
+                      <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center">
+                        <User className="h-3 w-3 text-muted-foreground" />
+                      </div>
+                    )}
+                    <span className="text-xs font-medium text-foreground">{plan.mentor_name}</span>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </Link>

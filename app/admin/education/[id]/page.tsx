@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/lib/supabase-types";
 import { toast } from "react-hot-toast";
@@ -11,9 +11,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Plus, Clock, Pencil, UserPlus } from "lucide-react";
+import { Plus, Clock, Pencil, UserPlus, User, ArrowLeft } from "lucide-react";
 import { DndContext, DragEndEvent, MouseSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { arrayMove, verticalListSortingStrategy, useSortable } from "@dnd-kit/sortable";
 import { DraggableNode } from "@/components/DraggableNode";
 import { MentorSelectorDialog } from "@/components/admin/MentorSelectorDialog";
 
@@ -21,10 +21,13 @@ interface EducationPlan {
   id: string;
   name: string;
   description: string | null;
-  duration_weeks: number | null;
+  duration: string | null;
   is_active: boolean;
-  mentor_id: string | null;
-  mentor_name: string | null;
+  mentor?: {
+    id: string;
+    name: string;
+    image_url: string;
+  } | null;
 }
 
 interface EducationNode {
@@ -43,6 +46,7 @@ interface EducationNode {
 
 export default function EducationPlanDetail() {
   const params = useParams();
+  const router = useRouter();
   const [plan, setPlan] = useState<EducationPlan | null>(null);
   const [nodes, setNodes] = useState<EducationNode[]>([]);
   const [isEditingPlan, setIsEditingPlan] = useState(false);
@@ -94,6 +98,8 @@ export default function EducationPlanDetail() {
         input_education_plan_id: params.id as string
       });
 
+      console.log("Fetched plan from Supabase:", planData);
+
       if (planError) throw planError;
       if (planData) {
         const fetchedPlan = planData as unknown as EducationPlan;
@@ -101,7 +107,7 @@ export default function EducationPlanDetail() {
         setPlanForm({
           name: fetchedPlan.name,
           description: fetchedPlan.description || "",
-          duration: fetchedPlan.duration_weeks?.toString() || ""
+          duration: fetchedPlan.duration || ""
         });
       }
 
@@ -128,6 +134,11 @@ export default function EducationPlanDetail() {
     }
   }, [params.id, fetchPlanAndNodes]);
 
+  // Debug: log plan state after updates
+  useEffect(() => {
+    console.log("Plan state:", plan);
+  }, [plan]);
+
   const handleUpdatePlan = async () => {
     try {
       setIsLoading(true);
@@ -135,7 +146,7 @@ export default function EducationPlanDetail() {
         input_education_plan_id: params.id as string,
         input_name: planForm.name,
         input_description: planForm.description,
-        input_duration_weeks: planForm.duration ? parseInt(planForm.duration) : undefined
+        input_duration: planForm.duration || undefined
       });
 
       if (error) throw error;
@@ -245,29 +256,47 @@ export default function EducationPlanDetail() {
   if (!plan) return null;
 
   return (
-    <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
-      <div className="bg-card rounded-lg border shadow-sm p-6">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-          <div className="space-y-4 flex-1">
-            <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tight">{plan.name}</h1>
-              <p className="text-muted-foreground text-lg">{plan.description}</p>
-            </div>
+    <div className="container mx-auto p-6">
+      {/* Header with Back Button and Title */}
+      <div className="flex items-center gap-4 mb-6">
+        <button
+          onClick={() => router.back()}
+          className="flex items-center justify-center rounded-md border bg-card hover:bg-accent transition p-2 cursor-pointer"
+          aria-label="Back"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </button>
+        <h1 className="text-3xl font-bold tracking-tight flex-1">{plan.name}</h1>
+        <Button variant="outline" size="sm" onClick={() => setIsEditingPlan(true)}>
+          <Pencil className="h-4 w-4 mr-2" />
+          Edit Plan
+        </Button>
+      </div>
 
-            <div className="flex flex-wrap items-center gap-4">
+      {/* Main Card for Plan Details */}
+      <div className="bg-card rounded-lg border shadow-sm p-6 mb-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div className="space-y-2 flex-1">
+            <p className="text-muted-foreground text-lg">{plan.description}</p>
+            <div className="flex flex-wrap items-center gap-4 mt-2">
               <Badge variant={plan.is_active ? "default" : "secondary"} className="text-sm">
                 {plan.is_active ? "Active" : "Inactive"}
               </Badge>
-
               <div className="flex items-center text-sm text-muted-foreground">
                 <Clock className="w-4 h-4 mr-1" />
-                <span>{plan.duration_weeks} weeks</span>
+                <span>{plan.duration}</span>
               </div>
-
-              {plan.mentor_name ? (
+              {plan.mentor?.id && plan.mentor?.name ? (
                 <div className="flex items-center gap-2 bg-muted/50 px-3 py-1 rounded-md">
+                  {plan.mentor?.image_url ? (
+                    <img src={plan.mentor.image_url} alt={plan.mentor.name} className="w-6 h-6 rounded-full object-cover" />
+                  ) : (
+                    <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center">
+                      <User className="h-3 w-3 text-muted-foreground" />
+                    </div>
+                  )}
                   <span className="text-sm font-medium">Mentor:</span>
-                  <span className="font-medium">{plan.mentor_name}</span>
+                  <span className="font-medium">{plan.mentor?.name}</span>
                   <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setIsMentorDialogOpen(true)}>
                     <Pencil className="h-3 w-3" />
                   </Button>
@@ -280,16 +309,10 @@ export default function EducationPlanDetail() {
               )}
             </div>
           </div>
-
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => setIsEditingPlan(true)}>
-              <Pencil className="h-4 w-4 mr-2" />
-              Edit Plan
-            </Button>
-          </div>
         </div>
       </div>
 
+      {/* Learning Nodes Section */}
       <div className="bg-card rounded-lg border shadow-sm p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold">Learning Nodes</h2>
@@ -303,32 +326,29 @@ export default function EducationPlanDetail() {
             Add Node
           </Button>
         </div>
-
         <div className="relative">
           <div className="absolute left-[18%] top-4 bottom-12 w-px bg-border -translate-x-1/2" />
           <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-            <SortableContext items={nodes.map((node) => node.id)} strategy={verticalListSortingStrategy}>
-              <div>
-                {nodes.length > 0 ? (
-                  nodes.map((node, index) => (
-                    <DraggableNode
-                      key={node.id}
-                      id={node.id}
-                      index={index}
-                      name={node.name}
-                      description={node.description}
-                      instructions={node.instructions}
-                      source={node.source}
-                      onEdit={() => handleEditNode(node)}
-                    />
-                  ))
-                ) : (
-                  <div className="text-center py-12 text-muted-foreground">
-                    <p>No learning nodes yet. Add your first node to get started.</p>
-                  </div>
-                )}
-              </div>
-            </SortableContext>
+            <div className="relative">
+              {nodes.length > 0 ? (
+                nodes.map((node, index) => (
+                  <DraggableNode
+                    key={node.id}
+                    id={node.id}
+                    index={index}
+                    name={node.name}
+                    description={node.description}
+                    instructions={node.instructions}
+                    source={node.source}
+                    onEdit={() => handleEditNode(node)}
+                  />
+                ))
+              ) : (
+                <div className="text-center py-12 text-muted-foreground">
+                  <p>No learning nodes yet. Add your first node to get started.</p>
+                </div>
+              )}
+            </div>
           </DndContext>
         </div>
       </div>
