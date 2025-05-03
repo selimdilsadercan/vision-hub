@@ -4,48 +4,52 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Clock, BookOpen, ArrowRight } from "lucide-react";
-import { type Education } from "@/lib/educations";
-import { cn } from "@/lib/utils";
+import { Clock, BookOpen, ArrowRight, Users } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { toast } from "react-hot-toast";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Database } from "@/lib/supabase-types";
 
-export default function EducationPage() {
-  const [educations, setEducations] = useState<Education[]>([]);
+type EducationPlan = Database["public"]["Functions"]["list_education_plans"]["Returns"][number];
+
+
+export default function EducationsPage() {
+  const [educationPlans, setEducationPlans] = useState<EducationPlan[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [categories, setCategories] = useState<string[]>([]);
+  const supabase = createClientComponentClient<Database>();
 
   useEffect(() => {
-    const fetchEducations = async () => {
+    const fetchEducationPlans = async () => {
       try {
-        const response = await fetch("/api/educations");
-        const data = (await response.json()) as Education[];
-        setEducations(data);
+        const { data, error } = await supabase.rpc("list_education_plans");
 
-        // Extract unique categories
-        const uniqueCategories = Array.from(new Set(data.map((edu) => edu.category)));
-        setCategories(uniqueCategories);
+        if (error) {
+          throw error;
+        }
+
+        if (data) {
+          setEducationPlans(data);
+
+          // Extract unique categories from descriptions as categories
+          const uniqueCategories = Array.from(new Set(data.map((plan) => plan.description).filter((desc): desc is string => desc !== null)));
+          setCategories(uniqueCategories);
+        }
       } catch (error) {
-        console.error("Error loading educations:", error);
+        console.error("Error loading education plans:", error);
+        toast.error("Failed to load education plans");
       }
     };
 
-    fetchEducations();
-  }, []);
+    fetchEducationPlans();
+  }, [supabase]);
 
-  const getLevelColor = (level: string) => {
-    switch (level) {
-      case "Beginner":
-        return "bg-green-500/10 text-green-500";
-      case "Intermediate":
-        return "bg-blue-500/10 text-blue-500";
-      case "Advanced":
-        return "bg-purple-500/10 text-purple-500";
-      default:
-        return "bg-gray-500/10 text-gray-500";
-    }
+  const getStatusColor = (isActive: boolean) => {
+    return isActive ? "bg-green-500/10 text-green-500" : "bg-yellow-500/10 text-yellow-500";
   };
 
-  const filteredEducations = selectedCategory === "all" ? educations : educations.filter((edu) => edu.category === selectedCategory);
+  const filteredEducationPlans = selectedCategory === "all" ? educationPlans : educationPlans.filter((plan) => plan.description === selectedCategory);
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -55,7 +59,7 @@ export default function EducationPage() {
           <p className="text-muted-foreground">Explore our comprehensive education programs and start learning</p>
         </div>
         <Badge variant="outline" className="text-sm">
-          {educations.length} Programs Available
+          {educationPlans.length} Programs Available
         </Badge>
       </div>
 
@@ -73,41 +77,35 @@ export default function EducationPage() {
 
         <TabsContent value={selectedCategory} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredEducations.map((education, index) => (
-              <Card key={index} className="flex flex-col">
+            {filteredEducationPlans.map((plan) => (
+              <Card key={plan.id} className="flex flex-col">
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <Badge variant="outline" className={cn(getLevelColor(education.level))}>
-                      {education.level}
+                    <Badge variant="outline" className={cn(getStatusColor(plan.is_active))}>
+                      {plan.is_active ? "Active" : "Inactive"}
                     </Badge>
                     <div className="flex items-center text-sm text-muted-foreground">
                       <Clock className="mr-1 h-4 w-4" />
-                      {education.duration}
+                      {`${plan.duration}`}
                     </div>
                   </div>
-                  <CardTitle className="mt-4">{education.title}</CardTitle>
-                  <CardDescription>{education.description}</CardDescription>
+                  <CardTitle className="mt-4">{plan.name}</CardTitle>
+                  <CardDescription>{plan.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 space-y-4">
-                  <div>
-                    <h4 className="font-medium mb-2 flex items-center gap-2">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Users className="h-4 w-4" />
+                      <span className="text-sm text-muted-foreground">Category: {plan.description || "General"}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
                       <BookOpen className="h-4 w-4" />
-                      Topics Covered
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {education.topics.map((topic, i) => (
-                        <Badge key={i} variant="secondary">
-                          {topic}
-                        </Badge>
-                      ))}
+                      <span className="text-sm text-muted-foreground">Program Details</span>
                     </div>
                   </div>
                   <div className="pt-4 mt-auto">
-                    <Link
-                      href={`/education/${encodeURIComponent(education.title)}`}
-                      className="flex items-center text-sm font-medium text-primary hover:text-primary/80"
-                    >
-                      Learn More
+                    <Link href={`/education/${plan.id}`} className="flex items-center text-sm font-medium text-primary hover:text-primary/80">
+                      View Program
                       <ArrowRight className="ml-1 h-4 w-4" />
                     </Link>
                   </div>
