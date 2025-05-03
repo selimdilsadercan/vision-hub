@@ -12,8 +12,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Plus, Clock, Pencil, UserPlus, User, ArrowLeft } from "lucide-react";
-import { DndContext, DragEndEvent, MouseSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { arrayMove, verticalListSortingStrategy, useSortable } from "@dnd-kit/sortable";
+import { DndContext, DragEndEvent, MouseSensor, TouchSensor, useSensor, useSensors, DragOverlay } from "@dnd-kit/core";
+import { arrayMove, verticalListSortingStrategy, useSortable, SortableContext } from "@dnd-kit/sortable";
 import { DraggableNode } from "@/components/DraggableNode";
 import { MentorSelectorDialog } from "@/components/admin/MentorSelectorDialog";
 
@@ -32,16 +32,14 @@ interface EducationPlan {
 
 interface EducationNode {
   id: string;
-  name: string;
-  description: string | null;
-  duration_minutes: number | null;
   education_plan_id: string;
+  name: string;
+  description: string;
+  sources: string[];
+  instructions: string;
+  duration: string;
   index: number;
-  instructions: string | null;
   is_active: boolean;
-  micro_skills: string[] | null;
-  skills: string[] | null;
-  source: string | null;
 }
 
 export default function EducationPlanDetail() {
@@ -63,7 +61,10 @@ export default function EducationPlanDetail() {
     name: "",
     description: "",
     instructions: "",
-    index: 0
+    sources: [] as string[],
+    duration: "",
+    index: 0,
+    sourceInput: ""
   });
   const [isEditingNode, setIsEditingNode] = useState(false);
   const [selectedNode, setSelectedNode] = useState<EducationNode | null>(null);
@@ -71,8 +72,12 @@ export default function EducationPlanDetail() {
     name: "",
     description: "",
     instructions: "",
-    source: ""
+    sources: [] as string[],
+    duration: "",
+    is_active: true,
+    sourceInput: ""
   });
+  const [activeNodeId, setActiveNodeId] = useState<string | null>(null);
 
   const supabase = createClientComponentClient<Database>();
 
@@ -118,7 +123,7 @@ export default function EducationPlanDetail() {
 
       if (nodesError) throw nodesError;
       if (nodesData) {
-        setNodes(nodesData.map((node) => ({ ...node, completed: false })) as unknown as EducationNode[]);
+        setNodes(nodesData as EducationNode[]);
       }
     } catch (error) {
       console.error("Error fetching plan details:", error);
@@ -171,6 +176,9 @@ export default function EducationPlanDetail() {
         input_education_plan_id: params.id as string,
         input_name: nodeForm.name,
         input_description: nodeForm.description || undefined,
+        input_instructions: nodeForm.instructions || undefined,
+        input_sources: nodeForm.sources,
+        input_duration: nodeForm.duration || undefined,
         input_index: newIndex,
         input_is_active: true
       });
@@ -180,7 +188,7 @@ export default function EducationPlanDetail() {
       toast.success("Node created successfully");
       setIsAddingNode(false);
       setSelectedNodeIndex(null);
-      setNodeForm({ name: "", description: "", instructions: "", index: 0 });
+      setNodeForm({ name: "", description: "", instructions: "", sources: [], duration: "", index: 0, sourceInput: "" });
       fetchPlanAndNodes();
     } catch (error) {
       console.error("Error creating node:", error);
@@ -223,7 +231,10 @@ export default function EducationPlanDetail() {
       name: node.name,
       description: node.description || "",
       instructions: node.instructions || "",
-      source: node.source || ""
+      sources: node.sources || [],
+      duration: node.duration || "",
+      is_active: node.is_active,
+      sourceInput: ""
     });
     setIsEditingNode(true);
   };
@@ -236,7 +247,11 @@ export default function EducationPlanDetail() {
       const { error } = await supabase.rpc("update_education_node", {
         input_education_node_id: selectedNode.id,
         input_name: editNodeForm.name,
-        input_description: editNodeForm.description || undefined
+        input_description: editNodeForm.description,
+        input_instructions: editNodeForm.instructions,
+        input_sources: editNodeForm.sources,
+        input_duration: editNodeForm.duration,
+        input_is_active: editNodeForm.is_active
       });
 
       if (error) throw error;
@@ -252,6 +267,9 @@ export default function EducationPlanDetail() {
       setIsLoading(false);
     }
   };
+
+  // Find the active node for overlay
+  const activeNode = nodes.find((n) => n.id === activeNodeId) || null;
 
   if (!plan) return null;
 
@@ -328,28 +346,57 @@ export default function EducationPlanDetail() {
         </div>
         <div className="relative">
           <div className="absolute left-[18%] top-4 bottom-12 w-px bg-border -translate-x-1/2" />
-          <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-            <div className="relative">
-              {nodes.length > 0 ? (
-                nodes.map((node, index) => (
+          <div className="relative">
+            <DndContext
+              sensors={sensors}
+              onDragEnd={async (event) => {
+                setActiveNodeId(null);  
+                await handleDragEnd(event);
+              }}
+              onDragStart={(event) => setActiveNodeId(event.active.id as string)}
+            >
+              {/* @ts-expect-error dnd-kit v10+ JSX workaround */}
+              <SortableContext items={nodes.map((n) => n.id)} strategy={verticalListSortingStrategy}>
+                {nodes.length > 0 ? (
+                  nodes.map((node, index) => (
+                    <DraggableNode
+                      key={node.id}
+                      id={node.id}
+                      index={index}
+                      name={node.name}
+                      description={node.description}
+                      instructions={node.instructions}
+                      duration={node.duration}
+                      sources={node.sources}
+                      onEdit={() => handleEditNode(node)}
+                      isDragging={activeNodeId === node.id}
+                    />
+                  ))
+                ) : (
+                  <div className="text-center py-12 text-muted-foreground">
+                    <p>No learning nodes yet. Add your first node to get started.</p>
+                  </div>
+                )}
+              </SortableContext>
+              {/* @ts-expect-error dnd-kit v10+ JSX workaround */}
+              <DragOverlay>
+                {activeNode ? (
                   <DraggableNode
-                    key={node.id}
-                    id={node.id}
-                    index={index}
-                    name={node.name}
-                    description={node.description}
-                    instructions={node.instructions}
-                    source={node.source}
-                    onEdit={() => handleEditNode(node)}
+                    key={activeNode.id}
+                    id={activeNode.id}
+                    index={activeNode.index}
+                    name={activeNode.name}
+                    description={activeNode.description}
+                    instructions={activeNode.instructions}
+                    duration={activeNode.duration}
+                    sources={activeNode.sources}
+                    onEdit={() => handleEditNode(activeNode)}
+                    isDragging={activeNodeId === activeNode.id}
                   />
-                ))
-              ) : (
-                <div className="text-center py-12 text-muted-foreground">
-                  <p>No learning nodes yet. Add your first node to get started.</p>
-                </div>
-              )}
-            </div>
-          </DndContext>
+                ) : null}
+              </DragOverlay>
+            </DndContext>
+          </div>
         </div>
       </div>
 
@@ -369,8 +416,14 @@ export default function EducationPlanDetail() {
               <Textarea id="description" value={planForm.description} onChange={(e) => setPlanForm({ ...planForm, description: e.target.value })} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="duration">Duration (weeks)</Label>
-              <Input id="duration" type="number" min="1" value={planForm.duration} onChange={(e) => setPlanForm({ ...planForm, duration: e.target.value })} />
+              <Label htmlFor="duration">Duration</Label>
+              <Input
+                id="duration"
+                type="text"
+                placeholder="e.g. 3 weeks, 2 months, 1 semester"
+                value={planForm.duration}
+                onChange={(e) => setPlanForm({ ...planForm, duration: e.target.value })}
+              />
             </div>
           </div>
           <DialogFooter>
@@ -406,6 +459,61 @@ export default function EducationPlanDetail() {
             <div className="space-y-2">
               <Label htmlFor="nodeInstructions">Instructions</Label>
               <Textarea id="nodeInstructions" value={nodeForm.instructions} onChange={(e) => setNodeForm({ ...nodeForm, instructions: e.target.value })} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="nodeDuration">Duration</Label>
+              <Input id="nodeDuration" value={nodeForm.duration} onChange={(e) => setNodeForm({ ...nodeForm, duration: e.target.value })} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="nodeSources">Sources</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="nodeSources"
+                  value={nodeForm.sourceInput}
+                  onChange={(e) => setNodeForm({ ...nodeForm, sourceInput: e.target.value })}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && nodeForm.sourceInput.trim()) {
+                      setNodeForm({
+                        ...nodeForm,
+                        sources: [...nodeForm.sources, nodeForm.sourceInput.trim()],
+                        sourceInput: ""
+                      });
+                    }
+                  }}
+                  placeholder="Add a source and press Enter or click Add"
+                />
+                <Button
+                  type="button"
+                  onClick={() => {
+                    if (nodeForm.sourceInput.trim()) {
+                      setNodeForm({
+                        ...nodeForm,
+                        sources: [...nodeForm.sources, nodeForm.sourceInput.trim()],
+                        sourceInput: ""
+                      });
+                    }
+                  }}
+                  variant="outline"
+                >
+                  Add
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {nodeForm.sources.map((src, idx) => (
+                  <div key={idx} className="flex items-center bg-muted px-2 py-1 rounded">
+                    <span className="mr-2">{src}</span>
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="ghost"
+                      className="h-5 w-5"
+                      onClick={() => setNodeForm({ ...nodeForm, sources: nodeForm.sources.filter((_, i) => i !== idx) })}
+                    >
+                      ×
+                    </Button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
           <DialogFooter>
@@ -453,14 +561,59 @@ export default function EducationPlanDetail() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="editNodeSource">Resource URL</Label>
-              <Input
-                id="editNodeSource"
-                type="url"
-                placeholder="https://"
-                value={editNodeForm.source}
-                onChange={(e) => setEditNodeForm({ ...editNodeForm, source: e.target.value })}
-              />
+              <Label htmlFor="editNodeDuration">Duration</Label>
+              <Input id="editNodeDuration" value={editNodeForm.duration} onChange={(e) => setEditNodeForm({ ...editNodeForm, duration: e.target.value })} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="editNodeSources">Sources</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="editNodeSources"
+                  value={editNodeForm.sourceInput}
+                  onChange={(e) => setEditNodeForm({ ...editNodeForm, sourceInput: e.target.value })}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && editNodeForm.sourceInput.trim()) {
+                      setEditNodeForm({
+                        ...editNodeForm,
+                        sources: [...editNodeForm.sources, editNodeForm.sourceInput.trim()],
+                        sourceInput: ""
+                      });
+                    }
+                  }}
+                  placeholder="Add a source and press Enter or click Add"
+                />
+                <Button
+                  type="button"
+                  onClick={() => {
+                    if (editNodeForm.sourceInput.trim()) {
+                      setEditNodeForm({
+                        ...editNodeForm,
+                        sources: [...editNodeForm.sources, editNodeForm.sourceInput.trim()],
+                        sourceInput: ""
+                      });
+                    }
+                  }}
+                  variant="outline"
+                >
+                  Add
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {editNodeForm.sources.map((src, idx) => (
+                  <div key={idx} className="flex items-center bg-muted px-2 py-1 rounded">
+                    <span className="mr-2">{src}</span>
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="ghost"
+                      className="h-5 w-5"
+                      onClick={() => setEditNodeForm({ ...editNodeForm, sources: editNodeForm.sources.filter((_, i) => i !== idx) })}
+                    >
+                      ×
+                    </Button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
           <DialogFooter>
