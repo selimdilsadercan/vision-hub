@@ -21,7 +21,8 @@ const eslintConfig = [
       "@typescript-eslint/no-require-imports": "off",
       "react-hooks/rules-of-hooks": "off",
       "@typescript-eslint/no-unsafe-function-type": "off",
-      "no-binary": "off"
+      "no-binary": "off",
+      "@typescript-eslint/no-unused-ts-expect-error": "off"
     }
   }
 ];
