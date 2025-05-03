@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Plus, Clock, Pencil, UserPlus, User, ArrowLeft } from "lucide-react";
 import { DndContext, DragEndEvent, MouseSensor, TouchSensor, useSensor, useSensors, DragOverlay } from "@dnd-kit/core";
-import { arrayMove, verticalListSortingStrategy, useSortable, SortableContext } from "@dnd-kit/sortable";
+import { arrayMove, verticalListSortingStrategy, useSortable, SortableContext, SortableContextProps } from "@dnd-kit/sortable";
 import { DraggableNode } from "@/components/DraggableNode";
 import { MentorSelectorDialog } from "@/components/admin/MentorSelectorDialog";
 
@@ -355,7 +355,7 @@ export default function EducationPlanDetail() {
               }}
               onDragStart={(event) => setActiveNodeId(event.active.id as string)}
             >
-              {/* @ts-expect-error dnd-kit v10+ JSX workaround */}
+              {/* @ts-expect-error */}
               <SortableContext items={nodes.map((n) => n.id)} strategy={verticalListSortingStrategy}>
                 {nodes.length > 0 ? (
                   nodes.map((node, index) => (
@@ -378,7 +378,7 @@ export default function EducationPlanDetail() {
                   </div>
                 )}
               </SortableContext>
-              {/* @ts-expect-error dnd-kit v10+ JSX workaround */}
+              {/* @ts-expect-error */}
               <DragOverlay>
                 {activeNode ? (
                   <DraggableNode
