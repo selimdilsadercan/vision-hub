@@ -3,16 +3,13 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Users, GraduationCap, CalendarCheck, Trophy, UserCircle, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, GraduationCap, UserCircle, ShieldCheck } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 
 const adminNavigationItems = [
   { title: "Dashboard", icon: LayoutDashboard, href: "/admin" },
-  { title: "Users", icon: Users, href: "/admin/users" },
-  { title: "Education", icon: GraduationCap, href: "/admin/education" },
-  { title: "Events", icon: CalendarCheck, href: "/admin/events" },
-  { title: "Competitions", icon: Trophy, href: "/admin/competitions" }
+  { title: "Education", icon: GraduationCap, href: "/admin/education" }
 ];
 
 export function AdminSidebar() {
@@ -22,7 +19,7 @@ export function AdminSidebar() {
     <div className="relative flex h-full w-[260px] flex-col border-r px-3 py-4">
       {/* Logo Area */}
       <div className="flex h-[60px] items-center px-2">
-        <Link href="/admin" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <div className="rounded-lg bg-primary p-1">
             <span className="text-lg font-bold text-primary-foreground">HUB</span>
           </div>

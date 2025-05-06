@@ -10,8 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Plus, Clock, Pencil, UserPlus, User, ArrowLeft } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Plus, Clock, Pencil, UserPlus, User, ArrowLeft, Trash2 } from "lucide-react";
 import { DndContext, DragEndEvent, MouseSensor, TouchSensor, useSensor, useSensors, DragOverlay } from "@dnd-kit/core";
 import { arrayMove, verticalListSortingStrategy, useSortable, SortableContext, SortableContextProps } from "@dnd-kit/sortable";
 import { DraggableNode } from "@/components/DraggableNode";
@@ -40,6 +40,19 @@ interface EducationNode {
   duration: string;
   index: number;
   is_active: boolean;
+}
+
+function AddNodeButton({ onClick, ariaLabel }: { onClick: () => void; ariaLabel: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={ariaLabel}
+      className="flex items-center justify-center w-8 h-8 rounded-full border border-border bg-background hover:bg-accent transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
+    >
+      <Plus className="w-4 h-4" />
+    </button>
+  );
 }
 
 export default function EducationPlanDetail() {
@@ -78,6 +91,7 @@ export default function EducationPlanDetail() {
     sourceInput: ""
   });
   const [activeNodeId, setActiveNodeId] = useState<string | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const supabase = createClientComponentClient<Database>();
 
@@ -170,8 +184,17 @@ export default function EducationPlanDetail() {
   const handleCreateNode = async () => {
     try {
       setIsLoading(true);
-      const newIndex = selectedNodeIndex !== null ? nodes[selectedNodeIndex].index + 0.5 : nodes.length;
-
+      let newIndex: number;
+      if (nodes.length === 0) {
+        newIndex = 0;
+      } else if (selectedNodeIndex === -1) {
+        newIndex = nodes[0].index - 1;
+      } else if (selectedNodeIndex !== null && selectedNodeIndex < nodes.length - 1) {
+        newIndex = (nodes[selectedNodeIndex].index + nodes[selectedNodeIndex + 1].index) / 2;
+      } else {
+        newIndex = nodes[nodes.length - 1].index + 1;
+      }
+      console.log("New index:", newIndex);
       const { error } = await supabase.rpc("create_education_node", {
         input_education_plan_id: params.id as string,
         input_name: nodeForm.name,
@@ -182,9 +205,7 @@ export default function EducationPlanDetail() {
         input_index: newIndex,
         input_is_active: true
       });
-
       if (error) throw error;
-
       toast.success("Node created successfully");
       setIsAddingNode(false);
       setSelectedNodeIndex(null);
@@ -268,13 +289,37 @@ export default function EducationPlanDetail() {
     }
   };
 
+  const handleDeleteNode = async () => {
+    if (!selectedNode) return;
+
+    try {
+      setIsLoading(true);
+      const { error } = await supabase.rpc("delete_education_node", {
+        input_id: selectedNode.id
+      });
+
+      if (error) throw error;
+
+      toast.success("Node deleted successfully");
+      setIsEditingNode(false);
+      setIsDeleteDialogOpen(false);
+      setSelectedNode(null);
+      fetchPlanAndNodes();
+    } catch (error) {
+      console.error("Error deleting node:", error);
+      toast.error("Failed to delete node");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Find the active node for overlay
   const activeNode = nodes.find((n) => n.id === activeNodeId) || null;
 
   if (!plan) return null;
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6 space-y-6">
       {/* Header with Back Button and Title */}
       <div className="flex items-center gap-4 mb-6">
         <button
@@ -346,56 +391,62 @@ export default function EducationPlanDetail() {
         </div>
         <div className="relative">
           <div className="absolute left-[18%] top-4 bottom-12 w-px bg-border -translate-x-1/2" />
-          <div className="relative">
-            <DndContext
-              sensors={sensors}
-              onDragEnd={async (event) => {
-                setActiveNodeId(null);
-                await handleDragEnd(event);
-              }}
-              onDragStart={(event) => setActiveNodeId(event.active.id as string)}
-            >
-              {/* @ts-ignore dnd-kit v10+ JSX workaround */}
-              <SortableContext items={nodes.map((n) => n.id)} strategy={verticalListSortingStrategy}>
-                {nodes.length > 0 ? (
-                  nodes.map((node, index) => (
-                    <DraggableNode
-                      key={node.id}
-                      id={node.id}
-                      index={index}
-                      name={node.name}
-                      description={node.description}
-                      instructions={node.instructions}
-                      duration={node.duration}
-                      sources={node.sources}
-                      onEdit={() => handleEditNode(node)}
-                      isDragging={activeNodeId === node.id}
-                    />
-                  ))
-                ) : (
-                  <div className="text-center py-12 text-muted-foreground">
-                    <p>No learning nodes yet. Add your first node to get started.</p>
-                  </div>
-                )}
-              </SortableContext>
-              {/* @ts-ignore dnd-kit v10+ JSX workaround */}
-              <DragOverlay>
-                {activeNode ? (
+          <div className="relative flex flex-col gap-0">
+            {/* Add button before first node */}
+            <div className="flex justify-center mb-4 -mt-4 ml-48">
+              <AddNodeButton
+                onClick={() => {
+                  setSelectedNodeIndex(-1);
+                  setIsAddingNode(true);
+                }}
+                ariaLabel="Add node at start"
+              />
+            </div>
+            {nodes.length > 0 ? (
+              nodes.map((node, index) => (
+                <div key={node.id} className="relative">
                   <DraggableNode
-                    key={activeNode.id}
-                    id={activeNode.id}
-                    index={activeNode.index}
-                    name={activeNode.name}
-                    description={activeNode.description}
-                    instructions={activeNode.instructions}
-                    duration={activeNode.duration}
-                    sources={activeNode.sources}
-                    onEdit={() => handleEditNode(activeNode)}
-                    isDragging={activeNodeId === activeNode.id}
+                    id={node.id}
+                    index={index}
+                    name={node.name}
+                    description={node.description}
+                    instructions={node.instructions}
+                    duration={node.duration}
+                    sources={node.sources}
+                    onEdit={() => handleEditNode(node)}
+                    isDragging={activeNodeId === node.id}
                   />
-                ) : null}
-              </DragOverlay>
-            </DndContext>
+                  {/* Add button between nodes */}
+                  {index < nodes.length - 1 && (
+                    <div className="flex justify-center mb-4 -mt-4 ml-48">
+                      <AddNodeButton
+                        onClick={() => {
+                          setSelectedNodeIndex(index);
+                          setIsAddingNode(true);
+                        }}
+                        ariaLabel={`Add node after step ${index + 1}`}
+                      />
+                    </div>
+                  )}
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No learning nodes yet. Add your first node to get started.</p>
+              </div>
+            )}
+            {/* Add button after last node */}
+            {nodes.length > 0 && (
+              <div className="flex justify-center mb-4 -mt-4 ml-48">
+                <AddNodeButton
+                  onClick={() => {
+                    setSelectedNodeIndex(nodes.length - 1);
+                    setIsAddingNode(true);
+                  }}
+                  ariaLabel="Add node at end"
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -616,18 +667,41 @@ export default function EducationPlanDetail() {
               </div>
             </div>
           </div>
+          <DialogFooter className="flex justify-between">
+            <Button variant="destructive" onClick={() => setIsDeleteDialogOpen(true)} className="mr-auto">
+              <Trash2 className="w-4 h-4 mr-2" />
+              Delete Node
+            </Button>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsEditingNode(false);
+                  setSelectedNode(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleUpdateNode} disabled={isLoading}>
+                {isLoading ? "Saving..." : "Save Changes"}
+              </Button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Node</DialogTitle>
+            <DialogDescription>Are you sure you want to delete this node? This action cannot be undone.</DialogDescription>
+          </DialogHeader>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setIsEditingNode(false);
-                setSelectedNode(null);
-              }}
-            >
+            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleUpdateNode} disabled={isLoading}>
-              {isLoading ? "Saving..." : "Save Changes"}
+            <Button variant="destructive" onClick={handleDeleteNode} disabled={isLoading}>
+              {isLoading ? "Deleting..." : "Delete Node"}
             </Button>
           </DialogFooter>
         </DialogContent>

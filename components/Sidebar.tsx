@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Home, Rocket, GraduationCap, Trophy, CalendarCheck, Globe2, UserCircle, Briefcase, Laptop, GitFork, ShieldCheck } from "lucide-react";
+import { Home, Rocket, GraduationCap, Trophy, CalendarCheck, Globe2, UserCircle, Briefcase, Laptop, GitFork, ShieldCheck, Settings } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/firebase/auth-context";
 import { getUserData, type FirestoreUser } from "@/firebase/firestore";
@@ -105,6 +105,21 @@ export function Sidebar() {
         {/* Bottom Navigation */}
         <div className="mt-auto flex flex-col gap-1">
           <Separator className="my-2" />
+          {userData?.is_admin && (
+            <Link href="/admin">
+              <span
+                className={cn(
+                  "group flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+                  pathname === "/admin" ? "bg-accent text-accent-foreground" : "transparent"
+                )}
+              >
+                <Settings className="mr-2 h-4 w-4" />
+                <div className="flex items-center gap-2 w-full">
+                  <span>Admin Dashboard</span>
+                </div>
+              </span>
+            </Link>
+          )}
           <Link href="/profile">
             <span
               className={cn(
