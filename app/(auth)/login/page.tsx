@@ -10,11 +10,12 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/firebase/auth-context";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { FcGoogle } from "react-icons/fc";
 
 function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { signIn, signUp, user, loading } = useAuth();
+  const { signIn, signUp, user, loading, signInWithGoogle } = useAuth();
   const router = useRouter();
 
   // Form states
@@ -81,8 +82,8 @@ function LoginPage() {
               <h2 className="text-2xl font-bold">Hoş Geldin 👋</h2>
             </div>
 
-            <Tabs defaultValue="login" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
+            <Tabs defaultValue="register" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-4">
                 <TabsTrigger value="register">Hesap Oluştur</TabsTrigger>
                 <TabsTrigger value="login">Hesabım Var</TabsTrigger>
               </TabsList>
@@ -105,6 +106,18 @@ function LoginPage() {
                   </div>
                   <Button type="submit" className="w-full bg-[#2563EB] hover:bg-blue-700" disabled={isLoading}>
                     {isLoading ? "Kaydolunuyor..." : "Kaydol"}
+                  </Button>
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <span className="w-full border-t" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-background px-2 text-muted-foreground">veya</span>
+                    </div>
+                  </div>
+                  <Button type="button" variant="outline" className="w-full" onClick={() => signInWithGoogle()} disabled={isLoading}>
+                    <FcGoogle className="mr-2 h-4 w-4" />
+                    Google ile Kaydol
                   </Button>
                   <p className="text-sm text-gray-600 text-center">
                     Kaydolarak{" "}
@@ -137,6 +150,18 @@ function LoginPage() {
                   </div>
                   <Button type="submit" className="w-full bg-[#2563EB] hover:bg-blue-700" disabled={isLoading}>
                     {isLoading ? "Giriş Yapılıyor..." : "Giriş Yap"}
+                  </Button>
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <span className="w-full border-t" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-background px-2 text-muted-foreground">veya</span>
+                    </div>
+                  </div>
+                  <Button type="button" variant="outline" className="w-full" onClick={() => signInWithGoogle()} disabled={isLoading}>
+                    <FcGoogle className="mr-2 h-4 w-4" />
+                    Google ile Giriş Yap
                   </Button>
                   <div className="text-center">
                     <Link href="/forgot-password" className="text-sm text-[#2563EB] hover:underline">

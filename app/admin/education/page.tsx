@@ -111,7 +111,7 @@ export default function AdminEducationPage() {
                 <Label htmlFor="duration">Duration</Label>
                 <Input
                   id="duration"
-                  type="number"
+                  type="text"
                   placeholder="Enter duration"
                   value={formData.duration}
                   onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
