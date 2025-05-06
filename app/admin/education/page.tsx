@@ -108,11 +108,11 @@ export default function AdminEducationPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="duration">Duration (weeks)</Label>
+                <Label htmlFor="duration">Duration</Label>
                 <Input
                   id="duration"
                   type="number"
-                  placeholder="Enter duration in weeks"
+                  placeholder="Enter duration"
                   value={formData.duration}
                   onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
                 />
