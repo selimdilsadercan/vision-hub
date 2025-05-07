@@ -3,13 +3,15 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, GraduationCap, UserCircle, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, GraduationCap, UserCircle, ShieldCheck, User, Calendar } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 
 const adminNavigationItems = [
   { title: "Dashboard", icon: LayoutDashboard, href: "/admin" },
-  { title: "Education", icon: GraduationCap, href: "/admin/education" }
+  { title: "Education", icon: GraduationCap, href: "/admin/education" },
+  { title: "Users", icon: User, href: "/admin/users" },
+  { title: "Meetings", icon: Calendar, href: "/admin/meetings" }
 ];
 
 export function AdminSidebar() {

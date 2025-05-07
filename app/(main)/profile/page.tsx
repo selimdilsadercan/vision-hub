@@ -8,10 +8,11 @@ import { EventCard } from "@/components/EventCard";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
 import { useAuth } from "@/firebase/auth-context";
-import { LogOut } from "lucide-react";
+import { LogOut, Pencil } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { getUserData, type FirestoreUser } from "@/firebase/firestore";
+import Link from "next/link";
 
 const tabs = ["Genel", "Portfolyo", "Eğitim", "Etkinlik"];
 
@@ -173,10 +174,11 @@ export default function ProfilePage() {
   };
 
   if (isLoading) {
-    return <div className="flex justify-center items-center h-full">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-    </div>
-    
+    return (
+      <div className="flex justify-center items-center h-full">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+    );
   }
 
   return (
@@ -206,10 +208,18 @@ export default function ProfilePage() {
               <p className="text-muted-foreground">
                 {userData?.department} {userData?.grade}
               </p>
-              <Button variant="outline" size="sm" onClick={handleSignOut} className="text-red-500 hover:text-red-600 hover:bg-red-50">
-                <LogOut className="w-4 h-4 mr-2" />
-                Çıkış Yap
-              </Button>
+              <div className="flex items-center justify-center gap-2">
+                <Link href="/profile/edit">
+                  <Button variant="outline" size="sm" className="ml-1" aria-label="Profili Düzenle">
+                    <Pencil className="w-4 h-4 mr-2" />
+                    Profili Düzenle
+                  </Button>
+                </Link>
+                <Button variant="outline" size="sm" onClick={handleSignOut} className="text-red-500 hover:text-red-600 hover:bg-red-50">
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Çıkış Yap
+                </Button> 
+              </div>
             </div>
           </div>
 

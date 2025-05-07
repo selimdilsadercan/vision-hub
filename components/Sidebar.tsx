@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import { Home, Rocket, GraduationCap, Trophy, CalendarCheck, Globe2, UserCircle, Briefcase, Laptop, GitFork, ShieldCheck, Settings } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/firebase/auth-context";
-import { getUserData, type FirestoreUser } from "@/firebase/firestore";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 
@@ -61,13 +60,17 @@ const navigationItems = [
 export function Sidebar() {
   const pathname = usePathname();
   const { user } = useAuth();
-  const [userData, setUserData] = useState<FirestoreUser | null>(null);
+  const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       if (!user) return;
-      const firestoreUser = await getUserData(user.uid);
-      setUserData(firestoreUser);
+      const supabase = require("@/lib/supabase").supabase;
+      const { data, error } = await supabase.rpc("get_profile_by_uid", { input_uid: user.uid });
+      if (error) return;
+      if (data && data.length > 0) {
+        setUserData(data[0]);
+      }
     };
 
     fetchUserData();
