@@ -28,7 +28,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
-import { StoryDetailDialog } from "@/components/StoryDetailDialog";
+import { StoryDetailDialog } from "@/dialog/StoryDetailDialog";
 
 interface Story {
   id: string;

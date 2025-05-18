@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr" suppressHydrationWarning>
-      <body className={cn(inter.className)} suppressHydrationWarning>
+      <body className={cn(inter.className, "h-full")} suppressHydrationWarning>
         <AuthProvider>
           <Toaster />
           {children}

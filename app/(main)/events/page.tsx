@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, MapPin, User } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
 import { useAuth } from "@/firebase/auth-context";
 import { getUserData } from "@/firebase/firestore";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { EventCard } from "@/components/EventCard";
+import { EventDialog } from "@/dialog/EventDialog";
+import { useSearchParams } from "next/navigation";
+import { isToday, isThisWeek, isThisMonth, isAfter, isBefore, startOfToday, endOfWeek, endOfMonth } from "date-fns";
+import { tr } from "date-fns/locale";
 
 interface Event {
   id: string;
@@ -20,16 +21,89 @@ interface Event {
   end_date: string;
   description: string;
   visible_date_range: string;
-  time_group: string;
-  owner_name: string;
-  owner_image_url: string;
-  is_approved: boolean;
+}
+
+function groupEvents(events: Event[]) {
+  const today: Event[] = [];
+  const thisWeek: Event[] = [];
+  const thisMonth: Event[] = [];
+  const later: Event[] = [];
+  const past: Event[] = [];
+  const now = new Date();
+
+  events.forEach((event) => {
+    const date = new Date(event.start_date);
+    if (isBefore(date, startOfToday())) {
+      past.push(event);
+    } else if (isToday(date)) {
+      today.push(event);
+    } else if (isThisWeek(date, { weekStartsOn: 1, locale: tr })) {
+      thisWeek.push(event);
+    } else if (isThisMonth(date)) {
+      thisMonth.push(event);
+    } else {
+      later.push(event);
+    }
+  });
+
+  return { today, thisWeek, thisMonth, later, past };
+}
+
+function GroupSection({ title, events }: { title: string; events: Event[] }) {
+  return (
+    <div className="space-y-2">
+      <h2 className="text-xl font-semibold mt-8 mb-2">{title}</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {events.map((event) => (
+          <EventCard
+            key={event.id}
+            id={event.id}
+            name={event.name}
+            organizator={event.organizator}
+            location={event.location}
+            start_date={event.start_date}
+            end_date={event.end_date}
+            description={event.description}
+            image_url={event.image_url}
+            visible_date_range={event.visible_date_range}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
+  const isCompetition = type === "competition";
+  const pageTitle = isCompetition ? "Yarışmalar" : "Etkinlikler";
+  const pageDesc = isCompetition ? "Yarışmaları keşfet ve katıl" : "Etkinlikleri keşfet ve katıl";
+  const buttonText = isCompetition ? "Yarışma Ekle" : "Etkinlik Ekle";
+  const [createOpen, setCreateOpen] = useState(false);
+
+  const refreshEvents = async () => {
+    setLoading(true);
+    try {
+      let eventTypes: ("other" | "bootcamp" | "ideathon" | "hackathon" | "meetup" | "workshop")[];
+      if (type === "competition") {
+        eventTypes = ["ideathon", "hackathon"];
+      } else {
+        eventTypes = ["other", "bootcamp", "meetup", "workshop"];
+      }
+      const { data, error } = await supabase.rpc("list_events", { event_types: eventTypes });
+      if (error) throw error;
+      setEvents(data ?? []);
+    } catch (error) {
+      toast.error("Failed to refresh events");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -44,15 +118,22 @@ export default function EventsPage() {
           return;
         }
 
-        const { data, error } = await supabase.rpc("list_user_events", {
-          input_profile_id: firestoreUser.profile_id
-        });
+        setIsAdmin(firestoreUser.is_admin);
+
+        let eventTypes: ("other" | "bootcamp" | "ideathon" | "hackathon" | "meetup" | "workshop")[];
+        if (type === "competition") {
+          eventTypes = ["ideathon", "hackathon"];
+        } else {
+          eventTypes = ["other", "bootcamp", "meetup", "workshop"];
+        }
+
+        const { data, error } = await supabase.rpc("list_events", { event_types: eventTypes });
 
         if (error) {
           throw error;
         }
 
-        setEvents(data);
+        setEvents(data ?? []);
       } catch (error) {
         console.error("Error fetching events:", error);
         toast.error("Failed to load events");
@@ -62,38 +143,24 @@ export default function EventsPage() {
     };
 
     fetchEvents();
-  }, [user]);
-
-  const getTimeGroupColor = (timeGroup: string) => {
-    switch (timeGroup.toLowerCase()) {
-      case "upcoming":
-        return "bg-blue-500/10 text-blue-500";
-      case "ongoing":
-        return "bg-green-500/10 text-green-500";
-      case "past":
-        return "bg-gray-500/10 text-gray-500";
-      default:
-        return "bg-gray-500/10 text-gray-500";
-    }
-  };
+  }, [user, type]);
 
   if (loading) {
     return (
       <div className="container mx-auto p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
-            <Card key={i} className="animate-pulse">
-              <CardHeader>
-                <div className="h-6 bg-muted rounded w-3/4 mb-2"></div>
-                <div className="h-4 bg-muted rounded w-1/2"></div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <div className="h-4 bg-muted rounded"></div>
-                  <div className="h-4 bg-muted rounded w-5/6"></div>
+            <div key={i} className="bg-white rounded-lg border p-3 animate-pulse">
+              <div className="flex gap-3">
+                <div className="w-[100px] h-[100px] rounded-xl bg-muted" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 bg-muted rounded w-3/4" />
+                  <div className="h-4 bg-muted rounded w-1/2" />
+                  <div className="h-4 bg-muted rounded w-2/3" />
+                  <div className="h-4 bg-muted rounded w-1/3" />
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           ))}
         </div>
       </div>
@@ -104,70 +171,33 @@ export default function EventsPage() {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold">Events</h1>
-          <p className="text-muted-foreground">Discover and join upcoming events</p>
+          <h1 className="text-3xl font-bold">{pageTitle}</h1>
+          <p className="text-muted-foreground">{pageDesc}</p>
         </div>
-        <Badge variant="outline" className="text-sm">
-          {events.length} Events Available
-        </Badge>
+        {isAdmin && (
+          <EventDialog
+            mode="create"
+            open={createOpen}
+            onOpenChange={setCreateOpen}
+            triggerText={buttonText}
+            eventType={isCompetition ? "hackathon" : "other"}
+            onSuccess={refreshEvents}
+          />
+        )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {events.map((event) => (
-          <Card key={event.id} className="flex flex-col">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <Badge variant="outline" className={getTimeGroupColor(event.time_group)}>
-                  {event.time_group}
-                </Badge>
-                <div className="flex items-center gap-2">
-                  <Avatar className="h-6 w-6">
-                    <AvatarImage src={event.owner_image_url} alt={event.owner_name} />
-                    <AvatarFallback>
-                      <User className="h-4 w-4" />
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="text-sm text-muted-foreground">{event.owner_name}</span>
-                </div>
-              </div>
-              <CardTitle className="mt-4">{event.name}</CardTitle>
-              <CardDescription>{event.description}</CardDescription>
-            </CardHeader>
-            <CardContent className="flex-1 space-y-4">
-              <div className="space-y-2">
-                <div className="flex items-center text-sm">
-                  <Calendar className="mr-2 h-4 w-4 text-muted-foreground" />
-                  <span>
-                    {new Date(event.start_date).toLocaleDateString()} - {new Date(event.end_date).toLocaleDateString()}
-                  </span>
-                </div>
-                <div className="flex items-center text-sm">
-                  <Clock className="mr-2 h-4 w-4 text-muted-foreground" />
-                  <span>
-                    {new Date(event.start_date).toLocaleTimeString()} - {new Date(event.end_date).toLocaleTimeString()}
-                  </span>
-                </div>
-                <div className="flex items-center text-sm">
-                  <MapPin className="mr-2 h-4 w-4 text-muted-foreground" />
-                  <span>{event.location}</span>
-                </div>
-                <div className="flex items-center text-sm">
-                  <User className="mr-2 h-4 w-4 text-muted-foreground" />
-                  <span>{event.organizator}</span>
-                </div>
-              </div>
-              {event.time_group.toLowerCase() === "upcoming" && (
-                <button
-                  className="w-full mt-4 bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md text-sm font-medium transition-colors"
-                  onClick={() => console.log("Join event:", event.id)}
-                >
-                  Join Event
-                </button>
-              )}
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      {(() => {
+        const groups = groupEvents(events);
+        return (
+          <>
+            {groups.today.length > 0 && <GroupSection title="Bugün" events={groups.today} />}
+            {groups.thisWeek.length > 0 && <GroupSection title="Bu Hafta" events={groups.thisWeek} />}
+            {groups.thisMonth.length > 0 && <GroupSection title="Bu Ay" events={groups.thisMonth} />}
+            {groups.later.length > 0 && <GroupSection title="Daha Sonra" events={groups.later} />}
+            {groups.past.length > 0 && <GroupSection title="Geçmiş Etkinlikler" events={groups.past} />}
+          </>
+        );
+      })()}
     </div>
   );
 }

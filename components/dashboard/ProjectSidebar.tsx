@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { FolderIcon, Users2Icon, SearchIcon, ClockIcon, CalendarIcon, WalletIcon, Settings, Handshake, FileText } from "lucide-react";
+import { FolderIcon, Users2Icon, SearchIcon, ClockIcon, CalendarIcon, WalletIcon, Settings, Handshake, FileText, ListTodo } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -19,6 +19,11 @@ const routes = [
     label: "Project Details",
     icon: FileText,
     href: "/details"
+  },
+  {
+    label: "Tasks",
+    icon: ListTodo,
+    href: "/tasks"
   },
   {
     label: "Timeline",

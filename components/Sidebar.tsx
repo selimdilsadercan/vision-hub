@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Home, Rocket, GraduationCap, Trophy, CalendarCheck, Globe2, UserCircle, Briefcase, Laptop, GitFork, ShieldCheck, Settings } from "lucide-react";
@@ -28,12 +28,12 @@ const navigationItems = [
   {
     title: "Yarışmalar",
     icon: Trophy,
-    href: "/competitions"
+    href: "/events?type=competition"
   },
   {
     title: "Etkinlikler",
     icon: CalendarCheck,
-    href: "/events"
+    href: "/events?type=other"
   },
   {
     title: "Websiteler",
@@ -59,6 +59,8 @@ const navigationItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
   const { user } = useAuth();
   const [userData, setUserData] = useState<any>(null);
 
@@ -90,19 +92,31 @@ export function Sidebar() {
       <div className="flex flex-1 flex-col gap-4 overflow-hidden">
         {/* Main Navigation */}
         <div className="flex flex-col gap-1">
-          {navigationItems.map((item) => (
-            <Link key={item.href} href={item.href}>
-              <span
-                className={cn(
-                  "group flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                  pathname === item.href ? "bg-accent text-accent-foreground" : "transparent"
-                )}
-              >
-                <item.icon className="mr-2 h-4 w-4" />
-                {item.title}
-              </span>
-            </Link>
-          ))}
+          {navigationItems.map((item) => {
+            let isActive = pathname === item.href;
+            if (item.title === "Ana Sayfa" && (pathname === "/home" || pathname.startsWith("/home/"))) {
+              isActive = true;
+            }
+            if (item.title === "Yarışmalar" && pathname === "/events" && type === "competition") {
+              isActive = true;
+            }
+            if (item.title === "Etkinlikler" && pathname === "/events" && (type === "other" || !type)) {
+              isActive = true;
+            }
+            return (
+              <Link key={item.href} href={item.href}>
+                <span
+                  className={cn(
+                    "group flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+                    isActive ? "bg-accent text-accent-foreground" : "transparent"
+                  )}
+                >
+                  <item.icon className="mr-2 h-4 w-4" />
+                  {item.title}
+                </span>
+              </Link>
+            );
+          })}
         </div>
 
         {/* Bottom Navigation */}

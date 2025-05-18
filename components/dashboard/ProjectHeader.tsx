@@ -6,11 +6,10 @@ import { Switch } from "@/components/ui/switch";
 
 interface ProjectHeaderProps {
   title: string;
-  isPrivate: boolean;
   projectId: string;
 }
 
-export function ProjectHeader({ title, isPrivate }: ProjectHeaderProps) {
+export function ProjectHeader({ title }: ProjectHeaderProps) {
   const router = useRouter();
 
   return (
@@ -20,10 +19,6 @@ export function ProjectHeader({ title, isPrivate }: ProjectHeaderProps) {
           <ArrowLeft className="h-5 w-5 text-muted-foreground" />
         </button>
         <h1 className="font-medium">{title}</h1>
-      </div>
-      <div className="flex items-center gap-2">
-        <Shield className={`h-5 w-5 ${isPrivate ? "text-primary" : "text-muted-foreground"}`} />
-        <Switch checked={isPrivate} />
       </div>
     </div>
   );
