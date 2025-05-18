@@ -75,7 +75,7 @@ export default function ProjectLayout({ children }: { children: React.ReactNode 
         <ProjectSidebar projectId={projectId} />
       </div>
       <main className="md:pl-[260px]">
-        <ProjectHeader title={project.name} isPrivate={project.is_private} projectId={projectId} />
+        <ProjectHeader title={project.name} projectId={projectId} />
         {children}
       </main>
       <ProjectNavbar projectId={projectId} />
