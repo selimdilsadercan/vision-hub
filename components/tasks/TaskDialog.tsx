@@ -9,6 +9,16 @@ import Image from "next/image";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/lib/supabase-types";
 import { toast } from "react-hot-toast";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction
+} from "@/components/ui/alert-dialog";
 
 interface User {
   id: string;
@@ -32,9 +42,10 @@ interface TaskDialogProps {
     image_url?: string;
   };
   mode: "create" | "edit";
+  onDelete?: () => void;
 }
 
-export function TaskDialog({ open, onOpenChange, onSubmit, initialValues, initialAssignedUser, mode }: TaskDialogProps) {
+export function TaskDialog({ open, onOpenChange, onSubmit, initialValues, initialAssignedUser, mode, onDelete }: TaskDialogProps) {
   const [title, setTitle] = useState(initialValues?.title || "");
   const [description, setDescription] = useState(initialValues?.description || "");
   const [dueDate, setDueDate] = useState(initialValues?.dueDate || "");
@@ -45,6 +56,8 @@ export function TaskDialog({ open, onOpenChange, onSubmit, initialValues, initia
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const supabase = createClientComponentClient<Database>();
 
   useEffect(() => {
@@ -104,6 +117,29 @@ export function TaskDialog({ open, onOpenChange, onSubmit, initialValues, initia
     });
   };
 
+  const handleDelete = async () => {
+    if (!initialValues || !onDelete) return;
+    setDeleting(true);
+    try {
+      const taskId = (initialValues as any).id;
+      if (!taskId) throw new Error("Task id is missing");
+      const { error } = await supabase.rpc("delete_project_task", { input_task_id: taskId });
+      if (error) {
+        toast.error("Failed to delete task");
+        setDeleting(false);
+        return;
+      }
+      toast.success("Task deleted successfully");
+      setDeleting(false);
+      setShowDeleteConfirm(false);
+      onOpenChange(false);
+      onDelete();
+    } catch (err) {
+      toast.error("Failed to delete task");
+      setDeleting(false);
+    }
+  };
+
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
@@ -146,6 +182,26 @@ export function TaskDialog({ open, onOpenChange, onSubmit, initialValues, initia
               </div>
             </div>
             <div className="flex justify-end space-x-2">
+              {mode === "edit" && initialValues && (
+                <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+                  <AlertDialogTrigger asChild>
+                    <Button type="button" variant="destructive" onClick={() => setShowDeleteConfirm(true)}>
+                      Delete
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you sure you want to delete this task?</AlertDialogTitle>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleDelete} disabled={deleting} className="bg-destructive text-white hover:bg-destructive/80">
+                        {deleting ? "Deleting..." : "Delete"}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Cancel
               </Button>

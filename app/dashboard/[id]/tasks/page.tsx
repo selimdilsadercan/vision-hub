@@ -47,8 +47,6 @@ export default function TasksPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const tasksPerPage = 5;
   const [profileId, setProfileId] = useState<string | null>(null);
   const [taskDialogOpen, setTaskDialogOpen] = useState(false);
   const [taskDialogMode, setTaskDialogMode] = useState<"create" | "edit">("create");
@@ -168,8 +166,22 @@ export default function TasksPage() {
     await fetchTasks();
   };
 
-  const totalPages = Math.ceil(tasks.length / tasksPerPage);
-  const paginatedTasks = tasks.slice((currentPage - 1) * tasksPerPage, currentPage * tasksPerPage);
+  const handleStatusChange = async (taskId: string, newStatus: "completed" | "pending" | "in-progress") => {
+    const task = tasks.find((t) => t.id === taskId);
+    if (!task) return;
+    const is_finished = newStatus === "completed";
+    const { error } = await supabase.rpc("update_project_task", {
+      input_task_id: taskId,
+      input_is_finished: is_finished
+    });
+    if (error) {
+      toast.error("Failed to update status");
+      return;
+    }
+    setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, is_finished } : t)));
+  };
+
+  const paginatedTasks = tasks;
 
   return (
     <div className="h-full p-6 space-y-6">
@@ -191,43 +203,20 @@ export default function TasksPage() {
       {!loading && !error && (
         <div className="space-y-4">
           {paginatedTasks.map((task) => (
-            <div key={task.id} onClick={() => handleOpenEditTask(task)} className="cursor-pointer">
-              <TaskCard
-                task={{
-                  id: task.id,
-                  title: task.title,
-                  status: task.is_finished ? "completed" : "pending",
-                  assignee: task.assigned_user || null,
-                  dueDate: task.date || "",
-                  description: task.description || ""
-                }}
-                onStatusChange={() => {}}
-              />
-            </div>
+            <TaskCard
+              key={task.id}
+              task={{
+                id: task.id,
+                title: task.title,
+                status: task.is_finished ? "completed" : "pending",
+                assignee: task.assigned_user || null,
+                dueDate: task.date || "",
+                description: task.description || ""
+              }}
+              onStatusChange={handleStatusChange}
+              onCardClick={() => handleOpenEditTask(task)}
+            />
           ))}
-
-          {totalPages > 1 && (
-            <div className="flex justify-center gap-2 mt-4">
-              <Button variant="outline" size="sm" onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
-                Previous
-              </Button>
-              <div className="flex items-center gap-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <Button key={page} variant={currentPage === page ? "default" : "outline"} size="sm" onClick={() => setCurrentPage(page)}>
-                    {page}
-                  </Button>
-                ))}
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </Button>
-            </div>
-          )}
         </div>
       )}
 

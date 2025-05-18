@@ -1,10 +1,10 @@
-import { CheckCircle2, Circle, User, FileText } from "lucide-react";
+import { CheckCircle2, Circle, CircleDot, User, FileText } from "lucide-react";
 import Image from "next/image";
 
 interface Task {
   id: string;
   title: string;
-  status: "completed" | "in-progress" | "pending";
+  status: "completed" | "pending";
   assignee: {
     id: string;
     name: string;
@@ -17,15 +17,22 @@ interface Task {
 interface TaskCardProps {
   task: Task;
   onStatusChange: (taskId: string, newStatus: Task["status"]) => void;
+  onCardClick?: () => void;
 }
 
-export function TaskCard({ task, onStatusChange }: TaskCardProps) {
+export function TaskCard({ task, onStatusChange, onCardClick }: TaskCardProps) {
+  const getNextStatus = (status: Task["status"]): Task["status"] => (status === "completed" ? "pending" : "completed");
+
   return (
-    <div className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted/50 transition-colors">
+    <div className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted/50 transition-colors cursor-pointer" onClick={onCardClick}>
       <div className="flex items-center gap-4">
         <button
-          onClick={() => onStatusChange(task.id, task.status === "completed" ? "pending" : "completed")}
-          className="text-muted-foreground hover:text-primary transition-colors"
+          onClick={(e) => {
+            e.stopPropagation();
+            onStatusChange(task.id, getNextStatus(task.status));
+          }}
+          className="text-muted-foreground hover:text-primary transition-colors focus:outline-none"
+          aria-label={task.status === "completed" ? "Mark as not finished" : "Mark as finished"}
         >
           {task.status === "completed" ? <CheckCircle2 className="h-5 w-5 text-green-500" /> : <Circle className="h-5 w-5" />}
         </button>
