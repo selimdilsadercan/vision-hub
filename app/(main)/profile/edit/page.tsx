@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -84,52 +84,50 @@ export default function ProfileEditPage() {
     }
   };
 
-  return (git 
-    <Suspense fallback={<div>Loading...</div>}>
-      <div className="min-h-screen flex items-center justify-center bg-muted py-8">
-        <div className="w-full max-w-md">
-          <h1 className="text-3xl font-bold mb-8 text-center">Profili Düzenle</h1>
-          <div className="bg-white rounded-lg border shadow p-8">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Ad Soyad</Label>
-                <Input id="name" value={form.name} onChange={(e) => handleChange("name", e.target.value)} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" value={form.email} onChange={(e) => handleChange("email", e.target.value)} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="phone">Telefon Numarası</Label>
-                <Input
-                  id="phone"
-                  value={form.phone_number}
-                  onChange={(e) => handleChange("phone_number", formatPhoneNumber(e.target.value))}
-                  maxLength={14}
-                  placeholder="0555 555 55 55"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="github">GitHub URL</Label>
-                <Input
-                  id="github"
-                  value={form.github_url}
-                  onChange={(e) => handleChange("github_url", e.target.value)}
-                  placeholder="https://github.com/kullanici"
-                />
-              </div>
-              <div className="flex justify-end gap-2 pt-2">
-                <Button type="button" variant="outline" onClick={() => router.push("/profile")}>
-                  İptal
-                </Button>
-                <Button type="submit" disabled={loading}>
-                  {loading ? "Kaydediliyor..." : "Kaydet"}
-                </Button>
-              </div>
-            </form>
-          </div>
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-muted py-8">
+      <div className="w-full max-w-md">
+        <h1 className="text-3xl font-bold mb-8 text-center">Profili Düzenle</h1>
+        <div className="bg-white rounded-lg border shadow p-8">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Ad Soyad</Label>
+              <Input id="name" value={form.name} onChange={(e) => handleChange("name", e.target.value)} required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" value={form.email} onChange={(e) => handleChange("email", e.target.value)} required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="phone">Telefon Numarası</Label>
+              <Input
+                id="phone"
+                value={form.phone_number}
+                onChange={(e) => handleChange("phone_number", formatPhoneNumber(e.target.value))}
+                maxLength={14}
+                placeholder="0555 555 55 55"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="github">GitHub URL</Label>
+              <Input
+                id="github"
+                value={form.github_url}
+                onChange={(e) => handleChange("github_url", e.target.value)}
+                placeholder="https://github.com/kullanici"
+              />
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <Button type="button" variant="outline" onClick={() => router.push("/profile")}>
+                İptal
+              </Button>
+              <Button type="submit" disabled={loading}>
+                {loading ? "Kaydediliyor..." : "Kaydet"}
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
-    </Suspense>
+    </div>
   );
 }
