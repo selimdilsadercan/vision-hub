@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Home, Rocket, GraduationCap, Trophy, CalendarCheck, Globe2, UserCircle, Briefcase, Laptop, GitFork, ShieldCheck, Settings } from "lucide-react";
@@ -59,10 +59,16 @@ const navigationItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const type = searchParams.get("type");
+  const [type, setType] = useState<string | null>(null);
   const { user } = useAuth();
   const [userData, setUserData] = useState<any>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      setType(params.get("type"));
+    }
+  }, [typeof window !== "undefined" && window.location.search]);
 
   useEffect(() => {
     const fetchUserData = async () => {

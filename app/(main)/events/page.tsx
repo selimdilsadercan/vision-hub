@@ -7,9 +7,8 @@ import { useAuth } from "@/firebase/auth-context";
 import { getUserData } from "@/firebase/firestore";
 import { EventCard } from "@/components/EventCard";
 import { EventDialog } from "@/dialog/EventDialog";
-import { useSearchParams } from "next/navigation";
-import { isToday, isThisWeek, isThisMonth, isAfter, isBefore, startOfToday, endOfWeek, endOfMonth } from "date-fns";
 import { tr } from "date-fns/locale";
+import { isToday, isThisWeek, isThisMonth, isAfter, isBefore, startOfToday, endOfWeek, endOfMonth } from "date-fns";
 
 interface Event {
   id: string;
@@ -78,8 +77,13 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const { user } = useAuth();
-  const searchParams = useSearchParams();
-  const type = searchParams.get("type");
+  const [type, setType] = useState<string | null>(null);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      setType(params.get("type"));
+    }
+  }, [typeof window !== "undefined" && window.location.search]);
   const isCompetition = type === "competition";
   const pageTitle = isCompetition ? "Yarışmalar" : "Etkinlikler";
   const pageDesc = isCompetition ? "Yarışmaları keşfet ve katıl" : "Etkinlikleri keşfet ve katıl";
