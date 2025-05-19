@@ -35,9 +35,6 @@ interface CalendarItem {
   project_image_url: string | null;
   workspace_id: string | null;
   workspace_name: string | null;
-  created_by: string;
-  created_by_name: string;
-  created_by_image_url: string;
 }
 
 interface CalendarEvent extends RBCEvent {

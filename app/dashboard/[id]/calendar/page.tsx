@@ -73,7 +73,6 @@ export default function CalendarPage() {
 
   useEffect(() => {
     fetchDeadlines();
-    // eslint-disable-next-line
   }, [projectId]);
 
   // Map deadlines to calendar events

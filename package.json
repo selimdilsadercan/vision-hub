@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
-    "supabase": "supabase"
+    "generate": "ts-node scripts/generate-types.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
