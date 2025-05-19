@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Home, Briefcase, UserCircle, Earth, Compass } from "lucide-react";
+import { Home, Briefcase, UserCircle, Earth, Compass, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function MobileNavbar() {
@@ -20,14 +20,9 @@ export function MobileNavbar() {
       label: "Discover"
     },
     {
-      href: "/spaces",
-      icon: Earth,
-      label: "Spaces"
-    },
-    {
-      href: "/jobs",
-      icon: Briefcase,
-      label: "Jobs"
+      href: "/calendar",
+      icon: Calendar,
+      label: "Calendar"
     },
     {
       href: "/profile",

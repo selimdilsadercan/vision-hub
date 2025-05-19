@@ -7,9 +7,11 @@ import { toast } from "react-hot-toast";
 import { useAuth } from "@/firebase/auth-context";
 import { getUserData, type FirestoreUser } from "@/firebase/firestore";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Shield } from "lucide-react";
+import { ArrowLeft, Shield, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { TaskCard } from "@/components/tasks/TaskCard";
+import { TaskDialog } from "@/components/tasks/TaskDialog";
 
 type Workspace = {
   project_id: string;
@@ -21,16 +23,20 @@ type Workspace = {
   education_plan_name?: string;
   education_plan_mentor_name?: string;
   education_plan_mentor_image_url?: string | null;
+  workspace_type?: string;
 };
 
 type Task = {
   id: string;
-  created_at: string;
-  text: string;
-  is_finished: boolean;
-  date: string;
-  assigned_user: any;
-  task_group: string;
+  title: string;
+  status: "completed" | "pending";
+  assignee: {
+    id: string;
+    name: string;
+    image_url?: string;
+  } | null;
+  dueDate: string;
+  description?: string;
 };
 
 export default function WorkspacePage() {
@@ -41,6 +47,8 @@ export default function WorkspacePage() {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState<FirestoreUser | null>(null);
   const { user } = useAuth();
+  const [taskDialogOpen, setTaskDialogOpen] = useState(false);
+  const [taskDialogInitialValues, setTaskDialogInitialValues] = useState({ title: "", description: "", dueDate: "" });
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -73,12 +81,14 @@ export default function WorkspacePage() {
         if (workspace) {
           setWorkspace({
             ...workspace,
-            is_education_plan: !!workspace.is_education_plan
+            is_education_plan: "is_education_plan" in workspace ? !!workspace.is_education_plan : false,
+            workspace_type: workspace.workspace_type
           });
 
           // Fetch tasks for this workspace
           const { data: tasksData, error: tasksError } = await supabase.rpc("list_project_tasks", {
-            input_project_id: params.id as string
+            input_project_id: params.id as string,
+            input_profile_id: profileId
           });
 
           if (tasksError) {
@@ -87,7 +97,22 @@ export default function WorkspacePage() {
             return;
           }
 
-          setTasks(tasksData || []);
+          const formattedTasks: Task[] = (tasksData || []).map((task: any) => ({
+            id: task.id,
+            title: task.text,
+            status: task.is_finished ? "completed" : "pending",
+            assignee: task.assigned_user
+              ? {
+                  id: task.assigned_user.id,
+                  name: task.assigned_user.name,
+                  image_url: task.assigned_user.image_url
+                }
+              : null,
+            dueDate: task.date || "",
+            description: task.description || ""
+          }));
+
+          setTasks(formattedTasks);
         }
       } catch (error) {
         console.error("Unexpected error:", error);
@@ -99,6 +124,71 @@ export default function WorkspacePage() {
 
     fetchWorkspaceAndTasks();
   }, [userData, params.id]);
+
+  const handleStatusChange = async (taskId: string, newStatus: "completed" | "pending") => {
+    const task = tasks.find((t) => t.id === taskId);
+    if (!task) return;
+    const is_finished = newStatus === "completed";
+    const { error } = await supabase.rpc("update_project_task", {
+      input_task_id: taskId,
+      input_is_finished: is_finished
+    });
+    if (error) {
+      toast.error("Failed to update status");
+      return;
+    }
+    setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t)));
+  };
+
+  const handleOpenCreateTask = () => {
+    setTaskDialogInitialValues({ title: "", description: "", dueDate: "" });
+    setTaskDialogOpen(true);
+  };
+
+  const handleTaskDialogSubmit = async (data: { title: string; description: string; dueDate: string }) => {
+    if (!workspace) return;
+    const { error } = await supabase.rpc("create_workspace_task", {
+      input_workspace_id: workspace.project_id,
+      input_workspace_type: (workspace.workspace_type as "education_plan" | "project" | "personal") || "personal",
+      input_text: data.title,
+      input_date: data.dueDate || undefined,
+      input_description: data.description || undefined
+    });
+    if (error) {
+      toast.error("Failed to create task");
+      return;
+    }
+    toast.success("Task created successfully");
+    setTaskDialogOpen(false);
+    // Refresh tasks
+    // (Refactor fetch logic into a function if needed)
+    if (userData && params.id) {
+      setLoading(true);
+      const profileId = userData.profile_id;
+      const { data: tasksData, error: tasksError } = await supabase.rpc("list_project_tasks", {
+        input_project_id: params.id as string,
+        input_profile_id: profileId
+      });
+      if (!tasksError) {
+        const formattedTasks: Task[] = (tasksData || []).map((task: any) => ({
+          id: task.id,
+          title: task.text,
+          status: task.is_finished ? "completed" : "pending",
+          assignee: task.assigned_user
+            ? {
+                id: task.assigned_user.id,
+                name: task.assigned_user.name,
+                image_url: task.assigned_user.image_url
+              }
+            : null,
+          dueDate: task.date || "",
+          description: task.description || ""
+        }));
+        setTasks(formattedTasks);
+      }
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -119,22 +209,50 @@ export default function WorkspacePage() {
   }
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-6">
       <div className="flex items-center gap-4 justify-between">
         <div className="flex items-center gap-4">
           <h2 className="text-2xl font-bold ml-1">{workspace.project_name}</h2>
         </div>
-        <Button
-          variant="outline"
-          size="default"
-          onClick={() => router.push(`/dashboard/${workspace.project_id}`)}
-          className="hover:bg-primary/10 mr-1"
-          aria-label="Go to dashboard"
-        >
-          <Shield className="h-5 w-5" />
-          Admin Dashboard
-        </Button>
+        {workspace.workspace_type !== "personal" && (
+          <Button
+            variant="outline"
+            size="default"
+            onClick={() => router.push(`/dashboard/${workspace.project_id}/tasks`)}
+            className="hover:bg-primary/10 mr-1"
+            aria-label="Go to dashboard"
+          >
+            <Shield className="h-5 w-5" />
+            Admin Dashboard
+          </Button>
+        )}
+        {workspace.workspace_type === "personal" && (
+          <Button variant="outline" size="sm" onClick={handleOpenCreateTask} className="gap-1">
+            <Plus className="h-4 w-4" />
+            Add Task
+          </Button>
+        )}
       </div>
+
+      <div className="space-y-4">
+        <h3 className="text-xl font-semibold">Tasks</h3>
+        {tasks.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">No tasks found.</div>
+        ) : (
+          <div className="space-y-4">
+            {tasks.map((task) => (
+              <TaskCard key={task.id} task={task} onStatusChange={handleStatusChange} />
+            ))}
+          </div>
+        )}
+      </div>
+      <TaskDialog
+        open={taskDialogOpen}
+        onOpenChange={setTaskDialogOpen}
+        onSubmit={handleTaskDialogSubmit}
+        initialValues={taskDialogInitialValues}
+        mode="create"
+      />
     </div>
   );
 }

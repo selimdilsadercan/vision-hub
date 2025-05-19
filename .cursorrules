@@ -51,5 +51,5 @@ You are a Senior Front-End Developer and an Expert in ReactJS, NextJS, JavaScrip
 
 ### Backend
 
-- we use convex as backend
+- we use supabase as backend
 - use react-hot-toast to show users errors

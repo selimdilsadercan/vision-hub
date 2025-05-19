@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { GraduationCap, Rocket } from "lucide-react";
+import { GraduationCap, Rocket, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -10,17 +10,17 @@ interface WorkspaceCardProps {
   workspace: {
     project_id: string;
     project_name: string;
-    project_tasks: string[];
-    project_extra_text: string;
-    image_url: string;
-    is_education_plan: boolean;
+    image_url?: string;
+    workspace_type?: string;
   };
   isActive?: boolean;
 }
 
 export function WorkspaceCard({ workspace, isActive }: WorkspaceCardProps) {
-  const shouldShowExtraText = workspace.project_extra_text !== "-1";
   const href = `/home/${workspace.project_id}`;
+  const isEducation = workspace.workspace_type === "education";
+  const isProject = workspace.workspace_type === "project";
+  const isPersonal = workspace.workspace_type === "personal";
 
   return (
     <Link href={href}>
@@ -31,20 +31,25 @@ export function WorkspaceCard({ workspace, isActive }: WorkspaceCardProps) {
         )}
       >
         <div className="flex-shrink-0 w-6 h-6 relative flex items-center justify-center overflow-hidden">
-          {workspace.is_education_plan ? (
+          {isEducation ? (
             <GraduationCap className="h-5 w-5" />
-          ) : workspace.image_url ? (
-            <Image src={workspace.image_url} alt={workspace.project_name} fill className="object-contain rounded-full" sizes="24px" />
+          ) : isProject ? (
+            workspace.image_url ? (
+              <Image src={workspace.image_url} alt={workspace.project_name} fill className="object-contain rounded-full" sizes="24px" />
+            ) : (
+              <Rocket className="h-5 w-5" />
+            )
+          ) : isPersonal ? (
+            <User className="h-5 w-5" />
           ) : (
             <Rocket className="h-5 w-5" />
           )}
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="font-medium text-sm truncate">{workspace.project_name}</h3>
-          {shouldShowExtraText && <p className="text-xs truncate opacity-70">{workspace.project_extra_text}</p>}
         </div>
         <Badge variant="secondary" className={cn("text-[10px] px-1.5 py-0 h-4", isActive ? "bg-gray-200 text-primary" : "bg-muted")}>
-          {workspace.is_education_plan ? "Edu" : "Proj"}
+          {isEducation ? "Edu" : isProject ? "Project" : isPersonal ? "Personal" : ""}
         </Badge>
       </div>
     </Link>

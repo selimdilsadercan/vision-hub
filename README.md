@@ -1,9 +1,9 @@
 ## Tech Stack
 
 - **Frontend**: Next.js
-- **Backend**: Convex
+- **Backend**: Supabase
 - **Authentication**: Clerk
-- **Database**: Convex
+- **Database**: Supabases
 - **UI Framework**: Shadcn, Tailwind CSS
 - **State Management**: React Context API
 - **Hosting**: Vercel

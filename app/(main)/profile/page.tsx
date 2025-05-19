@@ -100,70 +100,6 @@ export default function ProfilePage() {
     fetchUserData();
   }, [user]);
 
-  useEffect(() => {
-    async function fetchProjects() {
-      if (activeTab === "Portfolyo" && userData) {
-        setIsLoading(true);
-        try {
-          const { data, error } = await supabase.rpc("list_user_projects", {
-            input_profile_id: userData.profile_id
-          });
-          if (error) throw error;
-          setProjects(data);
-        } catch (error) {
-          toast.error("Projeler yüklenirken bir hata oluştu");
-          console.error(error);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    }
-
-    async function fetchVideos() {
-      if (activeTab === "Eğitim" && userData) {
-        setIsLoading(true);
-        try {
-          const { data, error } = await supabase.rpc("list_user_videos", {
-            input_profile_id: userData.profile_id
-          });
-          if (error) throw error;
-          setVideos(data);
-        } catch (error) {
-          toast.error("Videolar yüklenirken bir hata oluştu");
-          console.error(error);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    }
-
-    async function fetchEvents() {
-      if (activeTab === "Etkinlik" && userData) {
-        setIsLoading(true);
-        try {
-          const { data, error } = await supabase.rpc("list_user_events", {
-            input_profile_id: userData.profile_id
-          });
-          if (error) throw error;
-          setEvents(data);
-        } catch (error) {
-          toast.error("Etkinlikler yüklenirken bir hata oluştu");
-          console.error(error);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    }
-
-    if (activeTab === "Portfolyo") {
-      fetchProjects();
-    } else if (activeTab === "Eğitim") {
-      fetchVideos();
-    } else if (activeTab === "Etkinlik") {
-      fetchEvents();
-    }
-  }, [activeTab, userData]);
-
   const handleSignOut = async () => {
     try {
       await logout();
@@ -218,117 +154,78 @@ export default function ProfilePage() {
                 <Button variant="outline" size="sm" onClick={handleSignOut} className="text-red-500 hover:text-red-600 hover:bg-red-50">
                   <LogOut className="w-4 h-4 mr-2" />
                   Çıkış Yap
-                </Button> 
+                </Button>
               </div>
             </div>
           </div>
 
-          {/* Tabs */}
-          <div className="border-b">
-            <div className="flex space-x-2">
-              {tabs.map((tab) => (
-                <TabButton key={tab} label={tab} active={activeTab === tab} onClick={() => setActiveTab(tab)} />
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium flex items-center gap-2">✨ Hakkımda</h3>
+            <p className="text-sm text-muted-foreground">
+              Etkinler ve etkinliklerle sürekli olarak kendini geliştiren, özellikle mobil uygulama ve girişimcilik konularında ilgili bir{" "}
+              {userData?.department} öğrencisiyim.
+            </p>
+          </div>
+
+          {/* User Info */}
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium flex items-center gap-2">📧 İletişim Bilgileri</h3>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full border border-gray-300" />
+                <span className="text-sm">Email: {userData?.email}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Account Info */}
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium flex items-center gap-2">🔑 Hesap Bilgileri</h3>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full border border-gray-300" />
+                <span className="text-sm">Oluşturulma Tarihi: {new Date(userData?.created_time || "").toLocaleDateString("tr-TR")}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full border border-gray-300" />
+                <span className="text-sm">Beta Kullanıcısı: {userData?.is_beta ? "Evet" : "Hayır"}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full border border-gray-300" />
+                <span className="text-sm">Admin: {userData?.is_admin ? "Evet" : "Hayır"}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Soft Skills */}
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium flex items-center gap-2">⭐ Soft Skills</h3>
+            <div className="space-y-2">
+              {softSkills.map((skill) => (
+                <SkillItem key={skill.name} {...skill} />
               ))}
             </div>
           </div>
 
-          {/* Tab Content */}
-          {activeTab === "Genel" && (
-            <div className="space-y-6">
-              {/* About Me */}
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium flex items-center gap-2">✨ Hakkımda</h3>
-                <p className="text-sm text-muted-foreground">
-                  Etkinler ve etkinliklerle sürekli olarak kendini geliştiren, özellikle mobil uygulama ve girişimcilik konularında ilgili bir{" "}
-                  {userData?.department} öğrencisiyim.
-                </p>
-              </div>
-
-              {/* User Info */}
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium flex items-center gap-2">📧 İletişim Bilgileri</h3>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full border border-gray-300" />
-                    <span className="text-sm">Email: {userData?.email}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Account Info */}
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium flex items-center gap-2">🔑 Hesap Bilgileri</h3>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full border border-gray-300" />
-                    <span className="text-sm">Oluşturulma Tarihi: {new Date(userData?.created_time || "").toLocaleDateString("tr-TR")}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full border border-gray-300" />
-                    <span className="text-sm">Beta Kullanıcısı: {userData?.is_beta ? "Evet" : "Hayır"}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full border border-gray-300" />
-                    <span className="text-sm">Admin: {userData?.is_admin ? "Evet" : "Hayır"}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Soft Skills */}
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium flex items-center gap-2">⭐ Soft Skills</h3>
-                <div className="space-y-2">
-                  {softSkills.map((skill) => (
-                    <SkillItem key={skill.name} {...skill} />
-                  ))}
-                </div>
-              </div>
-
-              {/* Technical Skills */}
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium flex items-center gap-2">⭐ Teknik Yetenekler</h3>
-                <div className="space-y-2">
-                  {technicalSkills.map((skill) => (
-                    <SkillItem key={skill.name} {...skill} />
-                  ))}
-                </div>
-              </div>
-
-              {/* Experience */}
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium flex items-center gap-2">💼 Deneyim</h3>
-                <div className="space-y-2">
-                  {experience.map((exp) => (
-                    <SkillItem key={exp.name} {...exp} />
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === "Portfolyo" && (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {projects.map((project) => (
-                <ProjectCard key={project.id} {...project} />
+          {/* Technical Skills */}
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium flex items-center gap-2">⭐ Teknik Yetenekler</h3>
+            <div className="space-y-2">
+              {technicalSkills.map((skill) => (
+                <SkillItem key={skill.name} {...skill} />
               ))}
             </div>
-          )}
+          </div>
 
-          {activeTab === "Eğitim" && (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {videos.map((video) => (
-                <VideoCard key={video.id} {...video} />
+          {/* Experience */}
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium flex items-center gap-2">💼 Deneyim</h3>
+            <div className="space-y-2">
+              {experience.map((exp) => (
+                <SkillItem key={exp.name} {...exp} />
               ))}
             </div>
-          )}
-
-          {activeTab === "Etkinlik" && (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {events.map((event) => (
-                <EventCard key={event.id} {...event} />
-              ))}
-            </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

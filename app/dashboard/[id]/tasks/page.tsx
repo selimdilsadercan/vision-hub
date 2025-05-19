@@ -37,6 +37,7 @@ interface TaskDialogInitialValues {
   description: string;
   dueDate?: string;
   assignedUserId?: string;
+  id?: string;
 }
 
 export default function TasksPage() {
@@ -181,6 +182,18 @@ export default function TasksPage() {
     setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, is_finished } : t)));
   };
 
+  const handleDeleteTask = async () => {
+    if (!editingTaskId) return;
+    const { error } = await supabase.rpc("delete_project_task", { input_task_id: editingTaskId });
+    if (error) {
+      toast.error("Failed to delete task");
+      return;
+    }
+    toast.success("Task deleted successfully");
+    setTaskDialogOpen(false);
+    await fetchTasks();
+  };
+
   const paginatedTasks = tasks;
 
   return (
@@ -201,7 +214,7 @@ export default function TasksPage() {
       {!loading && !error && tasks.length === 0 && <div className="text-center py-8 text-muted-foreground">No tasks found.</div>}
 
       {!loading && !error && (
-        <div className="space-y-4">
+        <div className="space-y-2">
           {paginatedTasks.map((task) => (
             <TaskCard
               key={task.id}
@@ -224,9 +237,13 @@ export default function TasksPage() {
         open={taskDialogOpen}
         onOpenChange={setTaskDialogOpen}
         onSubmit={handleTaskDialogSubmit}
-        initialValues={taskDialogInitialValues}
+        initialValues={{
+          ...taskDialogInitialValues,
+          id: editingTaskId || undefined
+        }}
         initialAssignedUser={taskDialogInitialAssignedUser}
         mode={taskDialogMode}
+        onDelete={handleDeleteTask}
       />
     </div>
   );

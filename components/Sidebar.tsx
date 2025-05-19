@@ -3,7 +3,21 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Home, Rocket, GraduationCap, Trophy, CalendarCheck, Globe2, UserCircle, Briefcase, Laptop, GitFork, ShieldCheck, Settings } from "lucide-react";
+import {
+  Home,
+  Rocket,
+  GraduationCap,
+  Trophy,
+  CalendarCheck,
+  Globe2,
+  UserCircle,
+  Briefcase,
+  Laptop,
+  GitFork,
+  ShieldCheck,
+  Settings,
+  Calendar
+} from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/firebase/auth-context";
 import { useEffect, useState } from "react";
@@ -14,6 +28,11 @@ const navigationItems = [
     title: "Ana Sayfa",
     icon: Home,
     href: "/home"
+  },
+  {
+    title: "Takvim",
+    icon: Calendar,
+    href: "/calendar"
   },
   {
     title: "Proje Galerisi",
@@ -39,21 +58,6 @@ const navigationItems = [
     title: "Websiteler",
     icon: Laptop,
     href: "/websites"
-  },
-  {
-    title: "Spaces",
-    icon: Globe2,
-    href: "/spaces"
-  },
-  {
-    title: "Jobs",
-    icon: Briefcase,
-    href: "/jobs"
-  },
-  {
-    title: "Skill Tree",
-    icon: GitFork,
-    href: "/skills"
   }
 ];
 

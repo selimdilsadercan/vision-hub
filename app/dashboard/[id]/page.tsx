@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, Clock, DollarSign, ListTodo, Users, Video, CheckCircle2, Circle, Plus, ArrowRight } from "lucide-react";
@@ -7,43 +8,183 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
+import { supabase } from "@/lib/supabase";
+import { toast } from "react-hot-toast";
+import { TaskDialog } from "@/components/tasks/TaskDialog";
+import { AddMemberDialog } from "@/components/dashboard/AddMemberDialog";
+import { Database } from "@/lib/supabase-types";
+
+type ProjectRole = Database["public"]["Enums"]["project_role"];
+
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  is_finished: boolean;
+  date: string;
+  assigned_user_id?: string;
+  assigned_user?: {
+    id: string;
+    name: string;
+    image_url?: string;
+  };
+}
+
+interface Member {
+  id: string;
+  name: string;
+  role: ProjectRole;
+  image_url?: string;
+  status?: "Pending" | "Active";
+}
+
+interface TaskDialogSubmitData {
+  title: string;
+  description: string;
+  dueDate: string;
+  assignedUserId?: string;
+}
+
+interface TaskDialogInitialValues {
+  title: string;
+  description: string;
+  dueDate?: string;
+  assignedUserId?: string;
+}
 
 export default function ProjectPage() {
   const params = useParams();
   const projectId = params.id as string;
 
-  // Mock data for previews
-  const tasks = [
-    { id: 1, title: "Design homepage mockup", status: "completed", assignee: "Alex" },
-    { id: 2, title: "Implement user authentication", status: "in-progress", assignee: "Sarah" },
-    { id: 3, title: "Write API documentation", status: "pending", assignee: "Mike" }
-  ];
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [members, setMembers] = useState<Member[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [taskDialogOpen, setTaskDialogOpen] = useState(false);
+  const [taskDialogMode, setTaskDialogMode] = useState<"create" | "edit">("create");
+  const [taskDialogInitialValues, setTaskDialogInitialValues] = useState<TaskDialogInitialValues>({
+    title: "",
+    description: ""
+  });
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [isAddMemberDialogOpen, setIsAddMemberDialogOpen] = useState(false);
 
-  const timelineEvents = [
-    { id: 1, title: "Project kickoff", date: "2023-06-01", completed: true },
-    { id: 2, title: "Design phase", date: "2023-06-15", completed: true },
-    { id: 3, title: "Development phase", date: "2023-07-01", completed: false },
-    { id: 4, title: "Testing phase", date: "2023-07-15", completed: false },
-    { id: 5, title: "Project launch", date: "2023-08-01", completed: false }
-  ];
+  const fetchTasks = async () => {
+    try {
+      const { data, error } = await supabase.rpc("list_project_tasks", { input_project_id: projectId });
+      if (error) {
+        toast.error("Failed to fetch tasks");
+        return;
+      }
 
-  const finances = [
-    { id: 1, title: "Design tools subscription", amount: 120, date: "2023-06-05" },
-    { id: 2, title: "Cloud hosting", amount: 250, date: "2023-06-10" },
-    { id: 3, title: "Team training", amount: 500, date: "2023-06-15" }
-  ];
+      const formattedTasks: Task[] = (data as any[]).map((task) => ({
+        id: task.id,
+        title: task.text,
+        description: task.description || "",
+        is_finished: task.is_finished,
+        date: task.date,
+        assigned_user_id: task.assigned_user_id,
+        assigned_user: task.assigned_user
+          ? {
+              id: task.assigned_user.id,
+              name: task.assigned_user.name,
+              image_url: task.assigned_user.image_url
+            }
+          : undefined
+      }));
+      setTasks(formattedTasks);
+    } catch (error) {
+      toast.error("Failed to fetch tasks");
+    }
+  };
 
-  const upcomingMeetings = [
-    { id: 1, title: "Weekly standup", date: "2023-06-20", time: "10:00 AM" },
-    { id: 2, title: "Design review", date: "2023-06-22", time: "2:00 PM" },
-    { id: 3, title: "Client presentation", date: "2023-06-25", time: "11:00 AM" }
-  ];
+  const fetchMembers = async () => {
+    try {
+      const { data, error } = await supabase.rpc("list_project_members", {
+        input_project_id: projectId
+      });
 
-  const teamMembers = [
-    { id: 1, name: "Alex Johnson", role: "Project Manager", avatar: "https://i.pravatar.cc/150?img=1" },
-    { id: 2, name: "Sarah Williams", role: "Frontend Developer", avatar: "https://i.pravatar.cc/150?img=2" },
-    { id: 3, name: "Mike Brown", role: "Backend Developer", avatar: "https://i.pravatar.cc/150?img=3" }
-  ];
+      if (error) {
+        toast.error("Failed to fetch members");
+        return;
+      }
+
+      setMembers(
+        (data as any[]).map((member) => ({
+          ...member,
+          role: member.role as ProjectRole
+        }))
+      );
+    } catch (error) {
+      toast.error("Failed to fetch members");
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      await Promise.all([fetchTasks(), fetchMembers()]);
+      setLoading(false);
+    };
+    fetchData();
+  }, [projectId]);
+
+  const handleOpenCreateTask = () => {
+    setTaskDialogMode("create");
+    setTaskDialogInitialValues({ title: "", description: "", dueDate: "", assignedUserId: "" });
+    setEditingTaskId(null);
+    setTaskDialogOpen(true);
+  };
+
+  const handleTaskDialogSubmit = async (data: TaskDialogSubmitData): Promise<void> => {
+    if (taskDialogMode === "create") {
+      const { error } = await supabase.rpc("create_project_task", {
+        input_project_id: projectId,
+        input_text: data.title,
+        input_profile_id: data.assignedUserId,
+        input_date: data.dueDate || undefined,
+        input_description: data.description || undefined
+      });
+      if (error) {
+        toast.error("Failed to create task");
+        throw new Error("Failed to create task");
+      }
+      toast.success("Task created successfully");
+    } else if (taskDialogMode === "edit") {
+      if (!editingTaskId) return;
+      const { error } = await supabase.rpc("update_project_task", {
+        input_task_id: editingTaskId,
+        input_text: data.title,
+        input_date: data.dueDate || undefined,
+        input_profile_id: data.assignedUserId || undefined,
+        input_description: data.description || undefined
+      });
+      if (error) {
+        toast.error("Failed to update task");
+        throw new Error("Failed to update task");
+      }
+      toast.success("Task updated successfully");
+    }
+    setTaskDialogOpen(false);
+    await fetchTasks();
+  };
+
+  const handleStatusChange = async (taskId: string, newStatus: "completed" | "pending" | "in-progress") => {
+    const task = tasks.find((t) => t.id === taskId);
+    if (!task) return;
+    const is_finished = newStatus === "completed";
+    const { error } = await supabase.rpc("update_project_task", {
+      input_task_id: taskId,
+      input_is_finished: is_finished
+    });
+    if (error) {
+      toast.error("Failed to update status");
+      return;
+    }
+    setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, is_finished } : t)));
+  };
+
+  const completedTasks = tasks.filter((task) => task.is_finished).length;
+  const progressPercentage = tasks.length > 0 ? Math.round((completedTasks / tasks.length) * 100) : 0;
 
   return (
     <div className="h-full p-6 space-y-8">
@@ -60,7 +201,7 @@ export default function ProjectPage() {
                 <CardDescription>Project tasks and progress</CardDescription>
               </div>
             </div>
-            <Link href={`/projects/${projectId}/tasks`}>
+            <Link href={`/dashboard/${projectId}/tasks`}>
               <Button variant="ghost" size="sm" className="text-blue-600">
                 View all <ArrowRight className="ml-1 h-4 w-4" />
               </Button>
@@ -70,226 +211,24 @@ export default function ProjectPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Overall Progress</span>
-                <span className="text-sm text-muted-foreground">60%</span>
+                <span className="text-sm text-muted-foreground">{progressPercentage}%</span>
               </div>
-              <Progress value={60} className="h-2" />
+              <Progress value={progressPercentage} className="h-2" />
 
               <div className="space-y-2">
-                {tasks.map((task) => (
+                {tasks.slice(0, 3).map((task) => (
                   <div key={task.id} className="flex items-center justify-between p-2 rounded-md hover:bg-gray-50">
                     <div className="flex items-center gap-2">
-                      {task.status === "completed" ? (
-                        <CheckCircle2 className="h-4 w-4 text-green-500" />
-                      ) : task.status === "in-progress" ? (
-                        <Circle className="h-4 w-4 text-blue-500" />
-                      ) : (
-                        <Circle className="h-4 w-4 text-gray-300" />
-                      )}
+                      {task.is_finished ? <CheckCircle2 className="h-4 w-4 text-green-500" /> : <Circle className="h-4 w-4 text-gray-300" />}
                       <span className="text-sm">{task.title}</span>
                     </div>
-                    <span className="text-xs text-muted-foreground">{task.assignee}</span>
+                    <span className="text-xs text-muted-foreground">{task.assigned_user?.name || "Unassigned"}</span>
                   </div>
                 ))}
               </div>
 
-              <Button variant="outline" size="sm" className="w-full">
+              <Button variant="outline" size="sm" className="w-full" onClick={handleOpenCreateTask}>
                 <Plus className="mr-2 h-4 w-4" /> Add Task
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Timeline Preview */}
-        <Card className="h-full">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-purple-50">
-                <Clock className="h-5 w-5 text-purple-600" />
-              </div>
-              <div>
-                <CardTitle>Timeline</CardTitle>
-                <CardDescription>Project milestones and deadlines</CardDescription>
-              </div>
-            </div>
-            <Link href={`/projects/${projectId}/timeline`}>
-              <Button variant="ghost" size="sm" className="text-purple-600">
-                View all <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
-            </Link>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="relative">
-                <div className="absolute left-2.5 top-0 h-full w-px bg-gray-200"></div>
-                <div className="space-y-4">
-                  {timelineEvents.map((event) => (
-                    <div key={event.id} className="relative pl-8">
-                      <div
-                        className={`absolute left-0 top-1 h-5 w-5 rounded-full border-2 ${
-                          event.completed ? "bg-purple-600 border-purple-600" : "bg-white border-gray-300"
-                        }`}
-                      ></div>
-                      <div className="text-sm">
-                        <div className="font-medium">{event.title}</div>
-                        <div className="text-muted-foreground">{new Date(event.date).toLocaleDateString()}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <Button variant="outline" size="sm" className="w-full">
-                <Plus className="mr-2 h-4 w-4" /> Add Milestone
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Finance Preview */}
-        <Card className="h-full">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-green-50">
-                <DollarSign className="h-5 w-5 text-green-600" />
-              </div>
-              <div>
-                <CardTitle>Finance</CardTitle>
-                <CardDescription>Project expenses and budget</CardDescription>
-              </div>
-            </div>
-            <Link href={`/projects/${projectId}/finance`}>
-              <Button variant="ghost" size="sm" className="text-green-600">
-                View all <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
-            </Link>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-3 bg-green-50 rounded-lg">
-                  <div className="text-sm text-green-600 font-medium">Total Budget</div>
-                  <div className="text-2xl font-bold">$10,000</div>
-                </div>
-                <div className="p-3 bg-green-50 rounded-lg">
-                  <div className="text-sm text-green-600 font-medium">Spent</div>
-                  <div className="text-2xl font-bold">$870</div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="text-sm font-medium">Recent Expenses</div>
-                {finances.map((expense) => (
-                  <div key={expense.id} className="flex items-center justify-between p-2 rounded-md hover:bg-gray-50">
-                    <div>
-                      <div className="text-sm">{expense.title}</div>
-                      <div className="text-xs text-muted-foreground">{new Date(expense.date).toLocaleDateString()}</div>
-                    </div>
-                    <div className="text-sm font-medium">${expense.amount}</div>
-                  </div>
-                ))}
-              </div>
-
-              <Button variant="outline" size="sm" className="w-full">
-                <Plus className="mr-2 h-4 w-4" /> Add Expense
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Calendar Preview */}
-        <Card className="h-full">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-orange-50">
-                <Calendar className="h-5 w-5 text-orange-600" />
-              </div>
-              <div>
-                <CardTitle>Calendar</CardTitle>
-                <CardDescription>Project events and deadlines</CardDescription>
-              </div>
-            </div>
-            <Link href={`/projects/${projectId}/calendar`}>
-              <Button variant="ghost" size="sm" className="text-orange-600">
-                View all <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
-            </Link>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="grid grid-cols-7 gap-1 text-center text-xs">
-                {["S", "M", "T", "W", "T", "F", "S"].map((day, i) => (
-                  <div key={i} className="p-1">
-                    {day}
-                  </div>
-                ))}
-              </div>
-
-              <div className="grid grid-cols-7 gap-1">
-                {Array.from({ length: 35 }).map((_, i) => {
-                  const isToday = i === 15;
-                  const hasEvent = i === 15 || i === 18 || i === 22;
-
-                  return (
-                    <div
-                      key={i}
-                      className={`aspect-square flex items-center justify-center text-xs rounded-md ${
-                        isToday ? "bg-orange-100 text-orange-600 font-medium" : ""
-                      } ${hasEvent ? "relative" : ""}`}
-                    >
-                      {i + 1}
-                      {hasEvent && <div className="absolute bottom-1 w-1 h-1 rounded-full bg-orange-500"></div>}
-                    </div>
-                  );
-                })}
-              </div>
-
-              <Button variant="outline" size="sm" className="w-full">
-                <Plus className="mr-2 h-4 w-4" /> Add Event
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Meetings Preview */}
-        <Card className="h-full">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-red-50">
-                <Video className="h-5 w-5 text-red-600" />
-              </div>
-              <div>
-                <CardTitle>Meetings</CardTitle>
-                <CardDescription>Upcoming and past meetings</CardDescription>
-              </div>
-            </div>
-            <Link href={`/projects/${projectId}/meetings`}>
-              <Button variant="ghost" size="sm" className="text-red-600">
-                View all <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
-            </Link>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="text-sm font-medium">Upcoming Meetings</div>
-
-              <div className="space-y-2">
-                {upcomingMeetings.map((meeting) => (
-                  <div key={meeting.id} className="flex items-center justify-between p-2 rounded-md hover:bg-gray-50">
-                    <div>
-                      <div className="text-sm">{meeting.title}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {new Date(meeting.date).toLocaleDateString()} at {meeting.time}
-                      </div>
-                    </div>
-                    <Button variant="outline" size="sm">
-                      Join
-                    </Button>
-                  </div>
-                ))}
-              </div>
-
-              <Button variant="outline" size="sm" className="w-full">
-                <Plus className="mr-2 h-4 w-4" /> Schedule Meeting
               </Button>
             </div>
           </CardContent>
@@ -307,7 +246,7 @@ export default function ProjectPage() {
                 <CardDescription>Project members and roles</CardDescription>
               </div>
             </div>
-            <Link href={`/projects/${projectId}/members`}>
+            <Link href={`/dashboard/${projectId}/members`}>
               <Button variant="ghost" size="sm" className="text-indigo-600">
                 View all <ArrowRight className="ml-1 h-4 w-4" />
               </Button>
@@ -317,14 +256,20 @@ export default function ProjectPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Team Members</span>
-                <span className="text-sm text-muted-foreground">{teamMembers.length} members</span>
+                <span className="text-sm text-muted-foreground">{members.length} members</span>
               </div>
 
               <div className="space-y-2">
-                {teamMembers.map((member) => (
+                {members.slice(0, 3).map((member) => (
                   <div key={member.id} className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-50">
                     <div className="w-8 h-8 rounded-full overflow-hidden">
-                      <Image width={32} height={32} src={member.avatar} alt={member.name} className="w-full h-full object-cover" />
+                      {member.image_url ? (
+                        <Image width={32} height={32} src={member.image_url} alt={member.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500 text-xs">
+                          {member.name.substring(0, 2).toUpperCase()}
+                        </div>
+                      )}
                     </div>
                     <div>
                       <div className="text-sm font-medium">{member.name}</div>
@@ -334,13 +279,23 @@ export default function ProjectPage() {
                 ))}
               </div>
 
-              <Button variant="outline" size="sm" className="w-full">
+              <Button variant="outline" size="sm" className="w-full" onClick={() => setIsAddMemberDialogOpen(true)}>
                 <Plus className="mr-2 h-4 w-4" /> Invite Member
               </Button>
             </div>
           </CardContent>
         </Card>
       </div>
+
+      <TaskDialog
+        open={taskDialogOpen}
+        onOpenChange={setTaskDialogOpen}
+        onSubmit={handleTaskDialogSubmit}
+        initialValues={taskDialogInitialValues}
+        mode={taskDialogMode}
+      />
+
+      <AddMemberDialog isOpen={isAddMemberDialogOpen} onClose={() => setIsAddMemberDialogOpen(false)} projectId={projectId} onSuccess={fetchMembers} />
     </div>
   );
 }

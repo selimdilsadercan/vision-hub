@@ -35,6 +35,7 @@ interface TaskDialogProps {
     description: string;
     dueDate?: string;
     assignedUserId?: string;
+    id?: string;
   };
   initialAssignedUser?: {
     id: string;
@@ -121,19 +122,10 @@ export function TaskDialog({ open, onOpenChange, onSubmit, initialValues, initia
     if (!initialValues || !onDelete) return;
     setDeleting(true);
     try {
-      const taskId = (initialValues as any).id;
-      if (!taskId) throw new Error("Task id is missing");
-      const { error } = await supabase.rpc("delete_project_task", { input_task_id: taskId });
-      if (error) {
-        toast.error("Failed to delete task");
-        setDeleting(false);
-        return;
-      }
-      toast.success("Task deleted successfully");
+      await onDelete();
       setDeleting(false);
       setShowDeleteConfirm(false);
       onOpenChange(false);
-      onDelete();
     } catch (err) {
       toast.error("Failed to delete task");
       setDeleting(false);

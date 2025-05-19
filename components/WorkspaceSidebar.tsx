@@ -14,14 +14,9 @@ import { cn } from "@/lib/utils";
 type Workspace = {
   project_id: string;
   project_name: string;
-  project_tasks: string[];
-  project_extra_text: string;
-  image_url: string;
-  is_education_plan: boolean;
-  education_plan_id?: string;
-  education_plan_name?: string;
-  education_plan_mentor_name?: string;
-  education_plan_mentor_image_url?: string | null;
+  image_url?: string;
+  is_education_plan?: boolean;
+  workspace_type?: string;
 };
 
 export function WorkspaceSidebar() {
@@ -50,7 +45,6 @@ export function WorkspaceSidebar() {
         setLoading(true);
         const profileId = userData.profile_id;
 
-        console.log("profileId", profileId);
         const { data: workspacesData, error: workspacesError } = await supabase.rpc("list_user_workspaces", {
           input_profile_id: profileId
         });
@@ -61,20 +55,13 @@ export function WorkspaceSidebar() {
           return;
         }
 
-        const { error: projectsError } = await supabase.rpc("list_projects", {
-          input_profile_id: profileId
-        });
-
-        if (projectsError) {
-          console.error("Error fetching projects:", projectsError);
-          toast.error("Failed to fetch projects");
-          return;
-        }
-
         setWorkspaces(
-          workspacesData.map((w: any) => ({
-            ...w,
-            is_education_plan: !!w.is_education_plan
+          (workspacesData || []).map((w: any) => ({
+            project_id: w.project_id || w.id || "",
+            project_name: w.project_name || w.name || "",
+            image_url: w.image_url || w.project_image_url || "",
+            is_education_plan: !!w.is_education_plan,
+            workspace_type: w.workspace_type || ""
           }))
         );
       } catch (error) {
