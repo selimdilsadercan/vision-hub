@@ -115,14 +115,20 @@ export default function EventsPage() {
 
       try {
         setLoading(true);
-        const firestoreUser = await getUserData(user.uid);
 
-        if (!firestoreUser) {
+        // Get user profile using RPC function
+        const { data: profileData, error: profileError } = await supabase.rpc("get_profile_by_uid", { input_uid: user.uid });
+
+        if (profileError) {
+          throw profileError;
+        }
+
+        if (!profileData || profileData.length === 0) {
           toast.error("User data not found");
           return;
         }
 
-        setIsAdmin(firestoreUser.is_admin);
+        setIsAdmin(profileData[0].is_admin ?? false);
 
         let eventTypes: ("other" | "bootcamp" | "ideathon" | "hackathon" | "meetup" | "workshop")[];
         if (type === "competition") {

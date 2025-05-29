@@ -20,6 +20,7 @@ import {
   AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 import Image from "next/image";
+import { TiptapEditor } from "@/components/editor/TiptapEditor";
 
 interface StoryDetailDialogProps {
   storyId: string | null;
@@ -30,18 +31,17 @@ interface StoryDetailDialogProps {
 
 interface StoryDetail {
   id: string;
+  name: string;
+  description: string;
+  status: "Todo" | "InProgress" | "Done";
+  start_date: string;
+  end_date: string;
   created_at: string;
-  title: string;
-  items: string[];
-  item_images: string[];
   story_users: {
-    id: string;
-    name: string;
-    image_url?: string;
+    id: string | null;
+    name: string | null;
+    image_url: string | null;
   }[];
-  status: "DONE" | "IN_PROGRESS" | "TODO";
-  start_date?: string;
-  end_date?: string;
 }
 
 export function StoryDetailDialog({ storyId, open, onOpenChange, onStoryUpdate }: StoryDetailDialogProps) {
@@ -51,6 +51,7 @@ export function StoryDetailDialog({ storyId, open, onOpenChange, onStoryUpdate }
   const [editedTitle, setEditedTitle] = useState("");
   const [editedStartDate, setEditedStartDate] = useState("");
   const [editedEndDate, setEditedEndDate] = useState("");
+  const [editedDescription, setEditedDescription] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const fetchStoryDetails = useCallback(async () => {
@@ -68,8 +69,8 @@ export function StoryDetailDialog({ storyId, open, onOpenChange, onStoryUpdate }
         return;
       }
 
-      // Cast the data to the correct type
-      const storyData = data as unknown as StoryDetail;
+      // Use the first item from the array
+      const storyData = Array.isArray(data) ? data[0] : data;
       setStory(storyData);
     } catch (error) {
       console.error("Unexpected error:", error);
@@ -89,14 +90,16 @@ export function StoryDetailDialog({ storyId, open, onOpenChange, onStoryUpdate }
       setEditedTitle("");
       setEditedStartDate("");
       setEditedEndDate("");
+      setEditedDescription("");
     }
   }, [storyId, open, fetchStoryDetails]);
 
   useEffect(() => {
     if (story) {
-      setEditedTitle(story.title);
-      setEditedStartDate(story.start_date ? new Date(story.start_date).toISOString().split("T")[0] : "");
-      setEditedEndDate(story.end_date ? new Date(story.end_date).toISOString().split("T")[0] : "");
+      setEditedTitle(story.name);
+      setEditedStartDate(story.start_date);
+      setEditedEndDate(story.end_date);
+      setEditedDescription(story.description || "");
     }
   }, [story]);
 
@@ -107,8 +110,9 @@ export function StoryDetailDialog({ storyId, open, onOpenChange, onStoryUpdate }
       const { error } = await supabase.rpc("update_story", {
         input_story_id: story.id,
         input_story_name: editedTitle,
-        input_start_date: editedStartDate || undefined,
-        input_end_date: editedEndDate || undefined
+        input_start_date: editedStartDate,
+        input_end_date: editedEndDate,
+        input_description: editedDescription
       });
 
       if (error) {
@@ -119,9 +123,10 @@ export function StoryDetailDialog({ storyId, open, onOpenChange, onStoryUpdate }
 
       setStory({
         ...story,
-        title: editedTitle,
+        name: editedTitle,
         start_date: editedStartDate,
-        end_date: editedEndDate
+        end_date: editedEndDate,
+        description: editedDescription
       });
       setIsEditing(false);
       toast.success("Story updated successfully");
@@ -162,9 +167,9 @@ export function StoryDetailDialog({ storyId, open, onOpenChange, onStoryUpdate }
           <DialogHeader>
             <div className="flex items-center justify-between">
               {isEditing ? (
-                <Input value={editedTitle} onChange={(e) => setEditedTitle(e.target.value)} className="text-xl font-bold" placeholder="Story title" />
+                <Input value={editedTitle} onChange={(e) => setEditedTitle(e.target.value)} className="text-xl font-bold" placeholder="Story name" />
               ) : (
-                <DialogTitle className="text-xl font-bold">{loading ? "Loading..." : story?.title || "Story Not Found"}</DialogTitle>
+                <DialogTitle className="text-xl font-bold">{loading ? "Loading..." : story?.name || "Story Not Found"}</DialogTitle>
               )}
               <div className="flex items-center gap-2">
                 {!loading && story && (
@@ -205,6 +210,15 @@ export function StoryDetailDialog({ storyId, open, onOpenChange, onStoryUpdate }
                   <Calendar className="h-4 w-4" />
                   <span>Created: {format(new Date(story.created_at), "MMM d, yyyy")}</span>
                 </div>
+                {story.description &&
+                  (!isEditing ? (
+                    <div className="prose max-w-none text-muted-foreground text-sm col-span-2" dangerouslySetInnerHTML={{ __html: story.description }} />
+                  ) : null)}
+                {isEditing && (
+                  <div className="my-2">
+                    <TiptapEditor content={editedDescription} onChange={setEditedDescription} placeholder="Enter story description..." />
+                  </div>
+                )}
                 {isEditing ? (
                   <>
                     <div className="flex items-center gap-2">
@@ -236,16 +250,16 @@ export function StoryDetailDialog({ storyId, open, onOpenChange, onStoryUpdate }
                 <h4 className="font-medium">Assigned Users</h4>
                 {story.story_users && story.story_users.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
-                    {story.story_users.map((user) => (
-                      <div key={user.id} className="flex items-center gap-2 p-2 rounded-md bg-secondary/30">
+                    {story.story_users.map((user, idx) => (
+                      <div key={user.id ?? idx} className="flex items-center gap-2 p-2 rounded-md bg-secondary/30">
                         {user.image_url ? (
-                          <Image width={24} height={24} src={user.image_url} alt={user.name} className="h-6 w-6 rounded-full object-cover" />
+                          <Image width={24} height={24} src={user.image_url} alt={user.name ?? "User"} className="h-6 w-6 rounded-full object-cover" />
                         ) : (
                           <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center">
                             <User className="h-3 w-3 text-primary" />
                           </div>
                         )}
-                        <span className="text-sm">{user.name}</span>
+                        <span className="text-sm">{user.name ?? "Unknown"}</span>
                       </div>
                     ))}
                   </div>

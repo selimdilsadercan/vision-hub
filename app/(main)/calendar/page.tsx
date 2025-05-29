@@ -14,7 +14,7 @@ import { useAuth } from "@/firebase/auth-context";
 import { getUserData } from "@/firebase/firestore";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
-const locales = { "en-US": enUS };
+const locales = { "en-US": enUS };  
 const localizer = dateFnsLocalizer({
   format,
   parse,

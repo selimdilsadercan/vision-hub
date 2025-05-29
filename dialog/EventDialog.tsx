@@ -16,6 +16,7 @@ import { toast } from "react-hot-toast";
 import { useAuth } from "@/firebase/auth-context";
 import { getUserData } from "@/firebase/firestore";
 import Image from "next/image";
+import { ImageUpload } from "@/components/ui/image-upload";
 
 export function EventDialog({
   mode = "create",
@@ -180,19 +181,15 @@ export function EventDialog({
           <div className="bg-white rounded-lg border p-4">
             <div className="flex gap-4">
               <div className="relative w-[100px] h-[100px] rounded-xl overflow-hidden bg-muted">
-                {imageUrl ? (
-                  <Image unoptimized src={imageUrl} alt="Event" fill className="object-cover pointer-events-none select-none" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2ZM3 17l6-6a2 2 0 0 1 2.83 0l7.17 7M8 11a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
-                      />
-                    </svg>
-                  </div>
-                )}
+                <ImageUpload
+                  value={imageUrl}
+                  onChange={setImageUrl}
+                  onRemove={() => setImageUrl("")}
+                  compact
+                  storagePath="events"
+                  eventId={eventId || "temp"}
+                  className="mx-auto"
+                />
               </div>
               <div className="flex-1 min-w-0 space-y-1">
                 <div className="font-bold text-base line-clamp-1">{formData.name || "Başlık"}</div>
@@ -206,10 +203,6 @@ export function EventDialog({
           </div>
 
           <div className="space-y-4">
-            <div className="space-y-2">
-              <Label>Image URL</Label>
-              <Input placeholder="Enter image URL" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} type="url" autoComplete="off" />
-            </div>
             <div className="space-y-2">
               <Label>Title</Label>
               <Input placeholder="Enter event title" value={formData.name} onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))} />

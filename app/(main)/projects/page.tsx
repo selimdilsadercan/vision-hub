@@ -31,12 +31,16 @@ export default function ProjectsPage() {
   const [userData, setUserData] = useState<FirestoreUser | null>(null);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const { user } = useAuth();
+  const [supabaseIsAdmin, setSupabaseIsAdmin] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
       if (!user) return;
       const firestoreUser = await getUserData(user.uid);
       setUserData(firestoreUser);
+      // Fetch Supabase profile is_admin
+      const { data, error } = await supabase.from("profile").select("is_admin").eq("uid", user.uid).single();
+      if (data) setSupabaseIsAdmin(!!data.is_admin);
     };
 
     fetchUserData();
@@ -143,11 +147,13 @@ export default function ProjectsPage() {
 
   const filteredProjects = projects.filter((project) => project.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
+  const isAdmin = userData?.is_admin || supabaseIsAdmin;
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Projects</h1>
-        {userData?.is_admin && (
+        {isAdmin && (
           <Button onClick={() => setIsCreateDialogOpen(true)}>
             <Plus className="mr-2 h-4 w-4" /> Create Project
           </Button>
@@ -198,7 +204,7 @@ export default function ProjectsPage() {
                     {project.description ? <span className="line-clamp-2">{project.description}</span> : <span>{project.is_admin ? "Admin" : "Member"}</span>}
                   </CardDescription>
                 </CardHeader>
-                {userData?.is_admin && project.is_admin && (
+                {isAdmin && project.is_admin && (
                   <Button
                     variant="ghost"
                     size="icon"

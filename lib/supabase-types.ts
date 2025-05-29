@@ -418,6 +418,42 @@ export type Database = {
         }
         Relationships: []
       }
+      event_participant: {
+        Row: {
+          created_at: string
+          event_id: string | null
+          id: string
+          profile_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_id?: string | null
+          id?: string
+          profile_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_id?: string | null
+          id?: string
+          profile_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_participant_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "event"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_participant_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       feature: {
         Row: {
           created_at: string
@@ -1045,6 +1081,7 @@ export type Database = {
       story: {
         Row: {
           created_at: string
+          description: string | null
           end_date: string | null
           id: string
           index: number | null
@@ -1056,6 +1093,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          description?: string | null
           end_date?: string | null
           id?: string
           index?: number | null
@@ -1067,6 +1105,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          description?: string | null
           end_date?: string | null
           id?: string
           index?: number | null
@@ -1164,6 +1203,7 @@ export type Database = {
           personal_workspace_id: string | null
           profile_id: string | null
           project_id: string | null
+          story_id: string | null
           text: string | null
           updated_at: string | null
         }
@@ -1176,6 +1216,7 @@ export type Database = {
           personal_workspace_id?: string | null
           profile_id?: string | null
           project_id?: string | null
+          story_id?: string | null
           text?: string | null
           updated_at?: string | null
         }
@@ -1188,6 +1229,7 @@ export type Database = {
           personal_workspace_id?: string | null
           profile_id?: string | null
           project_id?: string | null
+          story_id?: string | null
           text?: string | null
           updated_at?: string | null
         }
@@ -1211,6 +1253,13 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "project"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "task_story_id_fkey"
+            columns: ["story_id"]
+            isOneToOne: false
+            referencedRelation: "story"
             referencedColumns: ["id"]
           },
         ]
@@ -1621,6 +1670,10 @@ export type Database = {
         }
         Returns: string
       }
+      create_event_participant: {
+        Args: { input_event_id: string; input_profile_id: string }
+        Returns: string
+      }
       create_microskill: {
         Args: {
           input_skill_id: string
@@ -1732,6 +1785,10 @@ export type Database = {
         Args: { event_id: string }
         Returns: boolean
       }
+      delete_event_participant: {
+        Args: { input_id: string }
+        Returns: undefined
+      }
       delete_project_invite: {
         Args: { input_invite_id: string }
         Returns: Json
@@ -1773,7 +1830,7 @@ export type Database = {
         Returns: Json
       }
       get_event: {
-        Args: { event_id: string }
+        Args: { input_event_id: string }
         Returns: {
           id: string
           name: string
@@ -1787,6 +1844,7 @@ export type Database = {
           created_at: string
           event_type: Database["public"]["Enums"]["event_type"]
           link: string
+          participants: Database["public"]["CompositeTypes"]["event_participant_type"][]
         }[]
       }
       get_job: {
@@ -1853,7 +1911,16 @@ export type Database = {
       }
       get_story: {
         Args: { input_story_id: string }
-        Returns: Json
+        Returns: {
+          id: string
+          name: string
+          description: string
+          status: Database["public"]["Enums"]["story_status"]
+          start_date: string
+          end_date: string
+          created_at: string
+          story_users: Database["public"]["CompositeTypes"]["assigned_user_type"][]
+        }[]
       }
       get_user_calendar: {
         Args: {
@@ -2194,9 +2261,6 @@ export type Database = {
           id: string
           created_at: string
           title: string
-          items: string[]
-          item_images: string[]
-          story_users: Json
           start_date: string
           end_date: string
           status: Database["public"]["Enums"]["story_status"]
@@ -2229,6 +2293,13 @@ export type Database = {
           date: string
           assigned_user: Database["public"]["CompositeTypes"]["assigned_user_type"]
           task_group: string
+        }[]
+      }
+      list_project_tasks_with_stories: {
+        Args: { input_project_id: string; input_profile_id?: string }
+        Returns: {
+          story_tasks: Database["public"]["CompositeTypes"]["story_task_group_type"][]
+          unassigned_tasks: Database["public"]["CompositeTypes"]["task_type"][]
         }[]
       }
       list_project_transactions: {
@@ -2519,6 +2590,7 @@ export type Database = {
           input_profile_id?: string
           input_is_finished?: boolean
           input_description?: string
+          input_story_id?: string
         }
         Returns: undefined
       }
@@ -2526,6 +2598,7 @@ export type Database = {
         Args: {
           input_story_id: string
           input_story_name?: string
+          input_description?: string
           input_start_date?: string
           input_end_date?: string
           input_status?: Database["public"]["Enums"]["story_status"]
@@ -2616,11 +2689,33 @@ export type Database = {
           | Database["public"]["CompositeTypes"]["education_plan_enrolled_user"][]
           | null
       }
+      event_participant_type: {
+        id: string | null
+        profile_id: string | null
+        profile_name: string | null
+        profile_image_url: string | null
+      }
       project_info_type: {
         id: string | null
         name: string | null
         is_active: boolean | null
         image_url: string | null
+      }
+      story_task_group_type: {
+        story_id: string | null
+        story_name: string | null
+        story_status: Database["public"]["Enums"]["story_status"] | null
+        tasks: Database["public"]["CompositeTypes"]["task_type"][] | null
+      }
+      task_type: {
+        id: string | null
+        text: string | null
+        description: string | null
+        is_finished: boolean | null
+        date: string | null
+        assigned_user:
+          | Database["public"]["CompositeTypes"]["assigned_user_type"]
+          | null
       }
     }
   }
