@@ -145,23 +145,9 @@ export default function WorkspacePage() {
     setTaskDialogOpen(true);
   };
 
-  const handleTaskDialogSubmit = async (data: { title: string; description: string; dueDate: string }) => {
-    if (!workspace) return;
-    const { error } = await supabase.rpc("create_workspace_task", {
-      input_workspace_id: workspace.project_id,
-      input_workspace_type: (workspace.workspace_type as "education_plan" | "project" | "personal") || "personal",
-      input_text: data.title,
-      input_date: data.dueDate || undefined,
-      input_description: data.description || undefined
-    });
-    if (error) {
-      toast.error("Failed to create task");
-      return;
-    }
-    toast.success("Task created successfully");
+  const handleTaskDialogSuccess = async () => {
     setTaskDialogOpen(false);
     // Refresh tasks
-    // (Refactor fetch logic into a function if needed)
     if (userData && params.id) {
       setLoading(true);
       const profileId = userData.profile_id;
@@ -249,9 +235,10 @@ export default function WorkspacePage() {
       <TaskDialog
         open={taskDialogOpen}
         onOpenChange={setTaskDialogOpen}
-        onSubmit={handleTaskDialogSubmit}
+        onSuccess={handleTaskDialogSuccess}
         initialValues={taskDialogInitialValues}
         mode="create"
+        projectId={workspace.project_id}
       />
     </div>
   );

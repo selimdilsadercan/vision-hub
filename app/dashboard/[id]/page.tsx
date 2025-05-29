@@ -135,35 +135,7 @@ export default function ProjectPage() {
     setTaskDialogOpen(true);
   };
 
-  const handleTaskDialogSubmit = async (data: TaskDialogSubmitData): Promise<void> => {
-    if (taskDialogMode === "create") {
-      const { error } = await supabase.rpc("create_project_task", {
-        input_project_id: projectId,
-        input_text: data.title,
-        input_profile_id: data.assignedUserId,
-        input_date: data.dueDate || undefined,
-        input_description: data.description || undefined
-      });
-      if (error) {
-        toast.error("Failed to create task");
-        throw new Error("Failed to create task");
-      }
-      toast.success("Task created successfully");
-    } else if (taskDialogMode === "edit") {
-      if (!editingTaskId) return;
-      const { error } = await supabase.rpc("update_project_task", {
-        input_task_id: editingTaskId,
-        input_text: data.title,
-        input_date: data.dueDate || undefined,
-        input_profile_id: data.assignedUserId || undefined,
-        input_description: data.description || undefined
-      });
-      if (error) {
-        toast.error("Failed to update task");
-        throw new Error("Failed to update task");
-      }
-      toast.success("Task updated successfully");
-    }
+  const handleTaskDialogSuccess = async () => {
     setTaskDialogOpen(false);
     await fetchTasks();
   };
@@ -290,9 +262,10 @@ export default function ProjectPage() {
       <TaskDialog
         open={taskDialogOpen}
         onOpenChange={setTaskDialogOpen}
-        onSubmit={handleTaskDialogSubmit}
+        onSuccess={handleTaskDialogSuccess}
         initialValues={taskDialogInitialValues}
         mode={taskDialogMode}
+        projectId={projectId}
       />
 
       <AddMemberDialog isOpen={isAddMemberDialogOpen} onClose={() => setIsAddMemberDialogOpen(false)} projectId={projectId} onSuccess={fetchMembers} />
