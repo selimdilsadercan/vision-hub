@@ -6,7 +6,7 @@ import { Database } from "@/lib/supabase-types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ChevronLeft, ChevronRight, Search, LayoutGrid, Table as TableIcon, Pencil, Shield } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, LayoutGrid, Table as TableIcon, Pencil, Shield, Plus } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -28,6 +28,14 @@ interface User {
 }
 
 interface EditUserForm {
+  name: string;
+  email: string;
+  phone_number: string;
+  github_url: string;
+  is_admin: boolean;
+}
+
+interface CreateUserForm {
   name: string;
   email: string;
   phone_number: string;
@@ -61,7 +69,15 @@ export default function AdminUsersPage() {
     github_url: "",
     is_admin: false
   });
+  const [createForm, setCreateForm] = useState<CreateUserForm>({
+    name: "",
+    email: "",
+    phone_number: "",
+    github_url: "",
+    is_admin: false
+  });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const pageSize = 12;
   const supabase = createClientComponentClient<Database>();
   const router = useRouter();
@@ -148,6 +164,39 @@ export default function AdminUsersPage() {
     }
   };
 
+  const handleCreateProfile = async () => {
+    if (!createForm.name.trim() || !createForm.email.trim()) {
+      toast.error("Name and email are required");
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase.rpc("create_profile", {
+        input_name: createForm.name.trim(),
+        input_email: createForm.email.trim(),
+        input_phone_number: createForm.phone_number || undefined,
+        input_github_url: createForm.github_url || undefined,
+        input_is_admin: createForm.is_admin
+      });
+
+      if (error) throw error;
+
+      toast.success("Profile created successfully");
+      setIsCreateDialogOpen(false);
+      setCreateForm({
+        name: "",
+        email: "",
+        phone_number: "",
+        github_url: "",
+        is_admin: false
+      });
+      fetchUsers(); // Refresh the list
+    } catch (error) {
+      console.error("Error creating profile:", error);
+      toast.error("Failed to create profile");
+    }
+  };
+
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="flex justify-between items-center mb-6">
@@ -168,6 +217,78 @@ export default function AdminUsersPage() {
               Search
             </Button>
           </form>
+          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="h-4 w-4 mr-2" />
+                Create Profile
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create New Profile</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor="create-name">Name *</Label>
+                  <Input 
+                    id="create-name" 
+                    value={createForm.name} 
+                    onChange={(e) => setCreateForm((prev) => ({ ...prev, name: e.target.value }))} 
+                    placeholder="Enter full name"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="create-email">Email *</Label>
+                  <Input 
+                    id="create-email" 
+                    type="email" 
+                    value={createForm.email} 
+                    onChange={(e) => setCreateForm((prev) => ({ ...prev, email: e.target.value }))} 
+                    placeholder="Enter email address"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="create-phone">Phone Number</Label>
+                  <Input
+                    id="create-phone"
+                    value={createForm.phone_number}
+                    onChange={(e) =>
+                      setCreateForm((prev) => ({
+                        ...prev,
+                        phone_number: formatPhoneNumber(e.target.value)
+                      }))
+                    }
+                    maxLength={14}
+                    placeholder="0555 555 55 55"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="create-github">GitHub URL</Label>
+                  <Input 
+                    id="create-github" 
+                    value={createForm.github_url} 
+                    onChange={(e) => setCreateForm((prev) => ({ ...prev, github_url: e.target.value }))} 
+                    placeholder="https://github.com/username"
+                  />
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Switch 
+                    id="create-admin" 
+                    checked={createForm.is_admin} 
+                    onCheckedChange={(checked) => setCreateForm((prev) => ({ ...prev, is_admin: checked }))} 
+                  />
+                  <Label htmlFor="create-admin">Admin Access</Label>
+                </div>
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={handleCreateProfile}>Create Profile</Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
