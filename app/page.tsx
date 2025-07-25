@@ -11,7 +11,7 @@ function RootPage() {
   useEffect(() => {
     if (!loading) {
       if (user) {
-        router.push("/home");
+        router.push("/education");
       } else {
         router.push("/login");
       }

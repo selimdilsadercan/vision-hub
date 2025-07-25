@@ -27,37 +27,44 @@ const navigationItems = [
   {
     title: "Ana Sayfa",
     icon: Home,
-    href: "/home"
+    href: "/home",
+    disabled: true
   },
   {
     title: "Takvim",
     icon: Calendar,
-    href: "/calendar"
+    href: "/calendar",
+    disabled: true
   },
   {
     title: "Proje Galerisi",
     icon: Rocket,
-    href: "/projects"
+    href: "/projects",
+    disabled: true
   },
   {
     title: "Eğitim Programları",
     icon: GraduationCap,
-    href: "/education"
+    href: "/education",
+    disabled: false
   },
   {
     title: "Yarışmalar",
     icon: Trophy,
-    href: "/events?type=competition"
+    href: "/events?type=competition",
+    disabled: true
   },
   {
     title: "Etkinlikler",
     icon: CalendarCheck,
-    href: "/events?type=other"
+    href: "/events?type=other",
+    disabled: true
   },
   {
     title: "Websiteler",
     icon: Laptop,
-    href: "/websites"
+    href: "/websites",
+    disabled: true
   }
 ];
 
@@ -113,6 +120,28 @@ export function Sidebar() {
             if (item.title === "Etkinlikler" && pathname === "/events" && (type === "other" || !type)) {
               isActive = true;
             }
+
+            if (item.disabled) {
+              return (
+                <div key={item.href}>
+                  <span
+                    className={cn(
+                      "group flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium opacity-50",
+                      isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+                    )}
+                  >
+                    <div className="flex items-center">
+                      <item.icon className="mr-2 h-4 w-4" />
+                      {item.title}
+                    </div>
+                    <Badge variant="secondary" className="text-xs">
+                      SOON
+                    </Badge>
+                  </span>
+                </div>
+              );
+            }
+
             return (
               <Link key={item.href} href={item.href}>
                 <span
@@ -133,7 +162,7 @@ export function Sidebar() {
         <div className="mt-auto flex flex-col gap-1">
           <Separator className="my-2" />
           {userData?.is_admin && (
-            <Link href="/admin">
+            <Link href="/admin/education">
               <span
                 className={cn(
                   "group flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
