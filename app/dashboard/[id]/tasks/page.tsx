@@ -21,7 +21,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction
 } from "@/components/ui/alert-dialog";
-import { StoryDetailDialog } from "@/dialog/StoryDetailDialog";
+import { StoryDetailDialog } from "@/components/StoryDetailDialog";
 
 interface Task {
   id: string;

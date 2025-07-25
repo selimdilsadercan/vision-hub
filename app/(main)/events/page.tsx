@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 import { useAuth } from "@/firebase/auth-context";
 import { getUserData } from "@/firebase/firestore";
 import { EventCard } from "@/components/EventCard";
-import { EventDialog } from "@/dialog/EventDialog";
+import { EventDialog } from "@/components/EventDialog";
 import { tr } from "date-fns/locale";
 import { isToday, isThisWeek, isThisMonth, isAfter, isBefore, startOfToday, endOfWeek, endOfMonth } from "date-fns";
 

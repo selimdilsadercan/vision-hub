@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
 import { ArrowLeft, Pencil, Trash2, ArrowUpRightFromSquare, Plus } from "lucide-react";
-import { EventDialog } from "@/dialog/EventDialog";
+import { EventDialog } from "@/components/EventDialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ParticipantCard } from "@/components/participants/ParticipantCard";
