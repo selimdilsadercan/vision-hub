@@ -3,15 +3,15 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, GraduationCap, UserCircle, ShieldCheck, User, Calendar } from "lucide-react";
+import { LayoutDashboard, GraduationCap, UserCircle, ShieldCheck, User, Calendar, ArrowLeft } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 
 const adminNavigationItems = [
-  { title: "Dashboard", icon: LayoutDashboard, href: "/admin" },
-  { title: "Education", icon: GraduationCap, href: "/admin/education" },
-  { title: "Users", icon: User, href: "/admin/users" },
-  { title: "Meetings", icon: Calendar, href: "/admin/meetings" }
+  { title: "Dashboard", icon: LayoutDashboard, href: "/admin", disabled: true },
+  { title: "Education", icon: GraduationCap, href: "/admin/education", disabled: false },
+  { title: "Users", icon: User, href: "/admin/users", disabled: false },
+  { title: "Meetings", icon: Calendar, href: "/admin/meetings", disabled: true }
 ];
 
 export function AdminSidebar() {
@@ -32,24 +32,59 @@ export function AdminSidebar() {
       <div className="flex flex-1 flex-col gap-4 overflow-hidden">
         {/* Main Navigation */}
         <div className="flex flex-col gap-1">
-          {adminNavigationItems.map((item) => (
-            <Link key={item.href} href={item.href}>
-              <span
-                className={cn(
-                  "group flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                  pathname === item.href ? "bg-accent text-accent-foreground" : "transparent"
-                )}
-              >
-                <item.icon className="mr-2 h-4 w-4" />
-                {item.title}
-              </span>
-            </Link>
-          ))}
+          {adminNavigationItems.map((item) => {
+            const isActive = pathname === item.href;
+
+            if (item.disabled) {
+              return (
+                <div key={item.href}>
+                  <span
+                    className={cn(
+                      "group flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium opacity-50",
+                      isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+                    )}
+                  >
+                    <div className="flex items-center">
+                      <item.icon className="mr-2 h-4 w-4" />
+                      {item.title}
+                    </div>
+                    <Badge variant="secondary" className="text-xs">
+                      SOON
+                    </Badge>
+                  </span>
+                </div>
+              );
+            }
+
+            return (
+              <Link key={item.href} href={item.href}>
+                <span
+                  className={cn(
+                    "group flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+                    isActive ? "bg-accent text-accent-foreground" : "transparent"
+                  )}
+                >
+                  <item.icon className="mr-2 h-4 w-4" />
+                  {item.title}
+                </span>
+              </Link>
+            );
+          })}
         </div>
 
         {/* Bottom Navigation */}
         <div className="mt-auto flex flex-col gap-1">
           <Separator className="my-2" />
+          <Link href="/home/education">
+            <span
+              className={cn(
+                "group flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+              )}
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              <span>Back to Main View</span>
+            </span>
+          </Link>
           <Link href="/profile">
             <span
               className={cn(
